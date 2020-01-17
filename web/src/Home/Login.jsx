@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Login = props =>{
+const Login = ({ props,changeLoginInput , initializeForm , changeCurid }) =>{
     const classes = useStyles();
     const [id , setId] = useState('');
     const [pw , setPw] = useState('');
@@ -42,10 +42,10 @@ const Login = props =>{
             if(validate){
                 props.history.push('/main');
             }else{
-                alert('틀렸음 ㅉㅉ');
+                alert('잘못된 입력입니다.');
             }
         })
-    };
+    }; 
     return(
         <div className={classes.page}>
             <h2>로그인</h2>
@@ -59,7 +59,7 @@ const Login = props =>{
                     label = "아이디"
                     name = "id"
                     autoFocus
-                    onChange = {onChangeId}
+                    onChange = {changeLoginInput}
                 />
                 <TextField
                     variant="outlined"
@@ -71,7 +71,7 @@ const Login = props =>{
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    onChange = {onChangePw}
+                    onChange = {changeLoginInput}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}

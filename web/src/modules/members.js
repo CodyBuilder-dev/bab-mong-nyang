@@ -1,31 +1,70 @@
 
-const CHANGE_INPUT ='members/CHANGE_INPUT';
-const INSERT = 'members/INSERT';
-const LOGIN = 'members/LOGIN';
+export const CHANGE_REGIST_INPUT ='members/CHANGE_REGIST_INPUT';
+export const CHANGE_LOGIN_INPUT = 'members/CHANGE_LOGIN_INPUT';
+export const INITIALIZE_FORM = 'members/INITIALIZE_FORM';
+export const CHANGE_CURID = 'members/CHANGE_CURID';
+export const SUBMIT_REGISTER = 'members/SUBMIT_REGISTER';
 
-export const changeInput = input => ({
-    type : CHANGE_INPUT, payload: input
+export const changeRegistInput = input => ({
+    type : CHANGE_REGIST_INPUT, payload: input
 });
-export const insert = form =>({
-    type : INSERT, payload : form
+export const changeLoginInput = input => ({
+    type : CHANGE_LOGIN_INPUT, payload : input
+})
+export const initializeForm = () =>({
+    type : INITIALIZE_FORM
 });
-export const login = text=>({
-    type : LOGIN , payload : {
-        curId : text
-    }
+export const changeCurid = id => ({
+    type : CHANGE_CURID , payload : id
+})
+export const submitRegist = register => ({
+    type : SUBMIT_REGISTER, payload : register
 })
 const initialState = {
-    input : [],
+    register : 
+        {
+            name : '',
+            id : '' ,
+            pw : '',
+            email : ''
+        },
+    login : {
+            id : '',
+            pw : ''
+    },
     curID : ''
 }
 
-const input = (state = initialState, action) => {
+const members = (state = initialState, action) => {
     switch (action.type){
-        case CHANGE_INPUT:
+        case CHANGE_REGIST_INPUT:
             return{
                 ...state,
-                input : action.payload
+                register : action.payload
             };
-        case 
-    };
-}
+        case CHANGE_LOGIN_INPUT:
+            return{
+                ...state,
+                login : action.payload
+            };
+        case INITIALIZE_FORM:
+            return{
+                state : initialState
+            };
+        case CHANGE_CURID:
+            return{
+                ...state,
+                curID : action.payload
+            };
+        case SUBMIT_REGISTER:
+            return {
+                ...state
+            };
+        default:
+            return {
+                state
+            };
+    }
+};
+
+export default members;

@@ -3,6 +3,7 @@ import Layout from "../layout/Layout";
 import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+
 const useStyles = makeStyles(theme => ({
     submit : {
         margin : theme.spacing(3,0,2),
@@ -22,24 +23,24 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Join = props =>{
+const Join = ({register, changeRegistInput, submitRegist}) =>{
     const classes = useStyles();
-    const [name, setName] = useState('');
-    const [id, setId] = useState('');
-    const [pw, setPw] = useState('');
-    const [email, setEmail] = useState('');
-    const onChangeName = e => {
-        setName(e.target.value);
-    }
-    const onChangeId = e => {
-        setId(e.target.value);
-    }
-    const onChangePw = e => {
-        setPw(e.target.value);
-    }
-    const onChangeEmail = e => {
-        setEmail(e.target.value);
-    }
+    // const [name, setName] = useState('');
+    // const [id, setId] = useState('');
+    // const [pw, setPw] = useState('');
+    // const [email, setEmail] = useState('');
+    // const onChangeName = e => {
+    //     setName(e.target.value);
+    // }
+    // const onChangeId = e => {
+    //     setId(e.target.value);
+    // }
+    // const onChangePw = e => {
+    //     setPw(e.target.value);
+    // }
+    // const onChangeEmail = e => {
+    //     setEmail(e.target.value);
+    // }
     // const handleSubmit = (event) =>{
     //     axios({
     //         url : '',
@@ -55,19 +56,7 @@ const Join = props =>{
 
     // }
     
-    const handleSubmit = event =>{
-        axios.post('http://70.12.246.71:3000/addMembers',{
-            name,
-            id,
-            pw,
-            email,
-        })
-        .then(res => {
-            console.log(res);
-            props.history.push('/login');
-        })
-        
-    }
+    
 
     return(
         <div className={classes.page}>
@@ -80,8 +69,9 @@ const Join = props =>{
                     fullWidth
                     id = "name"
                     label = "이름"
+                    value = {register}
                     name = "name"
-                    onChange = {onChangeName}
+                    onChange = {changeRegistInput}
                     autoFocus
                 />
                 
@@ -92,8 +82,9 @@ const Join = props =>{
                     fullWidth
                     id = "id"
                     label = "아이디"
+                    value = {register}
                     name = "id"
-                    onChange = {onChangeId}
+                    onChange = {changeRegistInput}
                 />
                 <TextField
                     variant="outlined"
@@ -104,7 +95,8 @@ const Join = props =>{
                     label="비밀번호 "
                     type="password"
                     id="pw"
-                    onChange = {onChangePw}
+                    value = {register}
+                    onChange = {changeRegistInput}
                     autoComplete="current-password"
                 />
                 <TextField 
@@ -116,7 +108,8 @@ const Join = props =>{
                     label = "이메일"
                     name = "email"
                     autoComplete="email"
-                    onChange = {onChangeEmail}
+                    value = {register}
+                    onChange = {changeRegistInput}
                 />
                 <Button
                     
@@ -124,15 +117,11 @@ const Join = props =>{
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick = {handleSubmit}
+                    onClick = {submitRegist}
                 >
                     회원 가입
                 </Button>
             </div>
-            <p>이름 : {name}</p>
-            <p>아이디 : {id}</p>
-            <p>비밀번호 : {pw}</p>
-            <p>이메일 : {email}</p>
         </div>
     );
 };
