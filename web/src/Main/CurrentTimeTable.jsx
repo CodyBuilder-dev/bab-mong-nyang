@@ -5,6 +5,7 @@ import {makeStyles} from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import {purple} from '@material-ui/core/colors'
 import Icons from './TableIcons';
+import {useSelector} from 'react-redux';
 
 
 const useStyles = makeStyles(theme => ({
@@ -24,8 +25,9 @@ const GlobalCss = withStyles({
         },
     },
 })(() => null);
-const CurrentTimeTable = props => {
+const CurrentTimeTable = ({props}) => {
     const classes = useStyles();
+    const {curId} = useSelector(state => ({curId : state.login.state.curid}));
     const [state, setState] = React.useState({
         columns: [
             
@@ -74,6 +76,7 @@ const CurrentTimeTable = props => {
 
 return (
     <div className = {classes.page}>
+    <p>{curId}님 환영합니다!</p>
     <GlobalCss />
     <MaterialTable
         icons ={Icons}

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Layout from "../layout/Layout";
 import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+
 
 const useStyles = makeStyles(theme => ({
     submit : {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Join = ({register, changeRegistInput, submitRegist}) =>{
+const Join = () =>{
     const classes = useStyles();
     // const [name, setName] = useState('');
     // const [id, setId] = useState('');
@@ -61,6 +61,7 @@ const Join = ({register, changeRegistInput, submitRegist}) =>{
     return(
         <div className={classes.page}>
             <h2>회원가입</h2>
+            
             <div className={classes.inputText}>
                 <TextField 
                     variant="outlined"
@@ -69,9 +70,7 @@ const Join = ({register, changeRegistInput, submitRegist}) =>{
                     fullWidth
                     id = "name"
                     label = "이름"
-                    value = {register}
                     name = "name"
-                    onChange = {changeRegistInput}
                     autoFocus
                 />
                 
@@ -82,9 +81,7 @@ const Join = ({register, changeRegistInput, submitRegist}) =>{
                     fullWidth
                     id = "id"
                     label = "아이디"
-                    value = {register}
                     name = "id"
-                    onChange = {changeRegistInput}
                 />
                 <TextField
                     variant="outlined"
@@ -95,8 +92,6 @@ const Join = ({register, changeRegistInput, submitRegist}) =>{
                     label="비밀번호 "
                     type="password"
                     id="pw"
-                    value = {register}
-                    onChange = {changeRegistInput}
                     autoComplete="current-password"
                 />
                 <TextField 
@@ -108,8 +103,6 @@ const Join = ({register, changeRegistInput, submitRegist}) =>{
                     label = "이메일"
                     name = "email"
                     autoComplete="email"
-                    value = {register}
-                    onChange = {changeRegistInput}
                 />
                 <Button
                     
@@ -117,7 +110,7 @@ const Join = ({register, changeRegistInput, submitRegist}) =>{
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick = {submitRegist}
+                    //onClick = {submitRegist}
                 >
                     회원 가입
                 </Button>
