@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Header = props => {
+const Header = (props) => {
+  console.log(props);
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -58,6 +59,7 @@ const Header = props => {
   };
   const handleClose2 = () => {
     setUserAnchorEl(null);
+    
   };
 
   return (

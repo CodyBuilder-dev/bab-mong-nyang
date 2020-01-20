@@ -1,12 +1,15 @@
 export const SUBMIT_LOGIN = 'login/SUBMIT_LOGIN';
 export const CHANGE_INPUT = 'login/CHANGE_INPUT';
-
+export const SUBMIT_LOGOUT = 'login/SUBMIT_LOGOUT';
 
 export const submitLogin = input =>({
     type : SUBMIT_LOGIN, payload : input
 });
 export const changeInput = input => ({
     type : CHANGE_INPUT , payload : input
+})
+export const submitLogout = input =>({
+    type : SUBMIT_LOGOUT, payload : input
 })
 
 const initialState = {
@@ -26,6 +29,10 @@ const login = (state = {initialState}, action) => {
                 ...state,
                 input: action.payload
             };
+        case SUBMIT_LOGOUT:
+            return{
+                state : {curid : '' , input : '', logedin : false}
+            }
         default:
             return {
                 state

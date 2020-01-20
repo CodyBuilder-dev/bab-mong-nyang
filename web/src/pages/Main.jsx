@@ -9,10 +9,10 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({}));
 
-const Main = props => {
+const Main = (props) => {
   const classes = useStyles();
   const index = 0;
-
+  console.log(props);
   return (
       <Layout>
         <CurTimeTable/>
