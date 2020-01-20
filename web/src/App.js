@@ -11,13 +11,14 @@ import Setting from "./pages/Setting";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail"
 import "./index.css";
-
+import LoginContainer from './containers/LoginContainer';
 const App = () => {
     return (
+        <>
         <BrowserRouter>
             <Route exact path ="/" component = {Home} />
             <Route path = "/home" component = {Home} />
-            <Route path = "/login" component = {Login}/>
+            <Route path = "/login" component = {LoginContainer}/>
             <Route path = "/join" component = {Join}/>
             <Route path = "/regist" component = {Regist}/>
             <Route path = "/set" component = {Setting}/>
@@ -25,6 +26,8 @@ const App = () => {
             <Route path ="/cur" component = {CurrentTimeTable}/>
             <Route path ="/main" component = {Main}/>
         </BrowserRouter>
+        
+        </>
     );
 };
 
