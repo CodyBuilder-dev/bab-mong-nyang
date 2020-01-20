@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="logdata">  
+  <select id = "selectAll">
+    select * from logdata;
+  </select>
+
+  <select id = "selectOne">
+    select * from logdata where l_No = #{l_No};
+  </select>
+
+  <insert id = "addLogdata">
+    insert into logdata values(0, #{d_No}, #{l_Time}, #{l_Remain});
+  </insert>
+ 
+  <update id = "updateLogdata">
+    update logdata set l_Time = #{l_Time}, l_Remain = #{l_Remain} where l_No = #{l_No};
+  </update>
+
+  <delete id = "deleteLogdata">
+    delete from logdata where l_No = #{l_No};
+  </delete>
+</mapper>

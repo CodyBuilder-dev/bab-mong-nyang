@@ -1,0 +1,67 @@
+use Service_DB;
+
+CREATE TABLE  User  (
+     u_No	INTEGER	NOT NULL AUTO_INCREMENT,
+     u_Id	VARCHAR(30) NOT NULL,
+     u_Pw	VARCHAR(16) NOT NULL,
+     u_Name	VARCHAR(30)	NOT NULL,
+     u_Email	VARCHAR(30)	NOT NULL,
+     PRIMARY KEY(u_No, u_Id)
+);
+
+CREATE TABLE  Device  (
+     d_No	INTEGER	NOT NULL AUTO_INCREMENT,
+     u_No	INTEGER	NOT NULL,
+     SerialNo	VARCHAR(30) NOT NULL,
+     d_Name	VARCHAR(30)	NULL,
+     d_Age	VARCHAR(30)	NULL,
+     d_Species	VARCHAR(30)	NULL,
+     d_Weight	VARCHAR(30)	NULL,
+     PRIMARY KEY(d_No, u_No)
+);
+
+CREATE TABLE Setting  (
+     s_No	INTEGER	NOT NULL AUTO_INCREMENT,
+     d_No	INTEGER	NOT NULL,
+     s_Time	VARCHAR(30)	NULL,
+     s_Amount	VARCHAR(30)	NULL,
+     PRIMARY KEY(s_No, d_No)
+);
+
+CREATE TABLE  LogData  (
+     l_No	INTEGER	NOT NULL AUTO_INCREMENT,
+     d_No	INTEGER	NOT NULL,
+     l_Time	VARCHAR(30)	NULL,
+     l_Remain	VARCHAR(30)	NULL,
+     PRIMARY KEY(l_No, d_No)
+);
+
+CREATE TABLE  Feed  (
+     f_No	INTEGER	NOT NULL AUTO_INCREMENT,
+     f_Name	VARCHAR(30)	NULL,
+     f_Manufacturer	VARCHAR(30)	NULL,
+     f_Calory	VARCHAR(30)	NULL,
+     f_Species	VARCHAR(30)	NULL,
+     PRIMARY KEY(f_No)
+);
+
+ALTER TABLE  Device  ADD CONSTRAINT  FK_User_TO_Device_1  FOREIGN KEY (
+     u_No
+)
+REFERENCES  User  (
+     u_No 
+);
+
+ALTER TABLE  Setting  ADD CONSTRAINT  FK_Device_TO_Setting_1  FOREIGN KEY (
+     d_No
+)
+REFERENCES  Device  (
+     d_No
+);
+
+ALTER TABLE  LogData  ADD CONSTRAINT  FK_Device_TO_LogData_1  FOREIGN KEY (
+     d_No
+)
+REFERENCES  Device  (
+     d_No 
+);
