@@ -13,9 +13,9 @@ import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import DrawerList from "./DrawerList";
-import NotificationList from "./NotificationList";
-import UserPopOver from "./UserPopOver";
+import DrawerList from "./header/DrawerList";
+import NotificationList from "./header/NotificationList";
+import UserPopOver from "./header/UserPopOver";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Header = props => {
+const Header = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -58,9 +58,10 @@ const Header = props => {
   };
   const handleClose2 = () => {
     setUserAnchorEl(null);
+    
   };
-
   return (
+    
     <AppBar position="fixed" color="default" className={classes.appBar}>
       <Toolbar>
         <IconButton

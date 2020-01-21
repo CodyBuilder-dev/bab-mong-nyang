@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import Layout from "../layout/Layout";
+import Layout from "../components/layout/Layout";
 import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
 import axios from 'axios';
 

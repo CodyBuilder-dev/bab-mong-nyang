@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../layout/LayoutMain";
+import Layout from '../components/layout/LayoutMain';
 import { makeStyles } from "@material-ui/core";
 import { Bar, Chart } from "react-chartjs-2";
 const useStyles = makeStyles(theme => ({
