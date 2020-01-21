@@ -1,5 +1,4 @@
 import React from 'react';
-import {forwardRef} from 'react';
 import MaterialTable from 'material-table';
 import {makeStyles} from "@material-ui/core";
 import Icons from './TableIcons';
