@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="setting">  
+  <select id = "selectAll">
+    select * from setting;
+  </select>
+
+  <select id = "selectOne">
+    select * from setting where s_No = #{s_No};
+  </select>
+
+  <insert id = "addSetting">
+    insert into setting values(0, #{d_No}, #{s_Time}, #{s_Amount});
+  </insert>
+ 
+  <update id = "updateSetting">
+    update setting set s_Time = #{s_Time}, s_Amount = #{s_Amount} where s_No = #{s_No};
+  </update>
+
+  <delete id = "deleteSetting">
+    delete from setting where s_No = #{s_No};
+  </delete>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="device">  
+  <select id = "selectAll">
+    select * from device;
+  </select>
+
+  <select id = "selectOne">
+    select * from device where d_No = #{d_No};
+  </select>
+
+  <insert id = "addDevice">
+    insert into device values(0, #{u_No}, #{SerialNo}, #{d_Name}, #{d_Age}, #{d_Species}, #{d_Weight});
+  </insert>
+ 
+  <update id = "updateDevice">
+    update device set d_Name = #{d_Name}, d_Age = #{d_Age}, d_Species = #{d_Species}, d_Weight = #{d_Weight} where d_No = #{d_No};
+  </update>
+
+  <delete id = "deleteDevice">
+    delete from device where d_No = #{d_No};
+  </delete>
+</mapper>
