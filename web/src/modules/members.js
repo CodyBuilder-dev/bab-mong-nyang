@@ -1,63 +1,44 @@
 
 export const CHANGE_REGIST_INPUT ='members/CHANGE_REGIST_INPUT';
-export const CHANGE_LOGIN_INPUT = 'members/CHANGE_LOGIN_INPUT';
-export const INITIALIZE_FORM = 'members/INITIALIZE_FORM';
-export const CHANGE_CURID = 'members/CHANGE_CURID';
+export const VALIDATE_ID = 'members/VALIDATE_ID';
 export const SUBMIT_REGISTER = 'members/SUBMIT_REGISTER';
 
 export const changeRegistInput = input => ({
     type : CHANGE_REGIST_INPUT, payload: input
 });
-export const changeLoginInput = input => ({
-    type : CHANGE_LOGIN_INPUT, payload : input
-})
-export const initializeForm = () =>({
-    type : INITIALIZE_FORM
-});
-export const changeCurid = id => ({
-    type : CHANGE_CURID , payload : id
+export const validateId = id =>({
+    type : VALIDATE_ID , payload : id
 })
 export const submitRegist = register => ({
     type : SUBMIT_REGISTER, payload : register
 })
 const initialState = {
-   
-            name : '아',
-            id : '왜' ,
-            pw : '안',
-            email : '돼',
-    login : {
-            id : '',
-            pw : ''
-    },
-    curID : ''
+    id : '',
+    pw : '',
+    name : '',
+    email : '',
+    validated : true
 }
 
 const members = (state = initialState, action) => {
     switch (action.type){
         case CHANGE_REGIST_INPUT:   
             return{
-                ...state,
-                register : action.payload
-            };
-        case CHANGE_LOGIN_INPUT:
-            return{
-                ...state,
-                login : action.payload
-            };
-        case INITIALIZE_FORM:
-            return{
-                state : initialState
-            };
-        case CHANGE_CURID:
-            return{
-                ...state,
-                curID : action.payload
+                state : {
+                    id : action.payload.id,
+                    pw : action.payload.pw,
+                    name : action.payload.name,
+                    email : action.payload.email
+                }
             };
         case SUBMIT_REGISTER:
             return {
-                ...state
+                state : initialState
             };
+        case VALIDATE_ID:
+            return{
+                ...state
+            }
         default:
             return {
                 state

@@ -23,39 +23,32 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Join = () =>{
+const Join = ({props, state, onChange, onSubmit}) =>{
     const classes = useStyles();
-    // const [name, setName] = useState('');
-    // const [id, setId] = useState('');
-    // const [pw, setPw] = useState('');
-    // const [email, setEmail] = useState('');
-    // const onChangeName = e => {
-    //     setName(e.target.value);
-    // }
-    // const onChangeId = e => {
-    //     setId(e.target.value);
-    // }
-    // const onChangePw = e => {
-    //     setPw(e.target.value);
-    // }
-    // const onChangeEmail = e => {
-    //     setEmail(e.target.value);
-    // }
-    // const handleSubmit = (event) =>{
-    //     axios({
-    //         url : '',
-    //         method : 'post',
-    //         data : this.state,
-    //     }).then(
-    //         response => {
-    //             console.log("잘 전달 됨");
-    //         }
-    //     ).catch(error => {
-    //         console.log(error);
-    //     })
-
-    // }
-    
+    const onChangeInput = (e) => {
+        let key = e.target.name;
+        let input = {name : state.name, id : state.id, pw : state.pw, email : state.email};
+        switch(key){
+            case 'name':
+                input.name = e.target.value;
+                onChange(input);
+                break;
+            case 'id' :
+                input.id = e.target.value;
+                onChange(input);
+                break;
+            case 'pw' :
+                input.pw = e.target.value;
+                onChange(input);
+                break;
+            case 'email' :
+                input.email = e.target.value;
+                onChange(input);
+                break;
+            default :
+                console.log('default')
+        }
+    }
     
 
     return(
@@ -72,6 +65,7 @@ const Join = () =>{
                     label = "이름"
                     name = "name"
                     autoFocus
+                    onChange = {onChangeInput}
                 />
                 
                 <TextField 
@@ -82,6 +76,7 @@ const Join = () =>{
                     id = "id"
                     label = "아이디"
                     name = "id"
+                    onChange = {onChangeInput}
                 />
                 <TextField
                     variant="outlined"
@@ -93,6 +88,7 @@ const Join = () =>{
                     type="password"
                     id="pw"
                     autoComplete="current-password"
+                    onChange = {onChangeInput}
                 />
                 <TextField 
                     variant="outlined"
@@ -103,6 +99,7 @@ const Join = () =>{
                     label = "이메일"
                     name = "email"
                     autoComplete="email"
+                    onChange = {onChangeInput}
                 />
                 <Button
                     
@@ -110,7 +107,7 @@ const Join = () =>{
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    //onClick = {submitRegist}
+                    onClick = {onSubmit}
                 >
                     회원 가입
                 </Button>

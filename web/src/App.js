@@ -9,6 +9,7 @@ import Main from "./pages/Main";
 import Detail from "./pages/Detail"
 import "./index.css";
 import LoginContainer from './containers/LoginContainer';
+import JoinContainer from './containers/JoinContainer';
 const App = () => {
     return (
         <>
@@ -16,7 +17,7 @@ const App = () => {
             <Route exact path ="/" component = {Home} />
             <Route path = "/home" component = {Home} />
             <Route path = "/login" component = {LoginContainer}/>
-            <Route path = "/join" component = {Join}/>
+            <Route path = "/join" component = {JoinContainer}/>
             <Route path = "/regist" component = {Regist}/>
             <Route path = "/set" component = {Setting}/>
             <Route path = "/detail" component = {Detail}/>
