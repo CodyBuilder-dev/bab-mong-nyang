@@ -7,14 +7,15 @@ import {
   IconButton,
   SwipeableDrawer,
   Badge,
-  Popover,
+  Popover
 } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import DrawerList from './DrawerList';
-import NotificationList from './NotificationList';
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import DrawerList from "./header/DrawerList";
+import NotificationList from "./header/NotificationList";
+import UserPopOver from "./header/UserPopOver";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -27,15 +28,19 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
     cursor: "pointer"
-  },
+  }
 }));
 
-const Header = props => {
+const Header = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const popOver = Boolean(anchorEl);
-  const id = popOver ? "simple-popover" : undefined;
+  const [userAnchorEl, setUserAnchorEl] = useState(null);
+  const notePopOver = Boolean(anchorEl);
+  const notePopId = notePopOver ? "simple-popover" : undefined;
+
+  const userPopOver = Boolean(userAnchorEl);
+  const userPopId = userPopOver ? "simple-popover" : undefined;
 
   const onClickDrawerOpenHandler = () => {
     setOpen(true);
@@ -48,8 +53,15 @@ const Header = props => {
     setAnchorEl(null);
   };
 
-  
+  const handleProfileClick = event => {
+    setUserAnchorEl(event.currentTarget);
+  };
+  const handleClose2 = () => {
+    setUserAnchorEl(null);
+    
+  };
   return (
+    
     <AppBar position="fixed" color="default" className={classes.appBar}>
       <Toolbar>
         <IconButton
@@ -75,7 +87,7 @@ const Header = props => {
 
         <IconButton
           color="inherit"
-          aria-describedby={id}
+          aria-describedby={notePopId}
           variant="contained"
           onClick={handleClick}
         >
@@ -83,9 +95,19 @@ const Header = props => {
             <NotificationsIcon />
           </Badge>
         </IconButton>
+        <IconButton
+          edge="end"
+          aria-label="account of current user"
+          aria-controls={userPopId}
+          aria-haspopup="true"
+          onClick={handleProfileClick}
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
         <Popover
-          id={id}
-          open={popOver}
+          id={notePopId}
+          open={notePopOver}
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
@@ -98,6 +120,22 @@ const Header = props => {
           }}
         >
           <NotificationList />
+        </Popover>
+        <Popover
+          id={userPopId}
+          open={userPopOver}
+          anchorEl={userAnchorEl}
+          onClose={handleClose2}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+        >
+          <UserPopOver />
         </Popover>
       </Toolbar>
     </AppBar>
