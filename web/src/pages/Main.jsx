@@ -1,6 +1,6 @@
 import React from "react";
-import Layout from "../layout/LayoutMain";
-import CurTimeTable from "../Main/CurrentTimeTable";
+import Layout from '../components/layout/LayoutMain';
+import CurTimeTable from "../components/main/CurrentTimeTable";
 
 
 import { makeStyles } from "@material-ui/core";

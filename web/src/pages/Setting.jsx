@@ -1,9 +1,9 @@
 import React from "react";
-import Layout from "../layout/Layout";
+import Layout from '../components/layout/LayoutMain';
 import {makeStyles, Button, Popover} from "@material-ui/core";
-import TimeTable from "../Main/TimeTable";
-import SettingTable from "../Main/SettingTable";
-import Header from "../Main/Header";
+import TimeTable from "../components/set/TimeTable";
+import SettingTable from "../components/set/SettingTable";
+import Header from "../components/layout/Header";
 const useStyles = makeStyles(theme => ({
 
 }));
@@ -12,7 +12,6 @@ const Setting = props =>{
     const classes = useStyles();
     return(
         <Layout>
-            <Header/>
             <SettingTable/>
             <TimeTable/>
             {/* 

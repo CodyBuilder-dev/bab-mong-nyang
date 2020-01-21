@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import Layout from "../layout/Layout";
+import React, { useEffect } from "react";
+import Layout from '../components/layout/Layout';
 import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
@@ -21,16 +21,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Login = ({ props  , onSubmit, onChange, input }) =>{
+const Login = ({ props  , onSubmit, onChange, input, logedin }) =>{
     const classes = useStyles();
-    // const [id , setId] = useState('');
-    // const [pw , setPw] = useState('');
-    // const onChangeId = e =>{
-    //    setId(e.target.value);
-    // }
-    // const onChangePw = e =>{
-    //     setPw(e.target.value);
-    // }
+    useEffect(()=>{
+        console.log("마운트될때 실행");
+        console.log(logedin);
+        console.log(props);
+        if(logedin){
+            props.history.goBack();
+        }
+    }, []);
     const buttonClick = event => {
         //axios.post('http://70.12.246.71:3000/login',{
         //    id,

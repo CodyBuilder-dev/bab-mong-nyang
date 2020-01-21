@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import Header from "../Main/Header";
+import Header from "./Header";
 import { CssBaseline, Container, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({

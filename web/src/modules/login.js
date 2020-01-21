@@ -18,7 +18,7 @@ const initialState = {
     logedin : false
 }
 
-const login = (state = {initialState}, action) => {
+const login = (state = initialState, action) => {
     switch (action.type){
         case SUBMIT_LOGIN:   
             return{

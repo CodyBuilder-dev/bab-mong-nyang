@@ -1,11 +1,11 @@
 import React,{useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import Login from '../Home/Login';
+import Login from '../pages/Login';
 import { submitLogin, changeInput ,submitLogout} from '../modules/login';
-import CurrentTimeTable from '../Main/CurrentTimeTable';
 
 const LoginContainer = (props) => {
-    const {input, curId} = useSelector(state => state.login, []);
+    const {input} = useSelector(state => state.login, []);
+    const logedin = useSelector(state => state.login.state.logedin,[]);
     const dispatch = useDispatch();
     const changeId = useCallback(id => dispatch(submitLogin(id)),[dispatch]);
     const onChangeInput = useCallback(id => dispatch(changeInput(id)),[dispatch]);
@@ -25,16 +25,9 @@ const LoginContainer = (props) => {
         },
         [onChangeInput]
     )
-    const onLogout = useCallback(
-        e=>{
-            onlogout();
-            props.history.push('/login');
-        },
-        [submitLogout]
-    )
     return (
         <>
-        <Login onSubmit = {onSubmit} onChange = {onChange} input = {input}/>
+        <Login props = {props} onSubmit = {onSubmit} onChange = {onChange} input = {input} logedin = {logedin}/>
         </>
     );
     

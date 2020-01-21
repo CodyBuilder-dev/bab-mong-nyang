@@ -1,10 +1,8 @@
 import React from 'react';
-import {forwardRef} from 'react';
 import MaterialTable , {MTableBody} from 'material-table';
 import {makeStyles} from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import {purple} from '@material-ui/core/colors'
-import Icons from './TableIcons';
 import {useSelector} from 'react-redux';
 
 
@@ -79,7 +77,7 @@ return (
     <p>{curId}님 환영합니다!</p>
     <GlobalCss />
     <MaterialTable
-        icons ={Icons}
+        // icons ={Icons}
         title="배식상황"
         columns={state.columns}
         data={state.data}
