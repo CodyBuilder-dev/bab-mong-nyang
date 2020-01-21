@@ -25,10 +25,10 @@ const Login = ({ props  , onSubmit, onChange, input, logedin }) =>{
     const classes = useStyles();
     useEffect(()=>{
         console.log("마운트될때 실행");
-        console.log(logedin);
+        console.log(document);
         console.log(props);
         if(logedin){
-            props.history.goBack();
+            props.history.push('/main');
         }
     }, []);
     const buttonClick = event => {

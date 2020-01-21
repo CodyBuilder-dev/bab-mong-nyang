@@ -3,7 +3,7 @@ import Layout from '../components/layout/LayoutMain';
 import {makeStyles, Button, Popover} from "@material-ui/core";
 import TimeTable from "../components/set/TimeTable";
 import SettingTable from "../components/set/SettingTable";
-import Header from "../components/layout/Header";
+import Header from "../components/layout/SubHeader";
 const useStyles = makeStyles(theme => ({
 
 }));
@@ -11,7 +11,8 @@ const useStyles = makeStyles(theme => ({
 const Setting = props =>{
     const classes = useStyles();
     return(
-        <Layout>
+        <>
+            {/* <Header /> */}
             <SettingTable/>
             <TimeTable/>
             {/* 
@@ -32,7 +33,7 @@ const Setting = props =>{
                 <Login/>
             </Popover>
             */}
-        </Layout>
+        </>
     );
 };
 

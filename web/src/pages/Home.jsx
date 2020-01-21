@@ -12,7 +12,7 @@ const Home = props =>{
         props.history.push('/login');
     }
     return(
-        <Layout>
+        <>
             <img src = {Hellocat}/>
             <p>Hello, This is Auto IoT Servent System</p>
             <Button  color="primary"  onClick={buttonClick} >
@@ -36,7 +36,7 @@ const Home = props =>{
                 <Login/>
             </Popover>
             */}
-        </Layout>
+        </>
     );
 };
 

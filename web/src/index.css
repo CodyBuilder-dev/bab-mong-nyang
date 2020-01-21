@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'CookieRun Bold'; src: url(./fonts/SCDream5.otf) format('truetype');
+}

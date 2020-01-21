@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from '../components/layout/LayoutMain';
 import CurTimeTable from "../components/main/CurrentTimeTable";
+import DeviceSelect from "../components/main/DeviceSelect";
 
 
 import { makeStyles } from "@material-ui/core";
@@ -14,9 +15,10 @@ const Main = (props) => {
   const index = 0;
   console.log(props);
   return (
-      <Layout>
-        <CurTimeTable/>
-      </Layout>
+      <>
+        <DeviceSelect />
+        <CurTimeTable />
+      </>
   );
 };
 
