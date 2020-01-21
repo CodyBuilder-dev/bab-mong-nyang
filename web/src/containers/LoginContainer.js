@@ -12,7 +12,7 @@ const LoginContainer = (props)=> {
     const onlogout = useCallback(()=>dispatch(submitLogout()),[dispatch]);
     const onSubmit = useCallback(
         e=>{
-            axios.post('http://70.12.246.68:3000/user/login',{
+            axios.post('http://localhost:3000/user/login',{
                 u_Id: state.inputId,
                 u_Pw: state.inputPw
             }).then(res =>{

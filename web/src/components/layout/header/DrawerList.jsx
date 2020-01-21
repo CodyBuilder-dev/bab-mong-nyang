@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-
+import {Link} from 'react-router-dom';
 import {
   makeStyles,
   List,
@@ -50,12 +50,14 @@ const DrawerList = props => {
             <ListItemText primary="설정" />
           </ListItem>
           <Divider />
-          <ListItem button key="userInfo">
+          <Link to = '/info'>
+          <ListItem button>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="내 정보" />
           </ListItem>
+          </Link>
           <Divider />
           <ListItem button key="userInfo">
             <ListItemIcon>

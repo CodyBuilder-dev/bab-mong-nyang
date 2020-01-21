@@ -11,6 +11,12 @@ const JoinContainer = (props) =>{
     const regist = useCallback(()=> dispatch(submitRegist()),[]);
     const onChange = useCallback(
         input=>{
+            console.log('pwcon = '+  input.pwcon.length + ' pw = ' + input.pw )
+            if(input.pwcon === '' || input.pw === input.pwcon){
+                input.validated = false;
+            }else{
+                input.validated = true;
+            }
             onChangeInput(input);
             console.log(input);
         },
@@ -18,8 +24,11 @@ const JoinContainer = (props) =>{
     );
     const onSubmit = useCallback(
         e=>{
-            console.log('axios요청 보냄');
-            console.log(state);
+            if(state.pwcon ===''){
+                onChangeInput({id : state.id , pw : state.pw, pwcon : state.pwcon, validated : true, email : state.email, name : state.name});
+                console.log(state);
+            }else{
+                console.log('axios요청 보냄');
             axios.post('http://70.12.246.68:3000/user/add',{
                 u_Name : state.name,
                 u_Id : state.id,
@@ -36,7 +45,7 @@ const JoinContainer = (props) =>{
             }).catch(error => {
                 
             })
-        },
+        }},
         [regist,state]
     )
     return (

@@ -10,6 +10,7 @@ import Detail from "./pages/Detail"
 import "./index.css";
 import LoginContainer from './containers/LoginContainer';
 import JoinContainer from './containers/JoinContainer';
+import Info from './pages/Info';
 const App = () => {
     return (
         <>
@@ -22,6 +23,7 @@ const App = () => {
             <Route path = "/set" component = {Setting}/>
             <Route path = "/detail" component = {Detail}/>
             <Route path ="/main" component = {Main}/>
+            <Route path ="/info" component = {Info}/>
         </BrowserRouter>
         
         </>

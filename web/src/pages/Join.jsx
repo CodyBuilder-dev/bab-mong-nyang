@@ -22,12 +22,12 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1),
     },
 }));
-
 const Join = ({props, state, onChange, onSubmit}) =>{
     const classes = useStyles();
     const onChangeInput = (e) => {
+        console.log(e);
         let key = e.target.name;
-        let input = {name : state.name, id : state.id, pw : state.pw, email : state.email};
+        let input = {name : state.name, id : state.id, pw : state.pw, email : state.email, pwcon : state.pwcon, validated : state.validated};
         switch(key){
             case 'name':
                 input.name = e.target.value;
@@ -43,6 +43,10 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                 break;
             case 'email' :
                 input.email = e.target.value;
+                onChange(input);
+                break;
+            case 'pwconfirm' :
+                input.pwcon = e.target.value;
                 onChange(input);
                 break;
             default :
@@ -66,6 +70,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     name = "name"
                     autoFocus
                     onChange = {onChangeInput}
+                    value = {state.name}
                 />
                 
                 <TextField 
@@ -77,6 +82,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     label = "아이디"
                     name = "id"
                     onChange = {onChangeInput}
+                    value = {state.id}
                 />
                 <TextField
                     variant="outlined"
@@ -89,6 +95,23 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     id="pw"
                     autoComplete="current-password"
                     onChange = {onChangeInput}
+                    value = {state.pw}
+                />
+               <TextField           
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="pwconfirm"
+                    label="비밀번호 확인"
+                    type="password"
+                    id="pwconfirm"
+                    autoComplete="current-password"
+                    error = {state.validated}
+                    onChange = {onChangeInput}
+                    value = {state.pwcon}
+                    helperText = {state.validated ? "일치하지 않습니다" : ""}
+                    
                 />
                 <TextField 
                     variant="outlined"
@@ -100,6 +123,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     name = "email"
                     autoComplete="email"
                     onChange = {onChangeInput}
+                    value={state.email}
                 />
                 <Button
                     

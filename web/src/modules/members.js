@@ -17,7 +17,8 @@ const initialState = {
     pw : '',
     name : '',
     email : '',
-    validated : true
+    pwcon : '',
+    validated : false
 }
 
 const members = (state = initialState, action) => {
@@ -28,7 +29,9 @@ const members = (state = initialState, action) => {
                     id : action.payload.id,
                     pw : action.payload.pw,
                     name : action.payload.name,
-                    email : action.payload.email
+                    email : action.payload.email,
+                    pwcon : action.payload.pwcon,
+                    validated : action.payload.validated
                 }
             };
         case SUBMIT_REGISTER:
