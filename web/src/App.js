@@ -26,6 +26,7 @@ const App = () => {
             <Route path ="/main" component = {Main}/>
             <Route path ="/info" component = {Info}/>
             <Route path ="/modify" component = {ModifyContainer}/>
+            </Layout>
         </BrowserRouter>
         
         </>
