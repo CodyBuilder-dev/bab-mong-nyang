@@ -9,7 +9,7 @@ var feeding = {
     _ID:0,
     _date:0,
     _time:0,
-    feed_femain:0,
+    feed_remain:0,
     _feeded:0,
     total_remain:0
 };
