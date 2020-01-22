@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Typography,
@@ -40,10 +40,13 @@ const Header = props => {
   const [userAnchorEl, setUserAnchorEl] = useState(null);
   const notePopOver = Boolean(anchorEl);
   const notePopId = notePopOver ? "popover" : undefined;
-
+  
   const userPopOver = Boolean(userAnchorEl);
   const userPopId = userPopOver ? "popover" : undefined;
-
+  window.onpopstate = e => {
+    setOpen(false)
+    setUserAnchorEl(null)
+  }
   const onClickDrawerOpenHandler = () => {
     setOpen(true);
   };
@@ -124,22 +127,7 @@ const Header = props => {
           >
             <NotificationList />
           </Popover>
-          <Popover
-            id={userPopId}
-            open={userPopOver}
-            anchorEl={userAnchorEl}
-            onClose={handleClose2}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-          >
-            <UserPopOver />
-          </Popover>
+          
         </Toolbar>
       );
     }
@@ -169,6 +157,23 @@ const Header = props => {
         >
           <DrawerList setOpen={setOpen} open={open} />
         </SwipeableDrawer>
+        
+        <Popover
+            id={userPopId}
+            open={userPopOver}
+            anchorEl={userAnchorEl}
+            onClose={handleClose2}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right"
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+          >
+            <UserPopOver setAnchorEl={setUserAnchorEl}/>
+          </Popover>
       </AppBar>
     </>
   );

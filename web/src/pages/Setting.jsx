@@ -1,9 +1,7 @@
 import React from "react";
-import Layout from '../components/layout/LayoutMain';
 import {makeStyles, Button, Popover} from "@material-ui/core";
 import TimeTable from "../components/set/TimeTable";
 import SettingTable from "../components/set/SettingTable";
-import Header from "../components/layout/SubHeader";
 const useStyles = makeStyles(theme => ({
 
 }));

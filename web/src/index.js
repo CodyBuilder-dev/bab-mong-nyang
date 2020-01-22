@@ -10,7 +10,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: "CookieRun Bold"
+    fontFamily: "SCDream"
   }
 });
 const store = createStore(rootReducer, composeWithDevTools());
