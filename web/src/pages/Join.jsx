@@ -23,39 +23,37 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Join = () =>{
+const Join = ({props, state, onChange, onSubmit}) =>{
     const classes = useStyles();
-    // const [name, setName] = useState('');
-    // const [id, setId] = useState('');
-    // const [pw, setPw] = useState('');
-    // const [email, setEmail] = useState('');
-    // const onChangeName = e => {
-    //     setName(e.target.value);
-    // }
-    // const onChangeId = e => {
-    //     setId(e.target.value);
-    // }
-    // const onChangePw = e => {
-    //     setPw(e.target.value);
-    // }
-    // const onChangeEmail = e => {
-    //     setEmail(e.target.value);
-    // }
-    // const handleSubmit = (event) =>{
-    //     axios({
-    //         url : '',
-    //         method : 'post',
-    //         data : this.state,
-    //     }).then(
-    //         response => {
-    //             console.log("잘 전달 됨");
-    //         }
-    //     ).catch(error => {
-    //         console.log(error);
-    //     })
-
-    // }
-    
+    let input  = {u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, validated : true, u_Email : state.u_Email, u_Name : state.u_Name};
+    const onChangeInput = (e) => {
+        console.log(e);
+        let key = e.target.name;
+        switch(key){
+            case 'name':
+                input.u_Name = e.target.value;
+                onChange(input);
+                break;
+            case 'id' :
+                input.u_Id = e.target.value;
+                onChange(input);
+                break;
+            case 'pw' :
+                input.u_Pw = e.target.value;
+                onChange(input);
+                break;
+            case 'email' :
+                input.u_Email = e.target.value;
+                onChange(input);
+                break;
+            case 'pwconfirm' :
+                input.pwcon = e.target.value;
+                onChange(input);
+                break;
+            default :
+                console.log('default')
+        }
+    }
     
 
     return(
@@ -72,6 +70,8 @@ const Join = () =>{
                     label = "이름"
                     name = "name"
                     autoFocus
+                    onChange = {onChangeInput}
+                    value = {state.u_Name}
                 />
                 
                 <TextField 
@@ -82,6 +82,8 @@ const Join = () =>{
                     id = "id"
                     label = "아이디"
                     name = "id"
+                    onChange = {onChangeInput}
+                    value = {state.u_Id}
                 />
                 <TextField
                     variant="outlined"
@@ -93,6 +95,24 @@ const Join = () =>{
                     type="password"
                     id="pw"
                     autoComplete="current-password"
+                    onChange = {onChangeInput}
+                    value = {state.u_Pw}
+                />
+               <TextField           
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="pwconfirm"
+                    label="비밀번호 확인"
+                    type="password"
+                    id="pwconfirm"
+                    autoComplete="current-password"
+                    error = {state.validated}
+                    onChange = {onChangeInput}
+                    value = {state.pwcon}
+                    helperText = {state.validated ? "일치하지 않습니다" : ""}
+                    
                 />
                 <TextField 
                     variant="outlined"
@@ -103,6 +123,8 @@ const Join = () =>{
                     label = "이메일"
                     name = "email"
                     autoComplete="email"
+                    onChange = {onChangeInput}
+                    value={state.u_Email}
                 />
                 <Button
                     
@@ -110,7 +132,7 @@ const Join = () =>{
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    //onClick = {submitRegist}
+                    onClick = {onSubmit}
                 >
                     회원 가입
                 </Button>

@@ -2,35 +2,43 @@ import React,{useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Login from '../pages/Login';
 import { submitLogin, changeInput ,submitLogout} from '../modules/login';
-
-const LoginContainer = (props) => {
-    const {input} = useSelector(state => state.login, []);
-    const logedin = useSelector(state => state.login.state.logedin,[]);
+import axios from 'axios'
+const LoginContainer = (props)=> {
+    
+    const state = useSelector(state => state.login.state, []);
+    const url = 'http://70.12.246.68:3000';
     const dispatch = useDispatch();
     const changeId = useCallback(id => dispatch(submitLogin(id)),[dispatch]);
-    const onChangeInput = useCallback(id => dispatch(changeInput(id)),[dispatch]);
+    const onChangeInput = useCallback(input => dispatch(changeInput(input)),[dispatch]);
     const onlogout = useCallback(()=>dispatch(submitLogout()),[dispatch]);
     const onSubmit = useCallback(
         e=>{
-            changeId(input);
-            onChangeInput('');
-            console.log(props);
-            props.history.push('/main');
+            axios.post(url+'/user/login',{
+                u_Id: state.inputId,
+                u_Pw: state.inputPw
+            }).then(res =>{
+                console.log(res);
+                let validate = res.data;
+                if(validate){
+                    changeId(state.inputId);
+                    props.history.push('/main');
+                }else{
+                    alert('잘못된 입력입니다.');
+                }
+            })
         },
-        [input, onChangeInput, changeId]
-    )
+        [state, onChangeInput, changeId]
+    );
     const onChange = useCallback(
-        e=>{
-            onChangeInput(e.target.value);
+        input=>{
+            onChangeInput(input);
+            console.log(input);
         },
         [onChangeInput]
     )
     return (
-        <>
-        <Login props = {props} onSubmit = {onSubmit} onChange = {onChange} input = {input} logedin = {logedin}/>
-        </>
-    );
-    
+        <Login onSubmit = {onSubmit} onChange = {onChange} state = {state}/>
+    )
 };
 
 export default LoginContainer;

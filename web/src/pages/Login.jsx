@@ -21,36 +21,36 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Login = ({ props  , onSubmit, onChange, input, logedin }) =>{
+const Login = ({ props , state, onChange, onSubmit}) =>{
     const classes = useStyles();
+    let logedin = state.logedin;
+    
     useEffect(()=>{
         console.log("마운트될때 실행");
-        console.log(logedin);
-        console.log(props);
         if(logedin){
-            props.history.goBack();
+            props.history.push('main');
         }
     }, []);
-    const buttonClick = event => {
-        //axios.post('http://70.12.246.71:3000/login',{
-        //    id,
-        //    pw
-        //})
-        //.then(res => {
-        //    console.log(res);
-        //    let validate = res.data;
-        //    if(validate){
-        //        onSubmit(id);
-        //        props.history.push('/main');
-        //    }else{
-        //        alert('잘못된 입력입니다.');
-        //    }
-        //})
-    }; 
+    const onChangeInput = (e) =>{
+        let key = e.target.name;
+        let input = {id : state.inputId, pw : state.inputPw};
+        switch(key){
+            case 'id' :
+                input.id = e.target.value;
+                onChange(input);
+                break;
+            case 'password' :
+                input.pw = e.target.value;
+                onChange(input);
+            default :
+                console.log(e.target.name);
+        }
+    };
+    
     return(
         <div className={classes.page}>
             <h2>로그인</h2>
-            <p>{input}</p>
+            
             <div className={classes.inputText}>
                 <TextField 
                     variant="outlined"
@@ -61,8 +61,8 @@ const Login = ({ props  , onSubmit, onChange, input, logedin }) =>{
                     label = "아이디"
                     name = "id"
                     autoFocus
-                    value = {input}
-                    onChange = {onChange}
+                    value = {state.inputId}
+                    onChange = {onChangeInput}
                 />
                 <TextField
                     variant="outlined"
@@ -74,6 +74,8 @@ const Login = ({ props  , onSubmit, onChange, input, logedin }) =>{
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    value = {state.inputPw}
+                    onChange = {onChangeInput}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
@@ -81,13 +83,11 @@ const Login = ({ props  , onSubmit, onChange, input, logedin }) =>{
                     className = {classes.label}
                 />
                 <Button
-                    
                     fullWidth
                     variant="contained"
                     color="primary"
                     className={classes.submit}
                     onClick = {onSubmit}
-                    
                 >
                     로그인
                 </Button>

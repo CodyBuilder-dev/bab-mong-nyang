@@ -1,11 +1,12 @@
 import React, {useCallback} from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { changeRegistInput, validateId, submitRegist } from '../modules/members';
-import Join from '../pages/Join';
+import Modify from '../pages/Modify';
 import axios from 'axios';
 
-const JoinContainer = (props) =>{
+const ModifyContainer = (props) =>{
     const state  = useSelector(state => state.members.state, []);
+    //const curId = useSelector(state=>state.login.state.curId,[]);
     const url = 'http://70.12.246.68:3000';
     const dispatch = useDispatch();
     const onChangeInput = useCallback(input => dispatch(changeRegistInput(input)),[dispatch]);
@@ -23,6 +24,15 @@ const JoinContainer = (props) =>{
         },
         [onChangeInput]
     );
+    const onLoad = useCallback(
+        (curId)=>{
+            axios.get(url+'/user/'+curId)
+            .then(res=>{
+                console.log(res.data[0]);
+                onChangeInput({u_Id : res.data[0].u_Id, u_Pw : '', u_Email : res.data[0].u_Email, pwcon : '' , u_Name : res.data[0].u_Name, validated :false});
+            })
+        }
+    );
     const onSubmit = useCallback(
         e=>{
             if(state.pwcon ===''){
@@ -30,7 +40,7 @@ const JoinContainer = (props) =>{
                 console.log(state);
             }else{
                 console.log('axios요청 보냄');
-            axios.post(url+'/user/add',{
+            axios.put(url+'/user/update',{
                 u_Name : state.u_Name,
                 u_Id : state.u_Id,
                 u_Pw : state.u_Pw,
@@ -40,18 +50,18 @@ const JoinContainer = (props) =>{
                 console.log(validate);
                 if(validate){
                     regist();
-                    alert('회원가입 성공');
-                    props.history.push('/login');
+                    alert('회원정보 수정');
+                    //props.history.push('/login');
                 }
             }).catch(error => {
                 
             })
         }},
         [regist,state]
-    )
+    );
     return (
-        <Join  state = {state} onChange = {onChange} onSubmit = {onSubmit}></Join>
+        <Modify  state = {state} onChange = {onChange} onSubmit = {onSubmit} onLoad = {onLoad}></Modify>
     );
 
 };
-export default JoinContainer;
+export default ModifyContainer;
