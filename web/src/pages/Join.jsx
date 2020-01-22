@@ -25,9 +25,8 @@ const useStyles = makeStyles(theme => ({
 
 const Join = ({props, state, onChange, onSubmit}) =>{
     const classes = useStyles();
-    let input  = {u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, validated : true, u_Email : state.u_Email, u_Name : state.u_Name};
+    let input  = state.input;
     const onChangeInput = (e) => {
-        console.log(e);
         let key = e.target.name;
         switch(key){
             case 'name':
@@ -61,30 +60,27 @@ const Join = ({props, state, onChange, onSubmit}) =>{
             <h2>회원가입</h2>
             
             <div className={classes.inputText}>
-                <TextField 
-                    variant="outlined"
-                    margin="normal" 
-                    required
-                    fullWidth
-                    id = "name"
-                    label = "이름"
-                    name = "name"
-                    autoFocus
-                    onChange = {onChangeInput}
-                    value = {state.u_Name}
-                />
                 
+                <div style = {{display : "flex",
+                alignItems: "center"}}>
                 <TextField 
                     variant="outlined"
                     margin="normal" 
                     required
-                    fullWidth
+                    width = "250px"
                     id = "id"
                     label = "아이디"
                     name = "id"
                     onChange = {onChangeInput}
-                    value = {state.u_Id}
+                    value = {state.input.u_Id}
+                    autoFocus
                 />
+                <Button 
+                    variant = "outlined"
+                    
+                    width = "45px"
+                >중복체크</Button>
+                </div>
                 <TextField
                     variant="outlined"
                     margin="normal"
@@ -96,7 +92,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     id="pw"
                     autoComplete="current-password"
                     onChange = {onChangeInput}
-                    value = {state.u_Pw}
+                    value = {state.input.u_Pw}
                 />
                <TextField           
                     variant="outlined"
@@ -108,11 +104,23 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     type="password"
                     id="pwconfirm"
                     autoComplete="current-password"
-                    error = {state.validated}
+                    error = {(state.input.validated !== undefined && !state.input.validated)}
                     onChange = {onChangeInput}
-                    value = {state.pwcon}
-                    helperText = {state.validated ? "일치하지 않습니다" : ""}
+                    value = {state.input.pwcon}
+                    helperText = {(state.input.validated === undefined || state.input.validated) ? "" : "일치하지 않습니다"}
                     
+                />
+                <TextField 
+                    variant="outlined"
+                    margin="normal" 
+                    required
+                    fullWidth
+                    id = "name"
+                    label = "이름"
+                    name = "name"
+                    
+                    onChange = {onChangeInput}
+                    value = {state.input.u_Name}
                 />
                 <TextField 
                     variant="outlined"
@@ -124,7 +132,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     name = "email"
                     autoComplete="email"
                     onChange = {onChangeInput}
-                    value={state.u_Email}
+                    value={state.input.u_Email}
                 />
                 <Button
                     

@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const User = props =>{
     const classes = useStyles();
-    const curid = useSelector(state => state.login.state.curid);
+    //const curid = useSelector(state => state.login.state.curid);
     // useEffect(()=>{
     //     // axios.post('http://',{
     //     //     u_Id : curid

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   makeStyles,
   Typography,
@@ -17,7 +17,8 @@ import DrawerList from "./header/DrawerList";
 import NotificationList from "./header/NotificationList";
 import UserPopOver from "./header/UserPopOver";
 import { useHistory } from "react-router";
-
+import { useDispatch } from "react-redux";
+import { submitForm } from "../../modules/store"
 const useStyles = makeStyles(theme => ({
   appBar: {
     // padding: `0 calc(10px + 2vw)`
@@ -40,7 +41,8 @@ const Header = props => {
   const [userAnchorEl, setUserAnchorEl] = useState(null);
   const notePopOver = Boolean(anchorEl);
   const notePopId = notePopOver ? "popover" : undefined;
-  
+  const dispatch = useDispatch();
+  const refresh = useCallback(() => dispatch(submitForm('')), [dispatch]);
   const userPopOver = Boolean(userAnchorEl);
   const userPopId = userPopOver ? "popover" : undefined;
   window.onpopstate = e => {
@@ -65,6 +67,7 @@ const Header = props => {
     setUserAnchorEl(null);
   };
   const onClickBackHandler = () => {
+    refresh();
     history.push('/main');
   };
   if (
@@ -74,6 +77,7 @@ const Header = props => {
     return <></>;
   }
   const appBarEl = () => {
+    
     if (history.location.pathname === "/main") {
       return (
         <Toolbar>
