@@ -6,7 +6,8 @@ const useStyle = makeStyles(theme => ({
   home: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: "22vh"
   }
 }));
 const Home = props => {

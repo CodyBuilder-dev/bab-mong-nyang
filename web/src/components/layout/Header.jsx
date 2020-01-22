@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Typography,
@@ -53,19 +53,28 @@ const Header = props => {
   const userPopOver = Boolean(userAnchorEl);
   const userPopId = userPopOver ? "popover" : undefined;
 
-  const { notes, addNote, checkNote, checkAll, removeNote, removeAll } = useNotes(noteItems);
+  const {
+    notes,
+    addNote,
+    checkNote,
+    checkAll,
+    removeNote,
+    removeAll
+  } = useNotes(noteItems);
   const unRead = notes => {
     let cnt = 0;
     for (const note of notes) {
       if (!note.isRead) cnt++;
     }
-    return cnt
-  }
-  window.onpopstate = e => {
-    setOpen(false);
-    setAnchorEl(null);
-    setUserAnchorEl(null);
+    return cnt;
   };
+  useEffect(() => {
+    window.onpopstate = e => {
+      setOpen(false);
+      handleClose()
+      handleClose2(null);
+    };
+  });
   const onClickDrawerOpenHandler = () => {
     setOpen(true);
   };
@@ -130,36 +139,7 @@ const Header = props => {
           >
             <AccountCircle />
           </IconButton>
-        </Toolbar>
-      );
-    }
-    return (
-      <Toolbar>
-        <IconButton
-          color="default"
-          aria-label="open drawer"
-          onClick={onClickBackHandler}
-          edge="start"
-          className={classes.menuButton}
-        >
-          <ArrowBack />
-        </IconButton>
-      </Toolbar>
-    );
-  };
-  return (
-    <>
-      <AppBar position="fixed" color="default" className={classes.appBar}>
-        {appBarEl()}
-        <SwipeableDrawer
-          anchor={"left"}
-          open={open}
-          onClose={() => setOpen(false)}
-          onOpen={() => setOpen(true)}
-        >
-          <DrawerList setOpen={setOpen} open={open} />
-        </SwipeableDrawer>
-        <Popover
+          <Popover
           id={notePopId}
           open={notePopOver}
           anchorEl={anchorEl}
@@ -197,6 +177,36 @@ const Header = props => {
         >
           <UserPopOver setAnchorEl={setUserAnchorEl} />
         </Popover>
+        </Toolbar>
+      );
+    }
+    return (
+      <Toolbar>
+        <IconButton
+          color="default"
+          aria-label="open drawer"
+          onClick={onClickBackHandler}
+          edge="start"
+          className={classes.menuButton}
+        >
+          <ArrowBack />
+        </IconButton>
+      </Toolbar>
+    );
+  };
+  return (
+    <>
+      <AppBar position="fixed" color="default" className={classes.appBar}>
+        {appBarEl()}
+        <SwipeableDrawer
+          anchor={"left"}
+          open={open}
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+        >
+          <DrawerList setOpen={setOpen} open={open} />
+        </SwipeableDrawer>
+        
       </AppBar>
     </>
   );
