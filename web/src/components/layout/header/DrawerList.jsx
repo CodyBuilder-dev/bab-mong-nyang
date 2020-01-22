@@ -11,6 +11,7 @@ import {
   Divider,
   Container
 } from "@material-ui/core";
+import { useHistory } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
@@ -21,66 +22,74 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DrawerList = props => {
+const DrawerList = ({ setOpen, open }) => {
   const classes = useStyles();
-
+  const history = useHistory();
   return (
     <List className={classes.drawerList}>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <AccountCircle />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="야옹이" secondary="2살, ♂" />
-        </ListItem>
-        <Divider />
-        <Container>
-          <ListItem button component = 'a' href ='/main'>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            <AccountCircle />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary="야옹이" secondary="2살, ♂" />
+      </ListItem>
+      <Divider />
+      <Container>
+        {/* <NavLink to={"/main"} style={{ textDecoration: "none" }}> */}
+          <ListItem button onClick={() => {
+            setOpen(false)
+            history.push('/main')
+          }}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="홈" />
           </ListItem>
-          <Divider />
-          <ListItem button component = 'a' href ="/set">
+        {/* </NavLink> */}
+        <Divider />
+        {/* <NavLink to={"/set"} style={{ textDecoration: "none" }}> */}
+          <ListItem button onClick={() => {
+            setOpen(false)
+            history.push('/set')
+            }}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="설정" />
           </ListItem>
-          <Divider />
-          <Link to = '/info'>
-          <ListItem button>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="내 정보" />
-          </ListItem>
-          </Link>
-          <Divider />
-          <ListItem button key="userInfo">
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="내 정보" />
-          </ListItem>
-          <Divider />
-          <ListItem button key="userInfo">
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="내 정보" />
-          </ListItem>
-          <Divider />
-          <ListItem button key="userInfo">
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="내 정보" />
-          </ListItem>
-        </Container>
-      </List>
+        {/* </NavLink> */}
+        <Divider />
+        <ListItem button key="userInfo">
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="내 정보" />
+        </ListItem>
+        <Divider />
+        <ListItem button key="userInfo">
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="내 정보" />
+        </ListItem>
+        <Divider />
+        <ListItem button key="userInfo">
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="내 정보" />
+        </ListItem>
+        <Divider />
+        <ListItem button key="userInfo">
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="내 정보" />
+        </ListItem>
+      </Container>
+    </List>
   );
 };
 
