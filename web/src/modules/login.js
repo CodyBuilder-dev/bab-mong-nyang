@@ -14,7 +14,8 @@ export const submitLogout = input =>({
 
 const initialState = {
     curId : '',
-    input : '',
+    inputId : '',
+    inputPw : '',
     logedin : false
 }
 
@@ -22,16 +23,20 @@ const login = (state = initialState, action) => {
     switch (action.type){
         case SUBMIT_LOGIN:   
             return{
-                state: {curid : action.payload , input : '', logedin : true} 
+                state: {curid : action.payload , inputId : '', inputPw : '', logedin : true} 
             };
         case CHANGE_INPUT:
             return{
-                ...state,
-                input: action.payload
+                state : {
+                    curid : state.curId,
+                    inputId : action.payload.id,
+                    inputPw : action.payload.pw,
+                    logedin : state.logedin
+                }
             };
         case SUBMIT_LOGOUT:
             return{
-                state : {curid : '' , input : '', logedin : false}
+                state : {curid : '' , inputId : '', inputPw:'', logedin : false}
             }
         default:
             return {

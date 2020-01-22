@@ -1,63 +1,47 @@
 
 export const CHANGE_REGIST_INPUT ='members/CHANGE_REGIST_INPUT';
-export const CHANGE_LOGIN_INPUT = 'members/CHANGE_LOGIN_INPUT';
-export const INITIALIZE_FORM = 'members/INITIALIZE_FORM';
-export const CHANGE_CURID = 'members/CHANGE_CURID';
+export const VALIDATE_ID = 'members/VALIDATE_ID';
 export const SUBMIT_REGISTER = 'members/SUBMIT_REGISTER';
 
 export const changeRegistInput = input => ({
     type : CHANGE_REGIST_INPUT, payload: input
 });
-export const changeLoginInput = input => ({
-    type : CHANGE_LOGIN_INPUT, payload : input
-})
-export const initializeForm = () =>({
-    type : INITIALIZE_FORM
-});
-export const changeCurid = id => ({
-    type : CHANGE_CURID , payload : id
+export const validateId = id =>({
+    type : VALIDATE_ID , payload : id
 })
 export const submitRegist = register => ({
     type : SUBMIT_REGISTER, payload : register
 })
 const initialState = {
-   
-            name : '아',
-            id : '왜' ,
-            pw : '안',
-            email : '돼',
-    login : {
-            id : '',
-            pw : ''
-    },
-    curID : ''
+    u_Id : '',
+    u_Pw : '',
+    u_Name : '',
+    u_Email : '',
+    pwcon : '',
+    validated : false
 }
 
 const members = (state = initialState, action) => {
     switch (action.type){
         case CHANGE_REGIST_INPUT:   
             return{
-                ...state,
-                register : action.payload
-            };
-        case CHANGE_LOGIN_INPUT:
-            return{
-                ...state,
-                login : action.payload
-            };
-        case INITIALIZE_FORM:
-            return{
-                state : initialState
-            };
-        case CHANGE_CURID:
-            return{
-                ...state,
-                curID : action.payload
+                state : {
+                    u_Id : action.payload.u_Id,
+                    u_Pw : action.payload.u_Pw,
+                    u_Name : action.payload.u_Name,
+                    u_Email : action.payload.u_Email,
+                    pwcon : action.payload.pwcon,
+                    validated : action.payload.validated
+                }
             };
         case SUBMIT_REGISTER:
             return {
-                ...state
+                state : initialState
             };
+        case VALIDATE_ID:
+            return{
+                ...state
+            }
         default:
             return {
                 state
