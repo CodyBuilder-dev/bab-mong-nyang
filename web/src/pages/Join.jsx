@@ -22,27 +22,28 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1),
     },
 }));
+
 const Join = ({props, state, onChange, onSubmit}) =>{
     const classes = useStyles();
+    let input  = {u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, validated : true, u_Email : state.u_Email, u_Name : state.u_Name};
     const onChangeInput = (e) => {
         console.log(e);
         let key = e.target.name;
-        let input = {name : state.name, id : state.id, pw : state.pw, email : state.email, pwcon : state.pwcon, validated : state.validated};
         switch(key){
             case 'name':
-                input.name = e.target.value;
+                input.u_Name = e.target.value;
                 onChange(input);
                 break;
             case 'id' :
-                input.id = e.target.value;
+                input.u_Id = e.target.value;
                 onChange(input);
                 break;
             case 'pw' :
-                input.pw = e.target.value;
+                input.u_Pw = e.target.value;
                 onChange(input);
                 break;
             case 'email' :
-                input.email = e.target.value;
+                input.u_Email = e.target.value;
                 onChange(input);
                 break;
             case 'pwconfirm' :
@@ -70,7 +71,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     name = "name"
                     autoFocus
                     onChange = {onChangeInput}
-                    value = {state.name}
+                    value = {state.u_Name}
                 />
                 
                 <TextField 
@@ -82,7 +83,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     label = "아이디"
                     name = "id"
                     onChange = {onChangeInput}
-                    value = {state.id}
+                    value = {state.u_Id}
                 />
                 <TextField
                     variant="outlined"
@@ -95,7 +96,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     id="pw"
                     autoComplete="current-password"
                     onChange = {onChangeInput}
-                    value = {state.pw}
+                    value = {state.u_Pw}
                 />
                <TextField           
                     variant="outlined"
@@ -123,7 +124,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     name = "email"
                     autoComplete="email"
                     onChange = {onChangeInput}
-                    value={state.email}
+                    value={state.u_Email}
                 />
                 <Button
                     

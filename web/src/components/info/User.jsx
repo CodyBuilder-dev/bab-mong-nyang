@@ -15,6 +15,11 @@ const useStyles = makeStyles(theme => ({
         width: '300px', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
+    submit : {
+        margin : theme.spacing(1,0,1),
+        lineHeight : '2.5rem',
+        fontSize : 16,
+    }
 }));
 const User = props =>{
     const classes = useStyles();
@@ -30,12 +35,13 @@ const User = props =>{
     //     input.email = 'tmp@tmp.com';
     // },[])
     const [state, setState] = React.useState({
-        id : curid,
+        id : 'curid',
         name : '몰라',
         email : 'tmp@tmp.com'
     })
     return(
         <div className = {classes.page}>
+            <h2>내 정보</h2>
             <div className={classes.inputText}>
             <TextField
                 id="outlined-read-only-input"
@@ -76,10 +82,11 @@ const User = props =>{
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    className={classes.submit}  
                 >
                     수정하기
-                </Button></Link>
+                </Button>
+            </Link>
             </div>
         </div>
     );

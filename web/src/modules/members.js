@@ -13,10 +13,10 @@ export const submitRegist = register => ({
     type : SUBMIT_REGISTER, payload : register
 })
 const initialState = {
-    id : '',
-    pw : '',
-    name : '',
-    email : '',
+    u_Id : '',
+    u_Pw : '',
+    u_Name : '',
+    u_Email : '',
     pwcon : '',
     validated : false
 }
@@ -26,10 +26,10 @@ const members = (state = initialState, action) => {
         case CHANGE_REGIST_INPUT:   
             return{
                 state : {
-                    id : action.payload.id,
-                    pw : action.payload.pw,
-                    name : action.payload.name,
-                    email : action.payload.email,
+                    u_Id : action.payload.u_Id,
+                    u_Pw : action.payload.u_Pw,
+                    u_Name : action.payload.u_Name,
+                    u_Email : action.payload.u_Email,
                     pwcon : action.payload.pwcon,
                     validated : action.payload.validated
                 }

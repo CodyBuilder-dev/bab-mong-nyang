@@ -11,6 +11,7 @@ import "./index.css";
 import LoginContainer from './containers/LoginContainer';
 import JoinContainer from './containers/JoinContainer';
 import Info from './pages/Info';
+import ModifyContainer from './containers/ModifyContainer';
 const App = () => {
     return (
         <>
@@ -24,6 +25,7 @@ const App = () => {
             <Route path = "/detail" component = {Detail}/>
             <Route path ="/main" component = {Main}/>
             <Route path ="/info" component = {Info}/>
+            <Route path ="/modify" component = {ModifyContainer}/>
         </BrowserRouter>
         
         </>
