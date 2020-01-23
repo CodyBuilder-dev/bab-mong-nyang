@@ -9,7 +9,6 @@ import {
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import { setCurrentID } from "../../../modules/store";
 const useStyles = makeStyles(theme => ({

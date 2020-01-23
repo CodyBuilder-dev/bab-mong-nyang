@@ -40,7 +40,8 @@ const useStyles = makeStyles(theme => ({
   },
   deviceInfoBox: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    marginLeft: '36px'
   }
 }));
 

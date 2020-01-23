@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Layout from '../components/layout/Layout';
 import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
 import axios from 'axios'
 import { Link } from 'react-router-dom';

@@ -5,22 +5,22 @@ import axios from 'axios';
 import {useSelector} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
-    submit : {
-        margin : theme.spacing(3,0,2),
-        lineHeight : '2.5rem',
-        fontSize : 16,
-    },
-    page : {
-        marginTop: theme.spacing(6),
-        marginBottom : theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    inputText : {
-        width: '300px', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    lineHeight: "2.5rem",
+    fontSize: 16
+  },
+  page: {
+    marginTop: theme.spacing(6),
+    marginBottom: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  inputText: {
+    width: "300px", // Fix IE 11 issue.
+    marginTop: theme.spacing(1)
+  }
 }));
 const Modify = ({props, state, onChange, onSubmit, onLoad}) =>{
     const classes = useStyles();
@@ -62,7 +62,7 @@ const Modify = ({props, state, onChange, onSubmit, onLoad}) =>{
                 console.log('default')
         }
     }
-    
+  };
 
     return(
         

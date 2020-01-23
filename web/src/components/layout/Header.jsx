@@ -9,6 +9,8 @@ import {
   Badge,
   Popover
 } from "@material-ui/core";
+import { useNotes } from "../custom-hooks/custom-hooks";
+
 import { ArrowBack } from "@material-ui/icons";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -32,7 +34,14 @@ const useStyles = makeStyles(theme => ({
     cursor: "pointer"
   }
 }));
-
+// ========================================================================
+let noteItems = [
+  { value: "사료통이 비었어요.", isRead: false },
+  { value: "야옹이가 밥을 다먹었어요!", isRead: false },
+  { value: "오늘은 야옹이가 밥을 10g 남겼어요.", isRead: false },
+  { value: "안녕하세요!", isRead: false }
+];
+// Test data=============================================================
 const Header = props => {
   const classes = useStyles();
   const history = useHistory();
@@ -45,10 +54,29 @@ const Header = props => {
   const refresh = useCallback(() => dispatch(submitForm('')), [dispatch]);
   const userPopOver = Boolean(userAnchorEl);
   const userPopId = userPopOver ? "popover" : undefined;
-  window.onpopstate = e => {
-    setOpen(false)
-    setUserAnchorEl(null)
-  }
+
+  const {
+    notes,
+    addNote,
+    checkNote,
+    checkAll,
+    removeNote,
+    removeAll
+  } = useNotes(noteItems);
+  const unRead = notes => {
+    let cnt = 0;
+    for (const note of notes) {
+      if (!note.isRead) cnt++;
+    }
+    return cnt;
+  };
+  useEffect(() => {
+    window.onpopstate = e => {
+      setOpen(false);
+      handleClose()
+      handleClose2(null);
+    };
+  });
   const onClickDrawerOpenHandler = () => {
     setOpen(true);
   };
@@ -101,7 +129,7 @@ const Header = props => {
             variant="contained"
             onClick={handleClick}
           >
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={unRead(notes)} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -116,22 +144,43 @@ const Header = props => {
             <AccountCircle />
           </IconButton>
           <Popover
-            id={notePopId}
-            open={notePopOver}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-          >
-            <NotificationList />
-          </Popover>
-          
+          id={notePopId}
+          open={notePopOver}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+        >
+          <NotificationList
+            notes={notes}
+            onItemCheck={idx => checkNote(idx)}
+            onItemRemove={idx => removeNote(idx)}
+            onCheckAll={() => checkAll()}
+            onRemoveAll={() => removeAll()}
+          />
+        </Popover>
+        <Popover
+          id={userPopId}
+          open={userPopOver}
+          anchorEl={userAnchorEl}
+          onClose={handleClose2}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+        >
+          <UserPopOver setAnchorEl={setUserAnchorEl} />
+        </Popover>
         </Toolbar>
       );
     }
@@ -162,22 +211,6 @@ const Header = props => {
           <DrawerList setOpen={setOpen} open={open} />
         </SwipeableDrawer>
         
-        <Popover
-            id={userPopId}
-            open={userPopOver}
-            anchorEl={userAnchorEl}
-            onClose={handleClose2}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-          >
-            <UserPopOver setAnchorEl={setUserAnchorEl}/>
-          </Popover>
       </AppBar>
     </>
   );
