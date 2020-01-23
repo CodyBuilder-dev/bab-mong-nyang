@@ -1,63 +1,55 @@
 import React, {useCallback} from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { changeRegistInput, validateId, submitRegist } from '../modules/members';
 import Modify from '../pages/Modify';
 import axios from 'axios';
-
+import {changeInput, submitForm, validateForm, setCurrentID}  from '../modules/store'
 const ModifyContainer = (props) =>{
-    const state  = useSelector(state => state.members.state, []);
-    //const curId = useSelector(state=>state.login.state.curId,[]);
-    const url = 'http://70.12.246.68:3000';
+    const state  = useSelector(state => state.store, []);
     const dispatch = useDispatch();
-    const onChangeInput = useCallback(input => dispatch(changeRegistInput(input)),[dispatch]);
-    const regist = useCallback(()=> dispatch(submitRegist()),[]);
+    const change_Input = useCallback(input => dispatch(changeInput(input)),[dispatch]);
+    const submit_Form = useCallback(()=> dispatch(submitForm('')),[]);
+    const validate_Form = useCallback((flag) => dispatch(validateForm(flag)),[dispatch]);
     const onChange = useCallback(
         input=>{
-            console.log('pwcon = '+  input.pwcon.length + ' pw = ' + input.u_Pw )
-            if(input.pwcon === '' || input.u_Pw === input.pwcon){
-                input.validated = false;
-            }else{
+            //console.log('pwcon = '+  input.pwcon.length + ' pw = ' + input.u_Pw )
+            if(input.pwcon === '' || input.u_Pw === input.pwcon || input.pwcon === undefined){
                 input.validated = true;
+            }else{
+                input.validated = false;
             }
-            onChangeInput(input);
+            change_Input(input);
             console.log(input);
         },
-        [onChangeInput]
+        [change_Input]
     );
-    const onLoad = useCallback(
-        (curId)=>{
-            axios.get(url+'/user/'+curId)
+    const onLoad = 
+        async curId=>{
+            await axios.get(state.url+'/user/'+state.currentID)
             .then(res=>{
                 console.log(res.data[0]);
-                onChangeInput({u_Id : res.data[0].u_Id, u_Pw : '', u_Email : res.data[0].u_Email, pwcon : '' , u_Name : res.data[0].u_Name, validated :false});
-            })
-        }
-    );
+                change_Input({u_Id : res.data[0].u_Id, u_Pw : '', u_Email : res.data[0].u_Email, pwcon : '' , u_Name : res.data[0].u_Name, validated :true});
+            });
+        };
     const onSubmit = useCallback(
         e=>{
             if(state.pwcon ===''){
-                onChangeInput({u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, validated : true, u_Email : state.u_Email, u_Name : state.u_Name});
-                console.log(state);
+                validate_Form(false);
             }else{
                 console.log('axios요청 보냄');
-            axios.put(url+'/user/update',{
-                u_Name : state.u_Name,
-                u_Id : state.u_Id,
-                u_Pw : state.u_Pw,
-                u_Email : state.u_Email
-            }).then(res =>{
-                let validate = res.data;
-                console.log(validate);
-                if(validate){
-                    regist();
+                
+            axios.put(state.url+'/user',state.input).then(res =>{
+                let flag = res.data;
+                console.log(flag);
+                if(flag){
                     alert('회원정보 수정');
-                    //props.history.push('/login');
+                    submit_Form();
+                    props.history.push('/info');
                 }
             }).catch(error => {
                 
             })
         }},
-        [regist,state]
+        [validate_Form, submit_Form,state]
     );
     return (
         <Modify  state = {state} onChange = {onChange} onSubmit = {onSubmit} onLoad = {onLoad}></Modify>

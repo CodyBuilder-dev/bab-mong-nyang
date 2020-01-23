@@ -10,7 +10,7 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { submitLogout } from "../../../modules/login";
+import { setCurrentID } from "../../../modules/store";
 const useStyles = makeStyles(theme => ({
   noteList: {
     height: "100%"
@@ -26,7 +26,7 @@ const UserPopOver = ({ setAnchorEl }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const logout = useCallback(() => dispatch(submitLogout()), [dispatch]);
+  const logout = useCallback(() => dispatch(setCurrentID('')), [dispatch]);
   const onClickLogout = () => {
     setAnchorEl(null);
     logout();

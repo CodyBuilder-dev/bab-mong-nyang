@@ -60,7 +60,10 @@ const DrawerList = ({ setOpen, open }) => {
           </ListItem>
         {/* </NavLink> */}
         <Divider />
-        <ListItem button key="userInfo">
+        <ListItem button onClick={() => {
+          setOpen(false)
+          history.push('/info')
+        }}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

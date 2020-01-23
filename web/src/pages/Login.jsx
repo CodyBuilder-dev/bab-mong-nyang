@@ -22,24 +22,25 @@ const useStyles = makeStyles(theme => ({
 
 const Login = ({ props , state, onChange, onSubmit}) =>{
     const classes = useStyles();
-    let logedin = state.logedin;
+    let currentID = state.currentID;
+    let input = state.input;
     
     useEffect(()=>{
         console.log("마운트될때 실행");
-        if(logedin){
+        if(currentID.length !== 0){
             props.history.push('main');
         }
     }, []);
     const onChangeInput = (e) =>{
         let key = e.target.name;
-        let input = {id : state.inputId, pw : state.inputPw};
+        console.log(input);
         switch(key){
             case 'id' :
-                input.id = e.target.value;
+                input.u_Id = e.target.value;
                 onChange(input);
                 break;
             case 'password' :
-                input.pw = e.target.value;
+                input.u_Pw = e.target.value;
                 onChange(input);
             default :
                 console.log(e.target.name);
@@ -60,7 +61,7 @@ const Login = ({ props , state, onChange, onSubmit}) =>{
                     label = "아이디"
                     name = "id"
                     autoFocus
-                    value = {state.inputId}
+                    value = {state.input.u_Id}
                     onChange = {onChangeInput}
                 />
                 <TextField
@@ -73,7 +74,7 @@ const Login = ({ props , state, onChange, onSubmit}) =>{
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    value = {state.inputPw}
+                    value = {state.input.u_Pw}
                     onChange = {onChangeInput}
                 />
                 <FormControlLabel
