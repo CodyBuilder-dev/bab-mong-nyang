@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import Layout from "../components/layout/Layout";
-import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
+import {makeStyles, TextField, FormControl, FormHelperText, Button, InputLabel, OutlinedInput} from "@material-ui/core";
 import axios from 'axios';
 
 
@@ -21,13 +21,15 @@ const useStyles = makeStyles(theme => ({
         width: '300px', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
+    helperText : {
+        color : 'red'
+    }
 }));
 
-const Join = ({props, state, onChange, onSubmit}) =>{
+const Join = ({props, state, onChange, onSubmit, onValidateID}) =>{
     const classes = useStyles();
-    let input  = {u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, validated : true, u_Email : state.u_Email, u_Name : state.u_Name};
+    let input  = state.input;
     const onChangeInput = (e) => {
-        console.log(e);
         let key = e.target.name;
         switch(key){
             case 'name':
@@ -54,36 +56,35 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                 console.log('default')
         }
     }
-    
-
+    const validateID = (e) =>{
+        console.log(e);
+        console.log(e.target);
+        onValidateID();
+    }
+    // const [labelWidth, setLabelWidth] = React.useState(0);
+    // const labelRef  = useRef(null);
+    // React.useEffect(() => {
+    //     setLabelWidth(labelRef.current.offsetWidth);
+    //   }, []);
     return(
         <div className={classes.page}>
             <h2>회원가입</h2>
             
             <div className={classes.inputText}>
-                <TextField 
+                <TextField           
                     variant="outlined"
-                    margin="normal" 
+                    margin="normal"
                     required
                     fullWidth
-                    id = "name"
-                    label = "이름"
-                    name = "name"
-                    autoFocus
+                    name="id"
+                    label="아이디"
+                    id="id"
+                    error = {(state.input.idValidated !== undefined && !state.input.idValidated)}
                     onChange = {onChangeInput}
-                    value = {state.u_Name}
-                />
-                
-                <TextField 
-                    variant="outlined"
-                    margin="normal" 
-                    required
-                    fullWidth
-                    id = "id"
-                    label = "아이디"
-                    name = "id"
-                    onChange = {onChangeInput}
-                    value = {state.u_Id}
+                    onBlur = {validateID}
+                    value = {state.input.id}
+                    helperText = {(state.input.idValidated === undefined || state.input.idValidated) ? "" : "일치하지 않습니다"}
+                    
                 />
                 <TextField
                     variant="outlined"
@@ -96,7 +97,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     id="pw"
                     autoComplete="current-password"
                     onChange = {onChangeInput}
-                    value = {state.u_Pw}
+                    value = {state.input.u_Pw}
                 />
                <TextField           
                     variant="outlined"
@@ -108,11 +109,23 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     type="password"
                     id="pwconfirm"
                     autoComplete="current-password"
-                    error = {state.validated}
+                    error = {(state.input.pwValidated !== undefined && !state.input.pwValidated)}
                     onChange = {onChangeInput}
-                    value = {state.pwcon}
-                    helperText = {state.validated ? "일치하지 않습니다" : ""}
+                    value = {state.input.pwcon}
+                    helperText = {(state.input.pwValidated === undefined || state.input.pwValidated) ? "" : "일치하지 않습니다"}
                     
+                />
+                <TextField 
+                    variant="outlined"
+                    margin="normal" 
+                    required
+                    fullWidth
+                    id = "name"
+                    label = "이름"
+                    name = "name"
+                    
+                    onChange = {onChangeInput}
+                    value = {state.input.u_Name}
                 />
                 <TextField 
                     variant="outlined"
@@ -124,7 +137,7 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     name = "email"
                     autoComplete="email"
                     onChange = {onChangeInput}
-                    value={state.u_Email}
+                    value={state.input.u_Email}
                 />
                 <Button
                     
