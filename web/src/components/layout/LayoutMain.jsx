@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Layout = (props) => {
+const Layout = props => {
   const classes = useStyles();
   console.log(props);
   return (

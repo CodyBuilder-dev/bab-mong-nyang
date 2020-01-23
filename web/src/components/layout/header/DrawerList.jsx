@@ -37,33 +37,42 @@ const DrawerList = ({ setOpen, open }) => {
       <Divider />
       <Container>
         {/* <NavLink to={"/main"} style={{ textDecoration: "none" }}> */}
-          <ListItem button onClick={() => {
-            setOpen(false)
-            history.push('/main')
-          }}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="홈" />
-          </ListItem>
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/main");
+          }}
+        >
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="홈" />
+        </ListItem>
         {/* </NavLink> */}
         <Divider />
         {/* <NavLink to={"/set"} style={{ textDecoration: "none" }}> */}
-          <ListItem button onClick={() => {
-            setOpen(false)
-            history.push('/set')
-            }}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="설정" />
-          </ListItem>
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/set");
+          }}
+        >
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="설정" />
+        </ListItem>
         {/* </NavLink> */}
         <Divider />
-        <ListItem button onClick={() => {
-          setOpen(false)
-          history.push('/info')
-        }}>
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/info");
+          }}
+        >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

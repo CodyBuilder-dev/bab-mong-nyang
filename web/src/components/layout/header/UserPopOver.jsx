@@ -26,7 +26,7 @@ const UserPopOver = ({ setAnchorEl }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const logout = useCallback(() => dispatch(setCurrentID('')), [dispatch]);
+  const logout = useCallback(() => dispatch(setCurrentID("")), [dispatch]);
   const onClickLogout = () => {
     setAnchorEl(null);
     logout();
@@ -34,7 +34,7 @@ const UserPopOver = ({ setAnchorEl }) => {
   };
   const onClickUserInfo = () => {
     setAnchorEl(null);
-  }
+  };
   const items = [
     {
       key: 1,
