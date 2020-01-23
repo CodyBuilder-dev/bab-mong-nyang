@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "childprocess": "^2.0.2",
     "express": "^4.17.1",
     "mariadb": "^2.1.5",
-    "mybatis-mapper": "^0.6.5"
+    "mybatis-mapper": "^0.6.5",
+    "pandas": "0.0.3"
   }
 }

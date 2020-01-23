@@ -1,61 +1,58 @@
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <wiringPi.h>
-#include <softPwm.h>
-#include <unistd.h>
+//#include <mysql.h>
 
 //LED pin set
-#define LED1 27
-#define LED2 28
-#define LED3 29
+#define IRRCV 27
 //MOTOR pin set
-#define ENA 29
-#define IN1 28
-#define IN2 27
-#define IN3 25
-#define IN4 24
-#define ENB 23
-//Photo diode pin set
-#define PHOTO 1
+#define IN1 22
+#define IN2 23
+#define IN3 24
+#define IN4 25
 
-void goFront()
+void setsteps(int w1, int w2, int w3, int w4)
 {
-    digitalWrite(IN1, 0);
-    digitalWrite(IN2, 1);
-    digitalWrite(IN3, 0);
-    digitalWrite(IN4, 1);
-    softPwmWrite(ENA, 128);
-    softPwmWrite(ENB, 128);
+    pinMode(IN1, OUTPUT);
+    digitalWrite(IN1, w1);
+    pinMode(IN2, OUTPUT);
+    digitalWrite(IN2, w2);
+    pinMode(IN3, OUTPUT);
+    digitalWrite(IN3, w3);
+    pinMode(IN4, OUTPUT);
+    digitalWrite(IN4, w4);
 }
-void end()
-{
-    digitalWrite(IN1, 0);
-    digitalWrite(IN2, 0);
-    digitalWrite(IN3, 0);
-    digitalWrite(IN4, 0);
-    softPwmWrite(ENA, 0);
-    softPwmWrite(ENB, 0);
+void goFront(int steps){
+    for(int i=0; i<=steps; ++i){
+        setsteps(1,1,0,0);
+        delay(5);
+        setsteps(0,1,1,0);
+        delay(5);
+        setsteps(0,0,1,1);
+        delay(5);
+        setsteps(1,0,0,1);
+        delay(5);
+    }
 }
-int main()
+void end(){
+      setsteps(0,0,0,0);
+}
+
+int main(int argc, char *argv[])
 {
     if( wiringPiSetup() == -1 )
     {
         printf("wiringPi Error!! \n");
         return 0;
     }
-    //Initial Setting
-    pinMode(ENA, OUTPUT);
-    pinMode(IN1, OUTPUT);
-    pinMode(IN2, OUTPUT);
-    pinMode(IN3, OUTPUT);
-    pinMode(IN4, OUTPUT);
-    pinMode(ENB, OUTPUT);
-    softPwmCreate(ENA, 0, 255);
-    softPwmCreate(ENB, 0, 255);
+
+    pinMode(IRRCV, INPUT);
+    int trigger = digitalRead(IRRCV);
+   int loopcnt = atoi(argv[1]);
     //call goFront function
-    goFront();
-    usleep(1000*1000*5);
+    for(int i=0; i<loopcnt; ++i)
+        goFront(128); //512 1loop
     end();
+    printf("feed %d Times!\n", loopcnt);
     return 0;
 }
