@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 export const useNotes = (initialValue = []) => {
   const [notes, setNotes] = useState(initialValue);
   return {
@@ -45,3 +45,26 @@ export const useNotes = (initialValue = []) => {
     }
   };
 };
+
+export const useFetchData =(requestURL) => {
+  const [input, setInput] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    console.log("mount");
+    const fetch = async () => {
+      console.log(requestURL);
+      setIsLoading(true);
+      const result = await axios.get(requestURL);
+      console.log(result);
+      result.data[0].u_Pw = "";
+      setInput(result.data[0]);
+      setIsLoading(false);
+    };
+    fetch();
+    //console.log(input);
+  }, []);
+  return {
+    input,
+    isLoading
+  }
+}

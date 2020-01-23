@@ -36,7 +36,6 @@ const DrawerList = ({ setOpen, open }) => {
       </ListItem>
       <Divider />
       <Container>
-        {/* <NavLink to={"/main"} style={{ textDecoration: "none" }}> */}
         <ListItem
           button
           onClick={() => {
@@ -49,9 +48,7 @@ const DrawerList = ({ setOpen, open }) => {
           </ListItemIcon>
           <ListItemText primary="홈" />
         </ListItem>
-        {/* </NavLink> */}
         <Divider />
-        {/* <NavLink to={"/set"} style={{ textDecoration: "none" }}> */}
         <ListItem
           button
           onClick={() => {
@@ -64,7 +61,6 @@ const DrawerList = ({ setOpen, open }) => {
           </ListItemIcon>
           <ListItemText primary="설정" />
         </ListItem>
-        {/* </NavLink> */}
         <Divider />
         <ListItem
           button
@@ -79,11 +75,17 @@ const DrawerList = ({ setOpen, open }) => {
           <ListItemText primary="내 정보" />
         </ListItem>
         <Divider />
-        <ListItem button key="userInfo">
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/regist");
+          }}
+        >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary="내 정보" />
+          <ListItemText primary="기기 등록" />
         </ListItem>
         <Divider />
         <ListItem button key="userInfo">

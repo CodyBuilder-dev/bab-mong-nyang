@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
+import {useFetchData} from "../components/custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -30,23 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
   const classes = useStyles();
-  const [input, setInput] = useState({});
-  //const [url, setUrl] = useState(state.url+'/user/' + state.currentID);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    console.log("mount");
-    const fetch = async () => {
-      setIsLoading(true);
-      const result = await axios.get(state.url + "/user/" + state.currentID);
-      console.log(result);
-      result.data[0].u_Pw = "";
-      setInput(result.data[0]);
-      setIsLoading(false);
-    };
-    fetch();
-    //console.log(input);
-  }, []);
-
+  const {input, isLoading} = useFetchData(state.url+'/user/'+state.currentID);
   const onChangeInput = e => {
     //console.log(input);
     let key = e.target.name;
