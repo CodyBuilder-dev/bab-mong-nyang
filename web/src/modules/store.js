@@ -18,10 +18,10 @@ export const validateForm = form=>({
 export const setCurrentID = id =>({
     type : SET_CURRENT_ID, payload : id
 });
-
+//70.12.246.68
 const initialState = {
         input : {},
-        url : 'http://localhost:3000',
+        url : 'http://70.12.246.68:3000',
         currentID : ''
 }
 const store = (state = initialState, action) =>{

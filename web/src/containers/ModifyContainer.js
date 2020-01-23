@@ -36,6 +36,7 @@ const ModifyContainer = (props) =>{
                 validate_Form(false);
             }else{
                 console.log('axios요청 보냄');
+                
             axios.put(state.url+'/user',state.input).then(res =>{
                 let flag = res.data;
                 console.log(flag);
@@ -48,7 +49,7 @@ const ModifyContainer = (props) =>{
                 
             })
         }},
-        [validate_Form, submit_Form]
+        [validate_Form, submit_Form,state]
     );
     return (
         <Modify  state = {state} onChange = {onChange} onSubmit = {onSubmit} onLoad = {onLoad}></Modify>

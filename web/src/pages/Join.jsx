@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import Layout from "../components/layout/Layout";
-import {makeStyles, TextField, FormControlLabel, Checkbox, Button} from "@material-ui/core";
+import {makeStyles, TextField, FormControl, FormHelperText, Button, InputLabel, OutlinedInput} from "@material-ui/core";
 import axios from 'axios';
 
 
@@ -21,9 +21,12 @@ const useStyles = makeStyles(theme => ({
         width: '300px', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
+    helperText : {
+        color : 'red'
+    }
 }));
 
-const Join = ({props, state, onChange, onSubmit}) =>{
+const Join = ({props, state, onChange, onSubmit, onValidateID}) =>{
     const classes = useStyles();
     let input  = state.input;
     const onChangeInput = (e) => {
@@ -53,34 +56,36 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                 console.log('default')
         }
     }
-    
-
+    const validateID = (e) =>{
+        console.log(e);
+        console.log(e.target);
+        onValidateID();
+    }
+    // const [labelWidth, setLabelWidth] = React.useState(0);
+    // const labelRef  = useRef(null);
+    // React.useEffect(() => {
+    //     setLabelWidth(labelRef.current.offsetWidth);
+    //   }, []);
     return(
         <div className={classes.page}>
             <h2>회원가입</h2>
             
             <div className={classes.inputText}>
-                
-                <div style = {{display : "flex",
-                alignItems: "center"}}>
-                <TextField 
+                <TextField           
                     variant="outlined"
-                    margin="normal" 
+                    margin="normal"
                     required
-                    width = "250px"
-                    id = "id"
-                    label = "아이디"
-                    name = "id"
+                    fullWidth
+                    name="id"
+                    label="아이디"
+                    id="id"
+                    error = {(state.input.idValidated !== undefined && !state.input.idValidated)}
                     onChange = {onChangeInput}
-                    value = {state.input.u_Id}
-                    autoFocus
-                />
-                <Button 
-                    variant = "outlined"
+                    onBlur = {validateID}
+                    value = {state.input.id}
+                    helperText = {(state.input.idValidated === undefined || state.input.idValidated) ? "" : "일치하지 않습니다"}
                     
-                    width = "45px"
-                >중복체크</Button>
-                </div>
+                />
                 <TextField
                     variant="outlined"
                     margin="normal"
@@ -104,10 +109,10 @@ const Join = ({props, state, onChange, onSubmit}) =>{
                     type="password"
                     id="pwconfirm"
                     autoComplete="current-password"
-                    error = {(state.input.validated !== undefined && !state.input.validated)}
+                    error = {(state.input.pwValidated !== undefined && !state.input.pwValidated)}
                     onChange = {onChangeInput}
                     value = {state.input.pwcon}
-                    helperText = {(state.input.validated === undefined || state.input.validated) ? "" : "일치하지 않습니다"}
+                    helperText = {(state.input.pwValidated === undefined || state.input.pwValidated) ? "" : "일치하지 않습니다"}
                     
                 />
                 <TextField 

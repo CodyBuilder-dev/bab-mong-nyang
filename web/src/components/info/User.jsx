@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useEffect, useState} from "react";
 import {makeStyles, TextField,Button} from "@material-ui/core";
 import {useSelector} from 'react-redux';
 import axios from 'axios';
@@ -23,42 +23,50 @@ const useStyles = makeStyles(theme => ({
 }));
 const User = props =>{
     const classes = useStyles();
-    //const curid = useSelector(state => state.login.state.curid);
-    // useEffect(()=>{
-    //     // axios.post('http://',{
-    //     //     u_Id : curid
-    //     // }).then(res=>{
-    //     //     input.email = res.data.email;
-    //     //     input.name = res.data.name;
-    //     // });
-    //     input.name = '몰라';
-    //     input.email = 'tmp@tmp.com';
-    // },[])
-    const [state, setState] = React.useState({
-        id : 'curid',
-        name : '몰라',
-        email : 'tmp@tmp.com'
-    })
+    const state = useSelector(state=> state.store,[]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [input , setInput] = useState({});
+    useEffect(()=>{
+        console.log('mount');
+        const fetch = async ()=>{
+            setIsLoading(true);
+            const result = await axios.get(state.url+'/user/'+state.currentID,);
+            console.log(result);
+            result.data[0].u_Pw = '';
+            setInput(result.data[0]);
+            setIsLoading(false);
+        };
+        fetch();
+        //console.log(input);
+    },[])
     return(
+        
         <div className = {classes.page}>
             <h2>내 정보</h2>
+            {
+                isLoading ? (
+                    <div>Loading....</div>
+                ) :
+                (
+            
+            
             <div className={classes.inputText}>
+            
             <TextField
                 id="outlined-read-only-input"
-                label="이름"
-                defaultValue={state.name}
+                label="아이디"
+                value={input.u_Id}
                 InputProps={{
                     readOnly: true,
                 }}
                 margin = "normal"
                 fullWidth
-
                 variant="outlined"
             />
             <TextField
                 id="outlined-read-only-input"
-                label="아이디"
-                defaultValue={state.id}
+                label="이름"
+                defaultValue={input.u_Name}
                 InputProps={{
                     readOnly: true,
                 }}
@@ -69,7 +77,7 @@ const User = props =>{
             <TextField
                 id="outlined-read-only-input"
                 label="이메일"
-                defaultValue={state.email}
+                defaultValue={input.u_Email}
                 InputProps={{
                     readOnly: true,
                 }}
@@ -88,7 +96,9 @@ const User = props =>{
                 </Button>
             </Link>
             </div>
+                )}
         </div>
+                
     );
 
 };

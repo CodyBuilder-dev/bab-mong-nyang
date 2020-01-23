@@ -13,9 +13,9 @@ const JoinContainer = (props) =>{
         input=>{
             //console.log('pwcon = '+  input.pwcon.length + ' pw = ' + input.u_Pw )
             if(input.pwcon === '' || input.u_Pw === input.pwcon || input.pwcon === undefined){
-                input.validated = true;
+                input.pwValidated = true;
             }else{
-                input.validated = false;
+                input.pwValidated = false;
             }
             change_Input(input);
             console.log(input);
@@ -25,7 +25,7 @@ const JoinContainer = (props) =>{
     const onSubmit = useCallback(
         e=>{
             if(state.pwcon ===''){
-                change_Input({u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, validated : false, u_Email : state.u_Email, u_Name : state.u_Name});
+                change_Input({u_Id : state.u_Id , u_Pw : state.u_Pw, pwcon : state.pwcon, pwValidated : false, idValidated:true, u_Email : state.u_Email, u_Name : state.u_Name});
                 console.log(state);
             }else{
                 console.log('axios요청 보냄');
@@ -42,9 +42,17 @@ const JoinContainer = (props) =>{
             })
         }},
         [submit_Form,state]
+    );
+    const onValidateID = useCallback(
+        ()=>{
+            axios.get(state.url+'/user/idCheck/'+state.input.u_Id).then(res=>{
+                console.log(res.data);
+                change_Input({...state.input , idValidated: res.data});
+            })
+        }
     )
     return (
-        <Join  state = {state} onChange = {onChange} onSubmit = {onSubmit}></Join>
+        <Join  state = {state} onChange = {onChange} onSubmit = {onSubmit} onValidateID = {onValidateID}></Join>
     );
 
 };

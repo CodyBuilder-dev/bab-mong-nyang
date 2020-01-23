@@ -33,6 +33,7 @@ const Modify = ({props, state, onChange, onSubmit, onLoad}) =>{
             setIsLoading(true);
             const result = await axios.get(state.url+'/user/'+state.currentID,);
             console.log(result);
+            result.data[0].u_Pw = '';
             setInput(result.data[0]);
             setIsLoading(false);
             
