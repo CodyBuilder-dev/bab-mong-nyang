@@ -7,17 +7,17 @@ const useStyles = makeStyles(theme => ({
     width: "100%"
   }
 }));
-
+let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 const state = {
-  labels: ["January", "February", "March", "April", "May"],
+  labels: ["", "", "", "", "", "", ""],
   datasets: [
     {
-      label: "Rainfall",
+      // label: "Rainfall",
       backgroundColor: "rgba(75,192,192,1)",
       borderColor: "rgba(0,0,0,1)",
       borderWidth: 2,
       barThickness: 20,
-      data: [65, 59, 80, 81, 56]
+      data: data.slice(3, 11)
     }
   ]
 };
@@ -221,19 +221,33 @@ const Detail = props => {
       }
     }
   });
+  Chart.defaults.scale.ticks.display = false;
   return (
-    <Layout>
+    <>
       <Bar
         // className={classes.bar}
         data={state}
         options={{
           cornerRadius: 10,
+          tooltips: {
+            enabled: false
+          },
           legend: {
             display: false
+          },
+          scales: {
+            // xAxes: [{
+            //   display: false
+            // }],
+            yAxes: [
+              {
+                display: false
+              }
+            ]
           }
         }}
       />
-    </Layout>
+    </>
   );
 };
 
