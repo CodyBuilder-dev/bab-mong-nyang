@@ -1,60 +1,31 @@
 import React, { useState, useContext } from "react";
+
 import {
   makeStyles,
-  Typography,
-  AppBar,
-  Toolbar,
-  IconButton,
-  // Drawer
-  SwipeableDrawer,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
+  ListItemIcon,
+  ListItemAvatar,
   Avatar,
   Divider,
-  Container,
-  ListItemIcon,
-  Badge
+  Container
 } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
-import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const useStyles = makeStyles(theme => ({
-  appBar: {
-    // padding: `0 calc(10px + 2vw)`
-    color: "default"
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1,
-    cursor: "pointer"
-  },
-  list: {
+  drawerList: {
     width: 250,
     backgroundColor: theme.palette.background.paper
   }
 }));
 
-const Header = props => {
+const DrawerList = props => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
 
-  const onClickDrawerOpenHandler = () => {
-    setOpen(true);
-  };
-
-  const onClickSignInDialogOpenHandler = () => {
-    alert("open signIn Dialog");
-  };
-
-  const list = () => (
-    <div className={classes.list}>
-      <List>
+  return (
+    <List className={classes.drawerList}>
         <ListItem>
           <ListItemAvatar>
             <Avatar>
@@ -108,49 +79,7 @@ const Header = props => {
           </ListItem>
         </Container>
       </List>
-    </div>
-  );
-  return (
-    <AppBar position="fixed" color="default" className={classes.appBar}>
-      <Toolbar>
-        <IconButton
-          color="default"
-          aria-label="open drawer"
-          onClick={onClickDrawerOpenHandler}
-          edge="start"
-          className={classes.menuButton}
-        >
-          <MenuIcon />
-        </IconButton>
-        <SwipeableDrawer
-          anchor={"left"}
-          open={open}
-          onClose={() => setOpen(false)}
-          onOpen={() => setOpen(true)}
-        >
-          {list()}
-        </SwipeableDrawer>
-        <Typography variant="h6" className={classes.title}>
-          Test
-        </Typography>
-        {/* <IconButton
-          aria-label="account of current user"
-          aria-controls="menu-appbar"
-          aria-haspopup="true"
-          onClick={onClickSignInDialogOpenHandler}
-          color="inherit"
-          size="medium"
-        >
-          <AccountCircle />
-        </IconButton> */}
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-      </Toolbar>
-    </AppBar>
   );
 };
 
-export default Header;
+export default DrawerList;
