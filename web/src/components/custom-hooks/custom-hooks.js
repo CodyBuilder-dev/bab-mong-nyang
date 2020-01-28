@@ -46,25 +46,37 @@ export const useNotes = (initialValue = []) => {
   };
 };
 
-export const useFetchData =(requestURL) => {
+export const useFetchData =(requestURL,dataType) => {
   const [input, setInput] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const dataFetch = async (url,type) => {
+    console.log(url);
+    setIsLoading(true);
+    const result = await axios.get(url);
+    console.log(result);
+    switch(type){
+      case 'user' : 
+        result.data[0].u_Pw = "";
+        setInput(result.data[0]);
+        break;
+      case 'timetable' :
+        setInput(result.data);
+        console.log('timetable');
+      default : 
+        setInput(result.data);
+      }
+    setIsLoading(false);
+  };
   useEffect(() => {
     console.log("mount");
-    const fetch = async () => {
-      console.log(requestURL);
-      setIsLoading(true);
-      const result = await axios.get(requestURL);
-      console.log(result);
-      result.data[0].u_Pw = "";
-      setInput(result.data[0]);
-      setIsLoading(false);
-    };
-    fetch();
-    //console.log(input);
+    
+    dataFetch(requestURL,dataType);
   }, []);
   return {
     input,
-    isLoading
+    isLoading,
+    setInput,
+    setIsLoading,
+    dataFetch
   }
 }

@@ -24,8 +24,9 @@ const useStyles = makeStyles(theme => ({
 }));
 const User = props => {
   const classes = useStyles();
-  const state = useSelector(state => state.store, []);
-  const {input, isLoading} = useFetchData(state.url+'/user/'+state.currentID);
+  const store = useSelector(state => state.store, []);
+  const {input, isLoading} = useFetchData(store.url+'/user/'+store.currentID,'user');
+  //console.log(input);
   return (
     <div className={classes.page}>
       <h2>내 정보</h2>

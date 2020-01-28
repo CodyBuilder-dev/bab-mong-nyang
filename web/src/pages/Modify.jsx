@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
   const classes = useStyles();
-  const {input, isLoading} = useFetchData(state.url+'/user/'+state.currentID);
+  const {input, isLoading} = useFetchData(state.url+'/user/'+state.currentID,'user');
   const onChangeInput = e => {
     //console.log(input);
     let key = e.target.name;
