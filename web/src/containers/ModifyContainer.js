@@ -6,7 +6,6 @@ import {
   changeInput,
   submitForm,
   validateForm,
-  setCurrentID
 } from "../modules/store";
 const ModifyContainer = props => {
   const state = useSelector(state => state.store, []);
@@ -20,7 +19,6 @@ const ModifyContainer = props => {
   ]);
   const onChange = useCallback(
     input => {
-      //console.log('pwcon = '+  input.pwcon.length + ' pw = ' + input.u_Pw )
       if (
         input.pwcon === "" ||
         input.u_Pw === input.pwcon ||
@@ -53,8 +51,7 @@ const ModifyContainer = props => {
       if (state.pwcon === "") {
         validate_Form(false);
       } else {
-        console.log("axios요청 보냄");
-
+        console.log("axios요청 보냄")
         axios
           .put(state.url + "/user", state.input)
           .then(res => {

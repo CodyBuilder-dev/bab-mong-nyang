@@ -1,7 +1,9 @@
 export const CHANGE_INPUT = "store/CHANGE_INPUT";
 export const SUBMIT_FORM = "store/SUBMIT_FORM";
 export const VALIDATE_FORM = "store/VALIDATE_FORM";
-export const SET_CURRENT_ID = "store/SET_CURRENT_ID";
+export const SET_CURRENT_USER_NO = "store/SET_CURRENT_USER_NO";
+export const SET_CURRENT_DEVICE_NO = "store/SET_CURRENT_DEVICE_NO";
+
 
 export const changeInput = input => ({
   type: CHANGE_INPUT,
@@ -18,15 +20,21 @@ export const validateForm = form => ({
   payload: form
 });
 
-export const setCurrentID = id => ({
-  type: SET_CURRENT_ID,
-  payload: id
+export const setCurrentUserNo = No => ({
+  type: SET_CURRENT_USER_NO,
+  payload: No
+});
+
+export const setCurrentDeviceNo = No => ({
+  type: SET_CURRENT_DEVICE_NO,
+  payload: No
 });
 //70.12.246.68
 const initialState = {
   input: {},
   url: "http://70.12.246.68:3000",
-  currentID: ""
+  currentUserNo: "",
+  currentDeviceNo : "",
 };
 const store = (state = initialState, action) => {
   switch (action.type) {
@@ -48,11 +56,16 @@ const store = (state = initialState, action) => {
           validated: action.payload
         }
       };
-    case SET_CURRENT_ID:
+    case SET_CURRENT_USER_NO:
       return {
         ...state,
         input: {},
-        currentID: action.payload
+        currentUserNo: action.payload
+      };
+    case SET_CURRENT_DEVICE_NO:
+      return {
+        ...state,
+        currentDeviceNo : action.payload
       };
     default:
       return {
