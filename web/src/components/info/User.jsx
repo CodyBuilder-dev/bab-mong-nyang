@@ -3,6 +3,7 @@ import { makeStyles, TextField, Button } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import {useFetchData} from "../custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(3),
@@ -23,22 +24,9 @@ const useStyles = makeStyles(theme => ({
 }));
 const User = props => {
   const classes = useStyles();
-  const state = useSelector(state => state.store, []);
-  const [isLoading, setIsLoading] = useState(false);
-  const [input, setInput] = useState({});
-  useEffect(() => {
-    console.log("mount");
-    const fetch = async () => {
-      setIsLoading(true);
-      const result = await axios.get(state.url + "/user/" + state.currentID);
-      console.log(result);
-      result.data[0].u_Pw = "";
-      setInput(result.data[0]);
-      setIsLoading(false);
-    };
-    fetch();
-    //console.log(input);
-  }, []);
+  const store = useSelector(state => state.store, []);
+  const {input, isLoading} = useFetchData(store.url+'/user/'+store.currentID,'user');
+  //console.log(input);
   return (
     <div className={classes.page}>
       <h2>내 정보</h2>

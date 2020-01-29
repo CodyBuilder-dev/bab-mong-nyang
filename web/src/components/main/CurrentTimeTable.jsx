@@ -2,7 +2,7 @@ import React from "react";
 import MaterialTable, { MTableBody } from "material-table";
 import { makeStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { purple } from "@material-ui/core/colors";
+import { lightBlue } from "@material-ui/core/colors";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -11,7 +11,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    //color : lightBlue[300]
   }
 }));
 const GlobalCss = withStyles({
@@ -39,7 +40,7 @@ const CurrentTimeTable = ({ props }) => {
         },
         headerStyle: {
           textAlign: "center",
-          backgroundColor: purple[300]
+          backgroundColor: lightBlue[300]
         }
       },
       {
@@ -55,7 +56,7 @@ const CurrentTimeTable = ({ props }) => {
         },
         headerStyle: {
           textAlign: "center",
-          backgroundColor: purple[300]
+          backgroundColor: lightBlue[300]
         }
       }
     ],
@@ -89,7 +90,7 @@ const CurrentTimeTable = ({ props }) => {
           width: "80%",
           maxWidth: "550px",
           padding: "10px",
-          backgroundColor: purple[300]
+          backgroundColor: lightBlue[300]
         }}
       />
     </div>
