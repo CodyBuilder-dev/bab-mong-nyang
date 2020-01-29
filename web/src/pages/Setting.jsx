@@ -5,7 +5,7 @@ import SettingTable from "../components/set/SettingTable";
 const Setting = props => {
   return (
     <>
-      <SettingTable />
+      {/* <SettingTable /> */}
       <TimeTable />
     </>
   );

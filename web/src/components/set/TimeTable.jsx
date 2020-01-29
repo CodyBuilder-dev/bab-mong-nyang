@@ -1,8 +1,10 @@
-import React from "react";
+import React ,{useState} from "react";
 import MaterialTable from "material-table";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles ,Switch } from "@material-ui/core";
 import Icons from "./TableIcons";
-
+import {useFetchData} from "../custom-hooks/custom-hooks";
+import { useSelector } from "react-redux";
+import axios from "axios";
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(6),
@@ -14,33 +16,62 @@ const useStyles = makeStyles(theme => ({
 }));
 const TimeTable = props => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    columns: [
-      {
-        title: "시간",
-        field: "time"
-      },
-      {
-        title: "제공량(g)",
-        field: "weight"
-      }
-    ],
-    data: [
-      { time: "08:00", weight: "15g" },
-      { time: "11:00", weight: "15g" },
-      { time: "13:00", weight: "15g" },
-      { time: "15:00", weight: "25g" },
-      { time: "17:00", weight: "35g" }
-    ]
-  });
-
+  const store = useSelector(state => state.store, []);
+  const {input, isLoading,setInput,setIsLoading,dataFetch} = useFetchData(store.url + '/setting/'+'1','timetable');
   return (
     <div className={classes.page}>
+      {isLoading ? (
+        <div> Loading.....</div>
+      ):(
       <MaterialTable
         icons={Icons}
         title="배식설정"
-        columns={state.columns}
-        data={state.data}
+        columns={[
+          {
+            title: "시간",
+            field: "s_Time"
+          },
+          {
+            title: "제공량(g)",
+            field: "s_Amount"
+          },
+          {
+            title: "적용",
+            field: "s_Activate",
+            sorting : false,
+            
+            headerStyle : {
+              borderBottom : "0px"
+            },
+            editComponent: () => (
+              <p></p>
+            ),
+            render: rowData => <Switch
+            checked={rowData !== undefined && rowData.s_Activate === 1}
+            color = "primary"
+            onChange={async(event) => {
+              setIsLoading(true);
+              if(rowData === undefined){
+                console.log(rowData);
+                console.log(event.target);
+                rowData = {s_Activate : 1};
+                await setIsLoading(false);
+              }else{
+                console.log(rowData);
+                console.log(event.target);
+                rowData.s_Activate = event.target.checked ? 1 : 0;
+                const result = await axios.put(store.url+'/setting',rowData);
+                if(result.data){
+                  console.log(result.data)
+                setIsLoading(false);
+                }
+              }
+              
+            }}
+            inputProps={{ 'aria-label': 'checkbox with default color' }}/>
+          }
+        ]}
+        data={input}
         options={{
           search: false,
           paging: false,
@@ -57,41 +88,60 @@ const TimeTable = props => {
         editable={{
           onRowAdd: newData =>
             new Promise(resolve => {
-              setTimeout(() => {
+              setTimeout(async() => {
+                console.log("add");
                 resolve();
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  return { ...prevState, data };
-                });
+                setIsLoading(true);
+                newData = {
+                  ...newData,
+                  d_No : 1,
+                  s_Activate : 0
+                }
+                console.log(newData);
+                const result = await axios.post(store.url + '/setting/',newData);
+                if(result.data){
+                  dataFetch(store.url + '/setting/'+'1','timetable');
+                  setIsLoading(false);
+                } else{
+                  alert("중복된 시간이 이미 존재합니다.");
+                  setIsLoading(false);
+                }
               }, 600);
             }),
           onRowUpdate: (newData, oldData) =>
             new Promise(resolve => {
-              setTimeout(() => {
+              setTimeout(async () => {
                 resolve();
-                if (oldData) {
-                  setState(prevState => {
-                    const data = [...prevState.data];
-                    data[data.indexOf(oldData)] = newData;
-                    return { ...prevState, data };
-                  });
+                setIsLoading(true);
+                console.log(newData);
+                const result = await axios.put(store.url + '/setting', newData);
+                if(result.data){
+                  setIsLoading(false);
+                  dataFetch(store.url + '/setting/'+'1','timetable');
+                }else{
+                  alert('실패');
+                  setIsLoading(false);
                 }
               }, 600);
             }),
           onRowDelete: oldData =>
             new Promise(resolve => {
-              setTimeout(() => {
+              setTimeout(async () => {
                 resolve();
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data.splice(data.indexOf(oldData), 1);
-                  return { ...prevState, data };
-                });
+                setIsLoading(true);
+                const result = await axios.delete(store.url + '/setting/'+oldData.s_No);
+                if(result.data){
+                  setIsLoading(false);
+                  dataFetch(store.url + '/setting/'+'1','timetable');
+                }else{
+                  alert("실패");
+                  setIsLoading(false);
+                }
               }, 600);
             })
         }}
       />
+      )}
     </div>
   );
 };
