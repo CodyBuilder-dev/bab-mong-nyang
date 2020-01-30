@@ -120,7 +120,7 @@ const Header = props => {
           </IconButton>
 
           <Typography variant="h6" className={classes.title}>
-            Test
+            IoT Servent System
           </Typography>
 
           <IconButton
