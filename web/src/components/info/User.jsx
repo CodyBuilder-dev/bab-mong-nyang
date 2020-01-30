@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 const User = props => {
   const classes = useStyles();
   const store = useSelector(state => state.store, []);
-  const {input, isLoading} = useFetchData(store.url+'/user/'+store.currentUserNo,'user');
+  const {input, isLoading} = useFetchData('/user/','user');
   //console.log(input);
   return (
     <div className={classes.page}>

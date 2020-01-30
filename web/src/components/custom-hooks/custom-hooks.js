@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import {changeStore} from "../../modules/store"
 export const useNotes = (initialValue = []) => {
   const [notes, setNotes] = useState(initialValue);
   return {
@@ -49,7 +49,7 @@ export const useNotes = (initialValue = []) => {
 };
 
 export const useFetchData =(requestURL,dataType) => {
-  const [input, setInput] = useState({});
+  const [input, setInput] = useState({device : []});
   const [isLoading, setIsLoading] = useState(false);
   const store = useSelector(state => state.store, []);
   const updateField = e => {
@@ -62,16 +62,9 @@ export const useFetchData =(requestURL,dataType) => {
     console.log(url);
     setIsLoading(true);
     const result = await axios.get(url);
-    console.log(result);
     switch(type){
-      case 'user' : 
-        setInput(result.data);
-        break;
-      case 'timetable' :
-        setInput(result.data);
-        console.log('timetable');
-        break;
       case 'device':
+      case 'devicelist':
         if(store.d_No === undefined){
           setInput(result.data);
         } 
@@ -80,16 +73,33 @@ export const useFetchData =(requestURL,dataType) => {
         }
         console.log('device');
         break;
+      case 'device_select':
+        setInput(result.data.filter(device=>device.d_No === store.u_Last)[0]);
+        console.log("device_select");
+        //console.log(result.data);
+        break;
       default : 
         setInput(result.data);
         break;
       }
     setIsLoading(false);
+    console.log(result.data);
   };
   useEffect(() => {
     console.log("mount");
-    
-    dataFetch(requestURL,dataType);
+    let url = store.url+requestURL;
+    switch(dataType){
+      case "timetable":
+        url+=store.u_Last;
+        break;
+      case "device":
+        url+=store.currentDeviceNo;
+        break;
+      default :
+        url+=store.currentUserNo;
+        break;
+    }
+    dataFetch(url,dataType);
   }, []);
   return {
     input,
@@ -100,3 +110,26 @@ export const useFetchData =(requestURL,dataType) => {
     updateField
   }
 }
+
+export const useStore = () =>{
+  const state = useSelector(state => state.store,[]);
+  const dispatch = useDispatch();
+  const change_Store = useCallback(data => dispatch(changeStore(data)),[dispatch]);
+  const onChange = useCallback (
+    async (data,type,url) => {
+      switch(type){
+        case "select":
+          const result = await axios.put(state.url+url,{u_No : state.currentUserNo, d_No : data.d_No});
+          if(result.data){
+            change_Store({u_Last : data.d_No});
+          }
+          break;
+        default:
+          break;
+      }
+  })
+  return{
+    state,
+    onChange
+  };
+};

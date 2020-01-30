@@ -6,6 +6,7 @@ import {
   changeInput,
   submitForm,
 } from "../modules/store";
+import { SentimentSatisfied } from "@material-ui/icons";
 const RegistContainer = props => {
   const state = useSelector(state => state.store, []);
   const dispatch = useDispatch();
@@ -25,6 +26,8 @@ const RegistContainer = props => {
   const onSubmit = useCallback(
      e => {
         console.log("axios요청 보냄");
+        console.log(state.url);
+        
         axios
           .post(state.url + "/device", state.input)
           .then(res => {

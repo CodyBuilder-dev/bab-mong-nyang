@@ -3,7 +3,7 @@ export const SUBMIT_FORM = "store/SUBMIT_FORM";
 export const VALIDATE_FORM = "store/VALIDATE_FORM";
 export const SET_CURRENT_USER_NO = "store/SET_CURRENT_USER_NO";
 export const SET_CURRENT_DEVICE_NO = "store/SET_CURRENT_DEVICE_NO";
-
+export const CHANGE_STORE = "store/CHANGE_STORE";
 
 export const changeInput = input => ({
   type: CHANGE_INPUT,
@@ -29,6 +29,12 @@ export const setCurrentDeviceNo = No => ({
   type: SET_CURRENT_DEVICE_NO,
   payload: No
 });
+
+export const changeStore = data => ({
+  type : CHANGE_STORE,
+  payload : data
+});
+
 //70.12.246.68
 const initialState = {
   input: {},
@@ -66,6 +72,11 @@ const store = (state = initialState, action) => {
       return {
         ...state,
         currentDeviceNo : action.payload
+      };
+    case CHANGE_STORE:
+      return{
+        ...state,
+        ...action.payload
       };
     default:
       return {
