@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const DeviceModify = ({props, state,submit_Form}) =>{
   const classes = useStyles();
-  const { input, isLoading ,setInput, updateField} = useFetchData(state.url+'/device/get/'+state.currentDeviceNo,'device');
+  const { input, isLoading ,setInput, updateField} = useFetchData('/device/get/','device');
   const onSubmit = async (e) => {
     console.log("axios요청 보냄");
     console.log(input);
@@ -101,7 +101,7 @@ const DeviceModify = ({props, state,submit_Form}) =>{
               required
               fullWidth
               id="SerialNo"
-              label="일려번호 S/N"
+              label="일련번호 S/N"
               name="SerialNo"
               value = {input.SerialNo}
               onChange = {updateField}

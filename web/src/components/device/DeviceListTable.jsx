@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 const DeviceListTable = ({props}) => {
   const classes = useStyles();
   const store = useSelector(state => state.store,[]);
-  const {input, isLoading} = useFetchData(store.url + '/device/'+store.currentUserNo,'device');
+  const {input, isLoading} = useFetchData('/device/','devicelist');
   const {onClickRowEvent} = DeviceListTableContainer(props);
   return(
     <div className = {classes.page}>

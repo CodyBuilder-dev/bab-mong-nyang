@@ -34,7 +34,7 @@ const ModifyContainer = props => {
     [change_Input]
   );
   const onLoad = async curId => {
-    await axios.get(state.url + "/user/" + state.currentID).then(res => {
+    await axios.get(state.url + "/user/" + state.currentUserNo).then(res => {
       console.log(res.data[0]);
       change_Input({
         u_Id: res.data[0].u_Id,

@@ -1,11 +1,13 @@
-import React from "react";
+import React,{useEffect} from "react";
 import CurTimeTable from "../components/main/CurrentTimeTable";
 import DeviceSelect from "../components/main/DeviceSelect";
 
-const Main = props => {
-  return (
+//import { useSelector } from "react-redux";
+
+const Main =  props => {
+  return(  
     <>
-      <DeviceSelect />
+      <DeviceSelect/>
       <CurTimeTable />
     </>
   );

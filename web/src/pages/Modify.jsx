@@ -30,10 +30,11 @@ const useStyles = makeStyles(theme => ({
 }));
 const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
   const classes = useStyles();
-  const {input, isLoading} = useFetchData(state.url+'/user/'+state.currentUserNo,'user');
+  const {input, isLoading} = useFetchData('/user/','user');
   const onChangeInput = e => {
     //console.log(input);
     let key = e.target.name;
+    if(input.u_No === undefined) input.u_No = state.currentUserNo;
     switch (key) {
       case "pw":
         input.u_Pw = e.target.value;

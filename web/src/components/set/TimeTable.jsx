@@ -5,6 +5,7 @@ import Icons from "./TableIcons";
 import {useFetchData} from "../custom-hooks/custom-hooks";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useEffect } from "react";
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(6),
@@ -17,7 +18,10 @@ const useStyles = makeStyles(theme => ({
 const TimeTable = props => {
   const classes = useStyles();
   const store = useSelector(state => state.store, []);
-  const {input, isLoading,setIsLoading,dataFetch} = useFetchData(store.url + '/setting/'+'1','timetable');
+  const {input, isLoading,setIsLoading,dataFetch} = useFetchData('/setting/','timetable');
+  useEffect(()=>{
+    dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
+  },[store])
   return (
     <div className={classes.page}>
       {isLoading ? (
@@ -94,13 +98,13 @@ const TimeTable = props => {
                 setIsLoading(true);
                 newData = {
                   ...newData,
-                  d_No : 1,
+                  d_No : store.u_Last,
                   s_Activate : 0
                 }
                 console.log(newData);
                 const result = await axios.post(store.url + '/setting/',newData);
                 if(result.data){
-                  dataFetch(store.url + '/setting/'+'1','timetable');
+                  dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
                   setIsLoading(false);
                 } else{
                   alert("중복된 시간이 이미 존재합니다.");
@@ -117,7 +121,7 @@ const TimeTable = props => {
                 const result = await axios.put(store.url + '/setting', newData);
                 if(result.data){
                   setIsLoading(false);
-                  dataFetch(store.url + '/setting/'+'1','timetable');
+                  dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
                 }else{
                   alert('실패');
                   setIsLoading(false);
@@ -132,7 +136,7 @@ const TimeTable = props => {
                 const result = await axios.delete(store.url + '/setting/'+oldData.s_No);
                 if(result.data){
                   setIsLoading(false);
-                  dataFetch(store.url + '/setting/'+'1','timetable');
+                  dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
                 }else{
                   alert("실패");
                   setIsLoading(false);
