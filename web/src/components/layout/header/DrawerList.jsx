@@ -88,18 +88,17 @@ const DrawerList = ({ setOpen, open }) => {
           <ListItemText primary="기기 목록" />
         </ListItem>
         <Divider />
-        <ListItem button key="userInfo">
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/chart");
+          }}
+        >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary="내 정보" />
-        </ListItem>
-        <Divider />
-        <ListItem button key="userInfo">
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="내 정보" />
+          <ListItemText primary="차트" />
         </ListItem>
       </Container>
     </List>
