@@ -5,6 +5,7 @@ import Icons from "../set/TableIcons";
 import { useSelector } from "react-redux";
 import {Link} from "react-router-dom";
 import {useFetchData} from "../custom-hooks/custom-hooks"
+import {DeviceListTableContainer} from "../../containers/DeviceListTableContainer"
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(6),
@@ -15,10 +16,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DeviceListTable = ({props, onClickRowEvent}) => {
+const DeviceListTable = ({props}) => {
   const classes = useStyles();
   const store = useSelector(state => state.store,[]);
   const {input, isLoading} = useFetchData(store.url + '/device/'+store.currentUserNo,'device');
+  const {onClickRowEvent} = DeviceListTableContainer(props);
   return(
     <div className = {classes.page}>
       {isLoading ? (

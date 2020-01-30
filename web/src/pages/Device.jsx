@@ -1,12 +1,12 @@
 import React from "react";
-import DeviceListTableContainer from "../containers/DeviceListTableContainer";
-
+//import DeviceListTableContainer from "../containers/DeviceListTableContainer";
+import DeviceListTable from "../components/device/DeviceListTable"
 
 const Device = props => {
   return (
     <>
       {/* <SettingTable /> */}
-      <DeviceListTableContainer props = {props}  />
+      <DeviceListTable props = {props}  />
     </>
   );
 };

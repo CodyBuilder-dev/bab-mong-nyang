@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DeviceListTable from "../components/device/DeviceListTable";
 import { setCurrentDeviceNo } from "../modules/store";
 
-const DeviceListTableContainer = ({props}) => {
+export const DeviceListTableContainer = (props) => {
   const state = useSelector(state => state.store, []);
   const dispatch = useDispatch();
   const setCurrentDevice_No = useCallback(No => dispatch(setCurrentDeviceNo(No)),[dispatch]);
@@ -15,6 +15,5 @@ const DeviceListTableContainer = ({props}) => {
     },
     []
   );
-  return <DeviceListTable onClickRowEvent={onClickRowEvent}/>
+  return {onClickRowEvent}
 };
-export default DeviceListTableContainer;
