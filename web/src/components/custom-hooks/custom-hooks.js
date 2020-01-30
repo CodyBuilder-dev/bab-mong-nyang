@@ -65,8 +65,7 @@ export const useFetchData =(requestURL,dataType) => {
     console.log(result);
     switch(type){
       case 'user' : 
-        result.data[0].u_Pw = "";
-        setInput(result.data[0]);
+        setInput(result.data);
         break;
       case 'timetable' :
         setInput(result.data);
