@@ -59,6 +59,14 @@ const DeviceListTable = ({props}) => {
           onRowClick = {(event,rowData)=>{
             onClickRowEvent(rowData.d_No);
           }}
+          actions ={[
+            {
+              icon:Icons.Add,
+              tooltip :"기기등록",
+              isFreeAction : true,
+              onClick:(event)=> props.history.push("regist")
+            }
+          ]}
         />
         </div>
       )}
