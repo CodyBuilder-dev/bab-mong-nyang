@@ -99,13 +99,13 @@ const DrawerList = ({ setOpen, open }) => {
           button
           onClick={() => {
             setOpen(false);
-            history.push("/chart");
+            history.push("/record");
           }}
         >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary="차트" />
+          <ListItemText primary="급식 기록" />
         </ListItem>
       </Container>
     </List>

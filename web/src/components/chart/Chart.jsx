@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// import "./Detail.css";
+import "./Chart.css";
 import {
   makeStyles,
   Container,
@@ -9,7 +9,7 @@ import {
   Typography
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { BarChart } from "../components/chart/index";
+import { BarChart } from "./index";
 
 const Wrapper = styled.div`
   height: 30vh;
@@ -27,8 +27,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   card: {
+    width: '100%',
     maxWidth: 400,
     minWidth: 275
   },
@@ -42,16 +43,19 @@ const useStyles = makeStyles({
   },
   pos: {
     marginBottom: 12
+  },
+  page: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   }
-});
+}));
 const bars = [
   {
     label: "01/01",
-    // text: 8,
     items: [
       {
         value: 250,
-        color: "#0f4c81"
       }
     ]
   },
@@ -60,7 +64,6 @@ const bars = [
     items: [
       {
         value: 140,
-        color: "#0f4c81"
       }
     ]
   },
@@ -69,7 +72,6 @@ const bars = [
     items: [
       {
         value: 60,
-        color: "#0f4c81"
       }
     ]
   },
@@ -78,7 +80,6 @@ const bars = [
     items: [
       {
         value: 270,
-        color: "#0f4c81"
       }
     ]
   },
@@ -87,7 +88,6 @@ const bars = [
     items: [
       {
         value: 8,
-        color: "#0f4c81"
       }
     ]
   },
@@ -95,8 +95,7 @@ const bars = [
     label: "01/06",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 48,
       }
     ]
   },
@@ -104,8 +103,7 @@ const bars = [
     label: "01/07",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 60,
       }
     ]
   },
@@ -113,8 +111,7 @@ const bars = [
     label: "01/08",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 222,
       }
     ]
   },
@@ -122,8 +119,7 @@ const bars = [
     label: "01/09",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 0,
       }
     ]
   },
@@ -131,8 +127,7 @@ const bars = [
     label: "01/10",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 79,
       }
     ]
   },
@@ -140,8 +135,7 @@ const bars = [
     label: "01/11",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 29,
       }
     ]
   },
@@ -149,8 +143,7 @@ const bars = [
     label: "01/12",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 98,
       }
     ]
   },
@@ -158,8 +151,7 @@ const bars = [
     label: "01/13",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 89,
       }
     ]
   },
@@ -167,8 +159,7 @@ const bars = [
     label: "01/14",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 86,
       }
     ]
   },
@@ -176,8 +167,7 @@ const bars = [
     label: "01/15",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 400,
       }
     ]
   },
@@ -185,8 +175,7 @@ const bars = [
     label: "01/16",
     items: [
       {
-        value: 10,
-        color: "#0f4c81"
+        value: 270,
       }
     ]
   },
@@ -194,8 +183,7 @@ const bars = [
     label: "01/17",
     items: [
       {
-        value: 3,
-        color: "#0f4c81"
+        value: 103,
       }
     ]
   },
@@ -203,8 +191,7 @@ const bars = [
     label: "01/18",
     items: [
       {
-        value: 8,
-        color: "#0f4c81"
+        value: 84,
       }
     ]
   },
@@ -213,7 +200,6 @@ const bars = [
     items: [
       {
         value: 250,
-        color: "#0f4c81"
       }
     ]
   },
@@ -222,7 +208,6 @@ const bars = [
     items: [
       {
         value: 140,
-        color: "#0f4c81"
       }
     ]
   },
@@ -231,7 +216,6 @@ const bars = [
     items: [
       {
         value: 60,
-        color: "#0f4c81"
       }
     ]
   },
@@ -240,7 +224,6 @@ const bars = [
     items: [
       {
         value: 270,
-        color: "#0f4c81"
       }
     ]
   },
@@ -249,7 +232,6 @@ const bars = [
     items: [
       {
         value: 8,
-        color: "#0f4c81"
       }
     ]
   }
@@ -261,7 +243,7 @@ const Chart = props => {
   let avg = Math.round((bars[centerBarIndex].items[0].value / 250) * 100);
   // const [scroller, setScroller] = useState(window.innerWidth > 400)
   return (
-    <>
+    <div className={classes.page}>
       <Card className={classes.card} variant="outlined">
         <Wrapper>
           <BarChart
@@ -298,7 +280,7 @@ const Chart = props => {
           </Typography>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };
 export default Chart;
