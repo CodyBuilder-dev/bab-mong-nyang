@@ -6,7 +6,6 @@ import {
   Checkbox,
   Button
 } from "@material-ui/core";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -28,18 +27,17 @@ const useStyles = makeStyles(theme => ({
 
 const Login = ({ props, state, onChange, onSubmit }) => {
   const classes = useStyles();
-  let currentID = state.currentID;
+  let currentUserNo = state.currentUserNo;
   let input = state.input;
 
   useEffect(() => {
     console.log("마운트될때 실행");
-    if (currentID.length !== 0) {
+    if (currentUserNo.length !== 0) {
       props.history.push("main");
     }
   }, []);
   const onChangeInput = e => {
     let key = e.target.name;
-    console.log(input);
     switch (key) {
       case "id":
         input.u_Id = e.target.value;
@@ -48,8 +46,9 @@ const Login = ({ props, state, onChange, onSubmit }) => {
       case "password":
         input.u_Pw = e.target.value;
         onChange(input);
+        break;
       default:
-        console.log(e.target.name);
+        break;
     }
   };
 

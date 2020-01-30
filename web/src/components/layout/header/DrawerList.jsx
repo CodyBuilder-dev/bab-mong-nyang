@@ -79,13 +79,13 @@ const DrawerList = ({ setOpen, open }) => {
           button
           onClick={() => {
             setOpen(false);
-            history.push("/regist");
+            history.push("/device");
           }}
         >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary="기기 등록" />
+          <ListItemText primary="기기 목록" />
         </ListItem>
         <Divider />
         <ListItem button key="userInfo">
