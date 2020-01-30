@@ -96,10 +96,10 @@ const Header = props => {
   };
   const onClickBackHandler = () => {
     refresh();
-    history.push('/main');
+    history.goBack();
   };
   if (
-    ["/", "/home", "/login", "/join", ""].indexOf(history.location.pathname) >
+    ["/", "/home", "/login", ""].indexOf(history.location.pathname) >
     -1
   ) {
     return <></>;
