@@ -11,6 +11,8 @@
 //IR pin set
 #define IRRCV 27
 #define IRTSM 26
+#define rcv 1
+
 //MOTOR pin set
 #define IN1 22
 #define IN2 23
@@ -26,15 +28,6 @@ void error(MYSQL *conn)
 {
 	fprintf(stderr, "%s\n", mysql_error(conn));
 	mysql_close(conn);
-	//exit(1);
-}
-void setIRsensing() {
-	pinMode(IRTSM, OUTPUT);
-	pinMode(IRRCV, INPUT);
-	digitalWrite(IRTSM,HIGH);
-}
-void setIRoff() {
-	digitalWrite(IRTSM,LOW);	
 }
 
 void setsteps(int w1, int w2, int w3, int w4)
@@ -67,13 +60,12 @@ void end() {
 int main(int argc, char *argv[])
 {
 
-    MYSQL *conn;
-    MYSQL_RES *result;
-    conn = mysql_init(NULL);
-    int res;
-    char buf[1024];
-    char tbuf[1024];
-	char dbuf[1024];
+	MYSQL *conn;
+	MYSQL_RES *result;
+	conn = mysql_init(NULL);
+	int res;
+	char buf[1024];
+	char tbuf[1024];
 
 	if (!(mysql_real_connect(conn, host, user, pass, dbname, 0, NULL, 0)))
 	{
@@ -88,14 +80,16 @@ int main(int argc, char *argv[])
 	if (wiringPiSetup() == -1)
 	{
 		printf("wiringPi Error!! \n");
-		return 0;
+		return 1;
 	}
+
+	pinMode(IRTSM, OUTPUT);
+	pinMode(IRRCV, INPUT);
+	digitalWrite(IRTSM, LOW);
 
 	restime = time(NULL);
 	sprintf(tbuf, "%d:%d:00", localtime(&restime)->tm_hour, localtime(&restime)->tm_min);
-	sprintf(dbuf, "%d-%d-%d", localtime(&restime)->tm_year, localtime(&restime)->tm_mon, localtime(&restime)->tm_mday);
-
-	mysql_query(conn, "select * from feedingtime");
+	mysql_query(conn, "select * from feedtime");
 	result = mysql_store_result(conn);
 	if (result == NULL)
 	{
@@ -103,40 +97,62 @@ int main(int argc, char *argv[])
 	}
 	int num_fields = mysql_num_fields(result);
 	MYSQL_ROW row;
-	while (row = mysql_fetch_row(result))
+	int flag = 0;
+	if (argc > 1) flag = 1;
+
+	while (flag || (row = mysql_fetch_row(result)))
 	{
-		if (/*strcmp(row[1], tbuf)*/1)
+		if (argc > 1 || strcmp(row[1], tbuf))
 		{
-			setIRsensing();
-			int rcv = digitalRead(IRRCV);
+			int loopcnt;
+			if (argc > 1) {
+				loopcnt = atoi(argv[1]);
+				flag = 0;
+			}
+			else loopcnt = atoi(row[2]);
+
+			for (int i = 0; i < loopcnt; ++i)
+				goFront(128); //512 1loop
+			end();
+			printf("feed %d Times!\n", loopcnt);
 
 			pid = fork();
+			int tt = 1e5;
 			if (pid == 0) {
-				int loopcnt = atoi(row[2]);
-				//call goFront function
-				for (int i = 0; i < loopcnt; ++i)
-					goFront(128); //512 1loop
-				end();
-				printf("feed %d Times!\n", loopcnt);
+				//IR SENSING
+				int tcnt = 0;
+				int remain = 1;
+				while (tt--) {
+					if (digitalRead(IRRCV) != rcv) {
+						++tcnt;
+						if (tcnt > 5) {
+							remain = 0;
+							sprintf(buf, "insert into feeded (_refill, _amount) values ('%d', '%d')", remain, loopcnt);
+							res = mysql_query(conn, buf);
+							if (!res)
+								printf("Insert <%d> <%d> successful!\n", remain, loopcnt);
+							else
+								error(conn);
+							exit(1);
+						}
+					}
+				}
+				sprintf(buf, "insert into feeded (_refill, _amount) values ('%d', '%d')", remain, loopcnt);
+				res = mysql_query(conn, buf);
+				if (!res)
+					printf("Insert <%d> <%d> successful!\n", remain, loopcnt);
+				else
+					error(conn);
 				exit(1);
 			}
 			else {
-				int tt = 3000;
+				//IR TRANSMITTING
 				while (tt--) {
-					if (digitalRead(IRRCV) != rcv) {
-						printf("%d :: %d\n", digitalRead(IRRCV), rcv);
-						sprintf(buf, "insert into feeding (_date, _time, total_remain) values ('%s', '%s', '%d')", dbuf,tbuf, 0);
-						res = mysql_query(conn, buf);
-						if (!res)
-							printf("Insert <%s> <%d> successful!\n", tbuf, 0);
-						else
-							error(conn);
-                       	break;
-					}
-					delay(5);
+					digitalWrite(IRTSM, HIGH);
+					digitalWrite(IRTSM, LOW);
 				}
+				exit(1);
 			}
-			setIRoff();
 		}
 	}
 	return 0;
