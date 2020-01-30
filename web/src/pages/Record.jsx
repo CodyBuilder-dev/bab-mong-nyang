@@ -2,7 +2,7 @@ import React from "react";
 import Chart from "../components/chart/Chart";
 import DeviceSelect from "../components/main/DeviceSelect";
 
-const Main = props => {
+const Record = props => {
   return (
     <>
       <DeviceSelect />
@@ -11,4 +11,4 @@ const Main = props => {
   );
 };
 
-export default Main;
+export default Record;
