@@ -17,7 +17,8 @@ import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // ======= Test Data =========================================
 // const devices = [
 //   {
@@ -43,13 +44,33 @@ const useStyles = makeStyles(theme => ({
   deviceInfoBox: {
     display: "flex",
     alignItems: "center",
-    marginLeft: '36px'
+    marginLeft: "36px"
+  },
+  dialogTitle: {
+    padding: "10px 24px 0"
   }
 }));
-
+const theme = createMuiTheme({
+  overrides: {
+    // Style sheet name ⚛️
+    MuiButton: {
+      // Name of the rule
+      text: {
+        // Some CSS
+        background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+        borderRadius: 3,
+        border: 0,
+        color: "white",
+        height: 48,
+        padding: "0 30px",
+        boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
+      }
+    }
+  }
+});
 function DeviceDialog(props) {
   const classes = useStyles();
-  const { onClose, open,devices ,selectedValue} = props;
+  const { onClose, open, devices, selectedValue } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -60,12 +81,10 @@ function DeviceDialog(props) {
   };
 
   return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="device-dialog"
-      open={open}
-    >
-      <DialogTitle id="device-dialog">기기를 선택하세요</DialogTitle>
+    <Dialog onClose={handleClose} aria-labelledby="device-dialog" open={open}>
+      <DialogTitle id="device-dialog" className={classes.dialogTitle}>
+        <Typography>기기를 선택하세요</Typography>
+      </DialogTitle>
       <List>
         {devices.map(device => (
           <ListItem
@@ -94,45 +113,52 @@ DeviceDialog.propTypes = {
 
 const DeviceSelect = props => {
   const classes = useStyles();
-  const {state,onChange} = useStore();
-  const {input, isLoading,setInput} = useFetchData("/Join/main/","main"); 
+  const { state, onChange } = useStore();
+  const { input, isLoading, setInput } = useFetchData("/Join/main/", "main");
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
-  useEffect(()=>{
-    setSelectedValue(input.device.filter(device=>device.d_No === state.u_Last)[0]);
-  },[input])
+  useEffect(() => {
+    setSelectedValue(
+      input.device.filter(device => device.d_No === state.u_Last)[0]
+    );
+  }, [input]);
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
   };
-  
+
   const handleClose = value => {
     setOpen(false);
     setSelectedValue(value);
-    onChange(value,"select","/Join/main")
+    onChange(value, "select", "/Join/main");
   };
   //console.log(input);
   return (
-    
     <div className={classes.deviceSelectForm}>
-      {isLoading ? (<div><Link to ="/regist">등록</Link></div>):(
-      <>
-      <div className={classes.deviceInfoBox}>
-        <Typography variant="subtitle1" display={"inline"}>
-          {selectedValue === undefined ? "..." : selectedValue.d_Name}'s 밥그릇
-        </Typography>
-        <IconButton onClick={handleClickOpen}>
-          <ArrowDropDown />
-        </IconButton>
-      </div>
-      <DeviceDialog
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-        devices={input.device}
-      />
-      </>)}
+      {isLoading ? (
+        <div>
+          <Link to="/regist">등록</Link>
+        </div>
+      ) : (
+        <>
+          <div className={classes.deviceInfoBox}>
+            <Typography variant="subtitle1" display={"inline"}>
+              {selectedValue === undefined ? "..." : selectedValue.d_Name}'s
+              밥그릇
+            </Typography>
+            <IconButton onClick={handleClickOpen}>
+              <ArrowDropDown />
+            </IconButton>
+          </div>
+          <DeviceDialog
+            selectedValue={selectedValue}
+            open={open}
+            onClose={handleClose}
+            devices={input.device}
+          />
+        </>
+      )}
     </div>
   );
-}
+};
 export default DeviceSelect;

@@ -6,7 +6,7 @@ import Layout from "./components/layout/LayoutMain";
 import Home from "./pages/Home";
 import Setting from "./pages/Setting";
 import Main from "./pages/Main";
-import Chart from "./pages/Chart";
+import Record from "./pages/Record";
 import "./index.css";
 import LoginContainer from "./containers/LoginContainer";
 import JoinContainer from "./containers/JoinContainer";
@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/join" component={JoinContainer} />
           <Route path="/regist" component={RegistContainer} />
           <Route path="/set" component={Setting} />
-          <Route path="/chart" component={Chart} />
+          <Route path="/record" component={Record} />
           <Route path="/main" component={Main} />
           <Route path="/info" component={Info} />
           <Route path="/modify" component={ModifyContainer} />
