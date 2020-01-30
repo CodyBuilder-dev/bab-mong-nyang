@@ -71,7 +71,6 @@ const CurrentTimeTable = ({ props }) => {
 
   return (
     <div className={classes.page}>
-      <p>{currentUserNo}님 환영합니다!</p>
       <GlobalCss />
       <MaterialTable
         // icons ={Icons}

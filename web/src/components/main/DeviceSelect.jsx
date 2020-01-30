@@ -15,18 +15,20 @@ import AddIcon from "@material-ui/icons/Add";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
-
+import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
+import { useEffect } from "react";
+import {Link} from "react-router-dom"
 // ======= Test Data =========================================
-const devices = [
-  {
-    id: "userName-0",
-    petName: "댕댕이"
-  },
-  {
-    id: "userName-1",
-    petName: "야옹이"
-  }
-];
+// const devices = [
+//   {
+//     d_No: "userName-0",
+//     d_Name: "댕댕이"
+//   },
+//   {
+//     d_No: "userName-1",
+//     d_Name: "야옹이"
+//   }
+// ];
 // ===========================================================
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -47,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 
 function DeviceDialog(props) {
   const classes = useStyles();
-  const { onClose, selectedValue, open } = props;
+  const { onClose, open,devices ,selectedValue} = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -69,14 +71,14 @@ function DeviceDialog(props) {
           <ListItem
             button
             onClick={() => handleListItemClick(device)}
-            key={device.id}
+            key={device.d_No}
           >
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
                 <PersonIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={`${device.petName}꺼`} />
+            <ListItemText primary={`${device.d_Name}꺼`} />
           </ListItem>
         ))}
       </List>
@@ -90,24 +92,34 @@ DeviceDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired
 };
 
-export default function DeviceSelect() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(devices[0]);
+const DeviceSelect = props => {
   const classes = useStyles();
+  const {state,onChange} = useStore();
+  const {input, isLoading,setInput} = useFetchData("/Join/main/","main"); 
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState({});
+  useEffect(()=>{
+    setSelectedValue(input.device.filter(device=>device.d_No === state.u_Last)[0]);
+  },[input])
+  //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  
   const handleClose = value => {
     setOpen(false);
     setSelectedValue(value);
+    onChange(value,"select","/Join/main")
   };
-
+  //console.log(input);
   return (
+    
     <div className={classes.deviceSelectForm}>
+      {isLoading ? (<div><Link to ="/regist">등록</Link></div>):(
+      <>
       <div className={classes.deviceInfoBox}>
         <Typography variant="subtitle1" display={"inline"}>
-          {selectedValue.petName}'s 밥그릇
+          {selectedValue === undefined ? "..." : selectedValue.d_Name}'s 밥그릇
         </Typography>
         <IconButton onClick={handleClickOpen}>
           <ArrowDropDown />
@@ -117,7 +129,10 @@ export default function DeviceSelect() {
         selectedValue={selectedValue}
         open={open}
         onClose={handleClose}
+        devices={input.device}
       />
+      </>)}
     </div>
   );
 }
+export default DeviceSelect;

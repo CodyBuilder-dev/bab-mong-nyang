@@ -13,7 +13,9 @@ import {
 import { useHistory } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-
+import { useFetchData } from "../../custom-hooks/custom-hooks";
+import {useSelector} from "react-redux";
+import { useEffect } from "react";
 const useStyles = makeStyles(theme => ({
   drawerList: {
     width: 250,
@@ -24,6 +26,11 @@ const useStyles = makeStyles(theme => ({
 const DrawerList = ({ setOpen, open }) => {
   const classes = useStyles();
   const history = useHistory();
+  const store = useSelector(state => state.store, []);
+  const {input, isLoading} = useFetchData("/device/","device_select") 
+  if(isLoading){
+    return <div>.....Loading</div>
+  }
   return (
     <List className={classes.drawerList}>
       <ListItem>
@@ -32,7 +39,7 @@ const DrawerList = ({ setOpen, open }) => {
             <AccountCircle />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="야옹이" secondary="2살, ♂" />
+        <ListItemText primary={input.d_Name} secondary={input.d_Age+"살"} />
       </ListItem>
       <Divider />
       <Container>
