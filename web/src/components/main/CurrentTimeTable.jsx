@@ -25,8 +25,8 @@ const GlobalCss = withStyles({
 })(() => null);
 const CurrentTimeTable = ({ props }) => {
   const classes = useStyles();
-  const currentID = useSelector(state => state.store.currentID);
-  console.log(currentID);
+  const currentUserNo = useSelector(state => state.store.currentUserNo);
+  console.log(currentUserNo);
   const [state, setState] = React.useState({
     columns: [
       {
@@ -71,7 +71,7 @@ const CurrentTimeTable = ({ props }) => {
 
   return (
     <div className={classes.page}>
-      <p>{currentID}님 환영합니다!</p>
+      <p>{currentUserNo}님 환영합니다!</p>
       <GlobalCss />
       <MaterialTable
         // icons ={Icons}

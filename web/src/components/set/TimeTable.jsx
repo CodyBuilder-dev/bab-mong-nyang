@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 const TimeTable = props => {
   const classes = useStyles();
   const store = useSelector(state => state.store, []);
-  const {input, isLoading,setInput,setIsLoading,dataFetch} = useFetchData(store.url + '/setting/'+'1','timetable');
+  const {input, isLoading,setIsLoading,dataFetch} = useFetchData(store.url + '/setting/'+'1','timetable');
   return (
     <div className={classes.page}>
       {isLoading ? (

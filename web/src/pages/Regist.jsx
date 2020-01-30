@@ -2,8 +2,6 @@ import React from "react";
 import {
   makeStyles,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Button
 } from "@material-ui/core";
 
@@ -26,12 +24,41 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Regist = props => {
+const Regist =({props,onChange,onSubmit,state}) => {
   const classes = useStyles();
+  let input = state.input;
+  const onChangeInput = e => {
+    let key = e.target.name;
+    if(input.u_No === undefined) input.u_No = state.currentUserNo;
+    switch (key) {
+      case "name":
+        input.d_Name = e.target.value;
+        onChange(input);
+        break;
+      case "age":
+        input.d_Age = e.target.value;
+        onChange(input);
+        break;
+      case "species":
+        input.d_Species = e.target.value;
+        onChange(input);
+        break;
+      case "weight":
+        input.d_Weight = e.target.value;
+        onChange(input);
+        break;
+      case "serialno":
+        input.SerialNo = e.target.value;
+        onChange(input);
+        break;
+      default:
+        console.log("default");
+    }
+  }
   return (
     <div className={classes.page}>
       <h3>반려동물의 정보를 입력해주세요</h3>
-      <form className={classes.inputText} noValidate autoComplete="off">
+        <div className={classes.inputText}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -41,6 +68,8 @@ const Regist = props => {
           label="이름"
           name="name"
           autoFocus
+          onChange = {onChangeInput}
+          value = {state.input.d_Name}
         />
 
         <TextField
@@ -48,19 +77,22 @@ const Regist = props => {
           margin="normal"
           required
           fullWidth
-          id="sex"
-          label="성별"
-          name="sex"
+          id="age"
+          label="나이"
+          name="age"
+          value = {state.input.d_Age}
+          onChange = {onChangeInput}
         />
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          id="birth"
-          label="생년월일"
-          name="birth"
-          autoComplete="birth"
+          id="species"
+          label="종"
+          name="species"
+          value = {state.input.d_Species}
+          onChange = {onChangeInput}
         />
         <TextField
           variant="outlined"
@@ -70,15 +102,19 @@ const Regist = props => {
           id="weight"
           label="몸무게"
           name="weight"
+          value={state.input.d_Weight}
+          onChange = {onChangeInput}
         />
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          id="serialNum"
+          id="serialno"
           label="일려번호 S/N"
-          name="serialNum"
+          name="serialno"
+          value = {state.input.serialno}
+          onChange = {onChangeInput}
         />
         <Button
           type="submit"
@@ -86,10 +122,11 @@ const Regist = props => {
           variant="contained"
           color="primary"
           className={classes.submit}
+          onClick={onSubmit}
         >
           기기 등록
         </Button>
-      </form>
+      </div>
     </div>
   );
 };
