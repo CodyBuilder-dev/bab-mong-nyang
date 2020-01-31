@@ -10,7 +10,6 @@ import Record from "./pages/Record";
 import "./index.css";
 import Info from "./pages/Info";
 import ModifyContainer from "./containers/ModifyContainer";
-import RegistContainer from "./containers/RegistContainer";
 import Device from"./pages/Device";
 import DeviceModify from "./pages/DeviceModify";
 import Login from "./pages/Login";
@@ -22,7 +21,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/join" component={Join} />
-          <Route path="/regist" component={RegistContainer} />
+          <Route path="/regist" component={Regist} />
           <Route path="/set" component={Setting} />
           <Route path="/record" component={Record} />
           <Route path="/main" component={Main} />
