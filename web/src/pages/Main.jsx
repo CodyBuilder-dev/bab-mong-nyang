@@ -1,22 +1,16 @@
-import React from "react";
-import Layout from '../components/layout/LayoutMain';
+import React,{useEffect} from "react";
 import CurTimeTable from "../components/main/CurrentTimeTable";
+import DeviceSelect from "../components/main/DeviceSelect";
+import DirectFeedButton from "../components/main/DirectFeedButton"
+//import { useSelector } from "react-redux";
 
-
-import { makeStyles } from "@material-ui/core";
-
-
-
-const useStyles = makeStyles(theme => ({}));
-
-const Main = (props) => {
-  const classes = useStyles();
-  const index = 0;
-  console.log(props);
-  return (
-      <Layout>
-        <CurTimeTable/>
-      </Layout>
+const Main =  props => {
+  return(  
+    <>
+      <DeviceSelect/>
+      <CurTimeTable />
+      <DirectFeedButton/>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 
 import {
   makeStyles,
@@ -7,32 +7,72 @@ import {
   ListItemText,
   ListSubheader,
   Divider,
+  Button
 } from "@material-ui/core";
-
+import NoteListItem from "./NoteListItem";
 const useStyles = makeStyles(theme => ({
   noteList: {
     width: 300,
     maxHeight: 400
+  },
+  noteButton: {
+    fontSize: "0.7rem"
+  },
+  noteSubHeader: {
+    lineHeight: "30px"
   }
 }));
 
 const NotificationList = props => {
   const classes = useStyles();
-  const noteItems = [
-    { key: 1, value: "사료통이 비었어요.", isRead: false },
-    { key: 2, value: "야옹이가 밥을 다먹었어요!", isRead: false },
-    { key: 3, value: "오늘은 야옹이가 밥을 10g 남겼어요.", isRead: false },
-    { key: 4, value: "안녕하세요!", isRead: true }
-  ]; // Test data
+  const items = () => {
+    if (props.notes.length === 0) {
+      return (
+        <ListItem>
+          <ListItemText primary="새로운 알림이 없어요!" />
+        </ListItem>
+      );
+    }
+    return props.notes.map((note, idx) => (
+      <NoteListItem
+        {...note}
+        key={`NoteItem.${idx}`}
+        divider={idx !== props.notes.length - 1}
+        onListClick={() => props.onItemCheck(idx)}
+      />
+    ));
+  };
   return (
     <List className={classes.noteList}>
-      <ListSubheader>{`알림`}</ListSubheader>
+      <ListSubheader className={classes.noteSubHeader}>{`알림`}</ListSubheader>
+      {/* <ListItem> */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "10px"
+        }}
+      >
+        <Button
+          className={classes.noteButton}
+          color="primary"
+          size={"small"}
+          onClick={() => props.onCheckAll()}
+        >
+          모두 읽음으로 표시
+        </Button>
+        <Button
+          className={classes.noteButton}
+          color="primary"
+          size="small"
+          onClick={() => props.onRemoveAll()}
+        >
+          읽은 알림 삭제
+        </Button>
+      </div>
+      {/* </ListItem> */}
       <Divider />
-      {noteItems.map(item => (
-        <ListItem button key={`${item.key}`}>
-          <ListItemText primary={`${item.value}`} />
-        </ListItem>
-      ))}
+      {items()}
     </List>
   );
 };

@@ -1,43 +1,29 @@
 import React from "react";
-import Layout from '../components/layout/Layout';
 import Hellocat from "../hellocat.png";
-import {makeStyles, Button, Popover} from "@material-ui/core";
-const useStyles = makeStyles(theme => ({
+import { Button, makeStyles } from "@material-ui/core";
 
+const useStyle = makeStyles(theme => ({
+  home: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: "22vh"
+  }
 }));
-
-const Home = props =>{
-    const classes = useStyles();
-    const buttonClick = event =>{
-        props.history.push('/login');
-    }
-    return(
-        <Layout>
-            <img src = {Hellocat}/>
-            <p>Hello, This is Auto IoT Servent System</p>
-            <Button  color="primary"  onClick={buttonClick} >
-            시작하기
-            </Button>
-            {/* 
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical : 'center',
-                    horizontal : 'center',
-                }}
-                transformOrigin={{
-                    vertical:'center',
-                    horizontal: 'center',
-                }}
-            >
-                <Login/>
-            </Popover>
-            */}
-        </Layout>
-    );
+const Home = props => {
+  const classes = useStyle();
+  const buttonClick = event => {
+    props.history.push("/login");
+  };
+  return (
+    <div className={classes.home}>
+      <img src={Hellocat} />
+      <p>Hello, This is Auto IoT Servent System</p>
+      <Button color="primary" onClick={buttonClick}>
+        시작하기
+      </Button>
+    </div>
+  );
 };
 
 export default Home;
