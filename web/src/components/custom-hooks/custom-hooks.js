@@ -62,6 +62,9 @@ export const useFetchData =(requestURL,dataType) => {
     setIsLoading(true);
     const result = await axios.get(url);
     switch(type){
+      case 'chart':
+        setInput(result.data)
+        break
       case 'device':
       case 'devicelist':
         if(store.d_No === undefined){
@@ -89,6 +92,9 @@ export const useFetchData =(requestURL,dataType) => {
     let url = store.url+requestURL;
     switch(dataType){
       case "timetable":
+        url+=store.u_Last;
+        break;
+      case "chart":
         url+=store.u_Last;
         break;
       case "device":
