@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import Header from "./Header";
 import { CssBaseline, Container, makeStyles } from "@material-ui/core";
 
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Layout = (props) => {
+const Layout = props => {
   const classes = useStyles();
   console.log(props);
   return (

@@ -2,22 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="logdata">  
   <select id = "selectAll">
-    select * from logdata;
+    select * from Logdata;
   </select>
 
   <select id = "selectOne">
-    select * from logdata where l_No = #{l_No};
+    select * from Logdata where l_No = #{l_No};
   </select>
 
   <insert id = "addLogdata">
-    insert into logdata values(0, #{d_No}, #{l_Time}, #{l_Remain});
+    insert into Logdata values(0, #{d_No}, #{l_Time}, #{l_Remain});
   </insert>
  
   <update id = "updateLogdata">
-    update logdata set l_Time = #{l_Time}, l_Remain = #{l_Remain} where l_No = #{l_No};
+    update Logdata set l_Time = #{l_Time}, l_Remain = #{l_Remain} where l_No = #{l_No};
   </update>
 
   <delete id = "deleteLogdata">
-    delete from logdata where l_No = #{l_No};
-  </delete>
+    delete from Logdata where l_No = #{l_No};
+  </delete>  
+
+  <select id = "selectChart">
+    select substr(l_Time, 6, 5) as 'l_Time2', sum(l_Remain) as 'l_Remain' from LogData where d_No = #{d_No} group by l_Time2;
+  </select>
 </mapper>

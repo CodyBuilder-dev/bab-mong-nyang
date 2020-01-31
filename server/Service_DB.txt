@@ -6,34 +6,37 @@ CREATE TABLE  User  (
      u_Pw	VARCHAR(16) NOT NULL,
      u_Name	VARCHAR(30)	NOT NULL,
      u_Email	VARCHAR(30)	NOT NULL,
-     PRIMARY KEY(u_No, u_Id)
+     u_Last INTEGER NOT NULL,
+     PRIMARY KEY(u_No)
 );
 
 CREATE TABLE  Device  (
      d_No	INTEGER	NOT NULL AUTO_INCREMENT,
      u_No	INTEGER	NOT NULL,
      SerialNo	VARCHAR(30) NOT NULL,
-     d_Name	VARCHAR(30)	NULL,
-     d_Age	VARCHAR(30)	NULL,
-     d_Species	VARCHAR(30)	NULL,
-     d_Weight	VARCHAR(30)	NULL,
-     PRIMARY KEY(d_No, u_No)
+     d_Name	VARCHAR(30)	NOT NULL,
+     d_Age	VARCHAR(30)	NOT NULL,
+     d_Species	VARCHAR(30)	NOT NULL,
+     d_Weight	VARCHAR(30)	NOT NULL,
+     PRIMARY KEY(d_No)
 );
 
 CREATE TABLE Setting  (
      s_No	INTEGER	NOT NULL AUTO_INCREMENT,
      d_No	INTEGER	NOT NULL,
-     s_Time	VARCHAR(30)	NULL,
+     s_Time	TIME NOT NULL,
      s_Amount	VARCHAR(30)	NULL,
-     PRIMARY KEY(s_No, d_No)
+     s_Activate BOOLEAN NOT NUll,
+     PRIMARY KEY(s_No)
 );
 
 CREATE TABLE  LogData  (
-     l_No	INTEGER	NOT NULL AUTO_INCREMENT,
-     d_No	INTEGER	NOT NULL,
-     l_Time	VARCHAR(30)	NULL,
+     l_Time DATETIME NOT NULL,
+     u_No	INTEGER NOT NULL,
+     d_No	INTEGER	NOT NULL,     
      l_Remain	VARCHAR(30)	NULL,
-     PRIMARY KEY(l_No, d_No)
+     l_Refill 	INTEGER NOT NULL,
+     PRIMARY KEY(l_Time)
 );
 
 CREATE TABLE  Feed  (
