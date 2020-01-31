@@ -113,13 +113,13 @@ DeviceDialog.propTypes = {
 
 const DeviceSelect = props => {
   const classes = useStyles();
-  const { state, onChange } = useStore();
-  const { input, isLoading, setInput } = useFetchData("/Join/main/", "main");
+  const { store, onChangeStore } = useStore();
+  const { input, isLoading } = useFetchData("/Join/main/", "main");
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
   useEffect(() => {
     setSelectedValue(
-      input.device.filter(device => device.d_No === state.u_Last)[0]
+      input.device.filter(device => device.d_No === store.u_Last)[0]
     );
   }, [input]);
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
@@ -130,7 +130,7 @@ const DeviceSelect = props => {
   const handleClose = value => {
     setOpen(false);
     setSelectedValue(value);
-    onChange(value, "select", "/Join/main");
+    onChangeStore(value, "select", "/Join/main");
   };
   //console.log(input);
   return (

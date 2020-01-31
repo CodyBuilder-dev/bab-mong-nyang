@@ -4,7 +4,7 @@ import {
   TextField,
   Button
 } from "@material-ui/core";
-
+import {useInput, useStore} from "../components/custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -24,37 +24,55 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Regist =({props,onChange,onSubmit,state}) => {
+const Regist =props => {
   const classes = useStyles();
-  let input = state.input;
-  const onChangeInput = e => {
-    let key = e.target.name;
-    if(input.u_No === undefined) input.u_No = state.currentUserNo;
-    switch (key) {
-      case "name":
-        input.d_Name = e.target.value;
-        onChange(input);
-        break;
-      case "age":
-        input.d_Age = e.target.value;
-        onChange(input);
-        break;
-      case "species":
-        input.d_Species = e.target.value;
-        onChange(input);
-        break;
-      case "weight":
-        input.d_Weight = e.target.value;
-        onChange(input);
-        break;
-      case "serialno":
-        input.SerialNo = e.target.value;
-        onChange(input);
-        break;
-      default:
-        console.log("default");
+  const {input,onChangeInput,onSubmit} = useInput();
+  const {store} = useStore();
+  const onChangeEvent = event => {
+    const param = {};
+    if(input.u_No === undefined){
+      param["u_No"] = store.currentUserNo;
+    }
+    param[event.target.name] = event.target.value;
+    onChangeInput(param);
+  };
+  const onClickEvent = async evnt =>{
+    let result = await onSubmit(store.url + "/device");
+    if(result){
+      alert("기기등록에 성공했습니다.")
+      props.history.push("/device");
+    }else{
+      alert("기기등록에 실패했습니다.")
     }
   }
+  // const onChangeInput = e => {
+  //   let key = e.target.name;
+  //   if(input.u_No === undefined) input.u_No = state.currentUserNo;
+  //   switch (key) {
+  //     case "name":
+  //       input.d_Name = e.target.value;
+  //       onChange(input);
+  //       break;
+  //     case "age":
+  //       input.d_Age = e.target.value;
+  //       onChange(input);
+  //       break;
+  //     case "species":
+  //       input.d_Species = e.target.value;
+  //       onChange(input);
+  //       break;
+  //     case "weight":
+  //       input.d_Weight = e.target.value;
+  //       onChange(input);
+  //       break;
+  //     case "serialno":
+  //       input.SerialNo = e.target.value;
+  //       onChange(input);
+  //       break;
+  //     default:
+  //       console.log("default");
+  //   }
+  // }
   return (
     <div className={classes.page}>
       <h3>반려동물의 정보를 입력해주세요</h3>
@@ -64,12 +82,12 @@ const Regist =({props,onChange,onSubmit,state}) => {
           margin="normal"
           required
           fullWidth
-          id="name"
+          id="d_Name"
           label="이름"
-          name="name"
+          name="d_Name"
           autoFocus
-          onChange = {onChangeInput}
-          value = {state.input.d_Name}
+          onChange = {onChangeEvent}
+          value = {input.d_Name}
         />
 
         <TextField
@@ -77,44 +95,44 @@ const Regist =({props,onChange,onSubmit,state}) => {
           margin="normal"
           required
           fullWidth
-          id="age"
+          id="d_Age"
           label="나이"
-          name="age"
-          value = {state.input.d_Age}
-          onChange = {onChangeInput}
+          name="d_Age"
+          value = {input.d_Age}
+          onChange = {onChangeEvent}
         />
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          id="species"
+          id="d_Species"
           label="종"
-          name="species"
-          value = {state.input.d_Species}
-          onChange = {onChangeInput}
+          name="d_Species"
+          value = {input.d_Species}
+          onChange = {onChangeEvent}
         />
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          id="weight"
+          id="d_Weight"
           label="몸무게"
-          name="weight"
-          value={state.input.d_Weight}
-          onChange = {onChangeInput}
+          name="d_Weight"
+          value={input.d_Weight}
+          onChange = {onChangeEvent}
         />
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          id="serialno"
+          id="SerialNo"
           label="일려번호 S/N"
-          name="serialno"
-          value = {state.input.serialno}
-          onChange = {onChangeInput}
+          name="SerialNo"
+          value = {input.SerialNo}
+          onChange = {onChangeEvent}
         />
         <Button
           type="submit"
@@ -122,7 +140,7 @@ const Regist =({props,onChange,onSubmit,state}) => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={onSubmit}
+          onClick={onClickEvent}
         >
           기기 등록
         </Button>

@@ -1,5 +1,5 @@
 import React from "react";
-import {useFetchData} from "../components/custom-hooks/custom-hooks"
+import {useFetchData,useStore} from "../components/custom-hooks/custom-hooks"
 import {
   makeStyles,
   TextField,
@@ -26,16 +26,16 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1)
   }
 }));
-const DeviceModify = ({props, state,submit_Form}) =>{
+const DeviceModify = props =>{
   const classes = useStyles();
-  const { input, isLoading ,setInput, updateField} = useFetchData('/device/get/','device');
+  const {store} = useStore();
+  const { input, isLoading , updateField} = useFetchData('/device/get/','device');
   const onSubmit = async (e) => {
     console.log("axios요청 보냄");
     console.log(input);
-    const result = await axios.put(state.url+"/device",input);
+    const result = await axios.put(store.url+"/device",input);
     console.log(result);
     if(result.data){
-      submit_Form();
       props.history.push("/device");
     }else{
       alert("수정에 실패했습니다.");
