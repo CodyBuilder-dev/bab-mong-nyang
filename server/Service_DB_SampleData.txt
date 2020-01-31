@@ -1,0 +1,56 @@
+use Service_DB;
+
+insert into User values (0, 'id1', 'pw1', 'name1', 'email1');
+insert into User values (0, 'id2', 'pw2', 'name2', 'email2');
+insert into User values (0, 'id3', 'pw3', 'name3', 'email3');
+insert into User values (0, 'id4', 'pw4', 'name4', 'email4');
+insert into User values (0, 'id5', 'pw5', 'name5', 'email5');
+insert into User values (0, 'id6', 'pw6', 'name6', 'email6');
+insert into User values (0, 'id7', 'pw7', 'name7', 'email7');
+insert into User values (0, 'id8', 'pw8', 'name8', 'email8');
+insert into User values (0, 'id9', 'pw9', 'name9', 'email9');
+insert into User values (0, 'id10', 'pw10', 'name10', 'email10');
+
+insert into Device values (0, 10, 'serial1', 'name1', 'age1', 'species1', 'weight1');
+insert into Device values (0, 9, 'serial2', 'name2', 'age2', 'species2', 'weight2');
+insert into Device values (0, 8, 'serial3', 'name3', 'age3', 'species3', 'weight3');
+insert into Device values (0, 7, 'serial4', 'name4', 'age4', 'species4', 'weight4');
+insert into Device values (0, 6, 'serial5', 'name5', 'age5', 'species5', 'weight5');
+insert into Device values (0, 5, 'serial6', 'name6', 'age6', 'species6', 'weight6');
+insert into Device values (0, 4, 'serial7', 'name7', 'age7', 'species7', 'weight7');
+insert into Device values (0, 3, 'serial8', 'name8', 'age8', 'species8', 'weight8');
+insert into Device values (0, 2, 'serial9', 'name9', 'age9', 'species9', 'weight9');
+insert into Device values (0, 1, 'serial10', 'name10', 'age10', 'species10', 'weight10');
+
+insert into Setting values (0, 10, curtime(), '100.0', true);
+insert into Setting values (0, 9, curtime(), '200.0', true);
+insert into Setting values (0, 8, curtime(), '300.0', true);
+insert into Setting values (0, 7, curtime(), '400.0', true);
+insert into Setting values (0, 6, curtime(), '500.0', true);
+insert into Setting values (0, 5, curtime(), '600.0', true);
+insert into Setting values (0, 4, curtime(), '700.0', true);
+insert into Setting values (0, 3, curtime(), '800.0', true);
+insert into Setting values (0, 2, curtime(), '900.0', true);
+insert into Setting values (0, 1, curtime(), '1000.0', true);
+
+insert into LogData values (now(), 10, 1, '10', 1);
+insert into LogData values (now(), 9, 2, '20', 1);
+insert into LogData values (now(), 8, 3, '30', 1);
+insert into LogData values (now(), 7, 4, '40', 1);
+insert into LogData values (now(), 6, 5, '50', 1);
+insert into LogData values (now(), 5, 6, '60', 1);
+insert into LogData values (now(), 4, 7, '70', 1);
+insert into LogData values (now(), 3, 8, '80', 1);
+insert into LogData values (now(), 2, 9, '90', 1);
+insert into LogData values (now(), 1, 10, '100', 1);
+
+insert into Feed values (0, 'name1', 'manufacturer1', '100.0', 'species1');
+insert into Feed values (0, 'name2', 'manufacturer2', '200.0', 'species2');
+insert into Feed values (0, 'name3', 'manufacturer3', '300.0', 'species3');
+insert into Feed values (0, 'name4', 'manufacturer4', '400.0', 'species4');
+insert into Feed values (0, 'name5', 'manufacturer5', '500.0', 'species5');
+insert into Feed values (0, 'name6', 'manufacturer6', '600.0', 'species6');
+insert into Feed values (0, 'name7', 'manufacturer7', '700.0', 'species7');
+insert into Feed values (0, 'name8', 'manufacturer8', '800.0', 'species8');
+insert into Feed values (0, 'name9', 'manufacturer9', '900.0', 'species9');
+insert into Feed values (0, 'name10', 'manufacturer10', '1000.0', 'species10');
