@@ -4,8 +4,7 @@ import { makeStyles, Button } from "@material-ui/core";
 import Icons from "../set/TableIcons";
 import { useSelector } from "react-redux";
 import {Link} from "react-router-dom";
-import {useFetchData} from "../custom-hooks/custom-hooks"
-import {DeviceListTableContainer} from "../../containers/DeviceListTableContainer"
+import {useFetchData,useStore} from "../custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(6),
@@ -18,9 +17,8 @@ const useStyles = makeStyles(theme => ({
 
 const DeviceListTable = ({props}) => {
   const classes = useStyles();
-  const store = useSelector(state => state.store,[]);
+  const {store,onChangeStore} = useStore();
   const {input, isLoading} = useFetchData('/device/','devicelist');
-  const {onClickRowEvent} = DeviceListTableContainer(props);
   return(
     <div className = {classes.page}>
       {isLoading ? (
@@ -57,7 +55,8 @@ const DeviceListTable = ({props}) => {
             }
           }}
           onRowClick = {(event,rowData)=>{
-            onClickRowEvent(rowData.d_No);
+            onChangeStore({currentDeviceNo:rowData.d_No},"","");
+            props.history.push("/devicemodify");
           }}
           actions ={[
             {

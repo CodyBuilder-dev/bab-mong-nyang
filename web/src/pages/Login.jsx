@@ -7,7 +7,7 @@ import {
   Button
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-
+import {useInput,useStore} from "../components/custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
@@ -25,33 +25,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Login = ({ props, state, onChange, onSubmit }) => {
+const Login = (props) => {
   const classes = useStyles();
-  let currentUserNo = state.currentUserNo;
-  let input = state.input;
-
-  useEffect(() => {
-    console.log("마운트될때 실행");
-    if (currentUserNo.length !== 0) {
-      props.history.push("main");
+  const{input,onChangeInput,onSubmit} = useInput();
+  const {store, onChangeStore} = useStore();
+  const onChangeEvent = event =>{
+    const param = {};
+    param[event.target.name] = event.target.value;
+    console.log(param);
+    onChangeInput(param);
+  }
+  const onClickEvent =  async event =>{
+    let result = await onSubmit(store.url+"/user/login");
+    console.log(result)
+    if(result.u_No > 0){
+      result ={
+        ...result,
+        currentUserNo : result.u_No
+      }
+      onChangeStore(result,"","");
+      props.history.push("/main");
     }
-  }, []);
-  const onChangeInput = e => {
-    let key = e.target.name;
-    switch (key) {
-      case "id":
-        input.u_Id = e.target.value;
-        onChange(input);
-        break;
-      case "password":
-        input.u_Pw = e.target.value;
-        onChange(input);
-        break;
-      default:
-        break;
-    }
-  };
-
+  }
   return (
     <div className={classes.page}>
       <h2>로그인</h2>
@@ -62,25 +57,25 @@ const Login = ({ props, state, onChange, onSubmit }) => {
           margin="normal"
           required
           fullWidth
-          id="id"
+          id="u_Id"
           label="아이디"
-          name="id"
+          name="u_Id"
           autoFocus
-          value={state.input.u_Id}
-          onChange={onChangeInput}
+          value={input.u_Id}
+          onChange={onChangeEvent}
         />
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          name="password"
+          name="u_Pw"
           label="비밀번호 "
           type="password"
-          id="password"
+          id="u_Pw"
           autoComplete="current-password"
-          value={state.input.u_Pw}
-          onChange={onChangeInput}
+          value={input.u_Pw}
+          onChange={onChangeEvent}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
@@ -92,7 +87,7 @@ const Login = ({ props, state, onChange, onSubmit }) => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={onSubmit}
+          onClick={onClickEvent}
         >
           로그인
         </Button>

@@ -8,21 +8,20 @@ import Setting from "./pages/Setting";
 import Main from "./pages/Main";
 import Record from "./pages/Record";
 import "./index.css";
-import LoginContainer from "./containers/LoginContainer";
-import JoinContainer from "./containers/JoinContainer";
 import Info from "./pages/Info";
 import ModifyContainer from "./containers/ModifyContainer";
 import RegistContainer from "./containers/RegistContainer";
-import DeviceModifyContainer from "./containers/DeviceModifyContainer";
 import Device from"./pages/Device";
+import DeviceModify from "./pages/DeviceModify";
+import Login from "./pages/Login";
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Layout>
           <Route exact path="/" component={Home} />
-          <Route path="/login" component={LoginContainer} />
-          <Route path="/join" component={JoinContainer} />
+          <Route path="/login" component={Login} />
+          <Route path="/join" component={Join} />
           <Route path="/regist" component={RegistContainer} />
           <Route path="/set" component={Setting} />
           <Route path="/record" component={Record} />
@@ -30,7 +29,7 @@ const App = () => {
           <Route path="/info" component={Info} />
           <Route path="/modify" component={ModifyContainer} />
           <Route path="/device" component={Device} />
-          <Route path="/devicemodify" component = {DeviceModifyContainer}/>
+          <Route path="/devicemodify" component = {DeviceModify}/>
         </Layout>
       </BrowserRouter>
     </>
