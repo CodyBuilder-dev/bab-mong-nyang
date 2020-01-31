@@ -45,6 +45,7 @@ class Scroller extends React.Component {
       <Container>
         <Line/>
         <Position
+          className={'scroll'}
           offset={(animationOffset * width) / 100}
           style={positionStyle}
           onTouchStart={e =>{

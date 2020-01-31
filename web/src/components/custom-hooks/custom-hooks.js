@@ -1,4 +1,4 @@
-import { useState, useEffect,useCallback } from "react";
+import React,{ useState, useEffect,useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import {changeStore} from "../../modules/store"
@@ -47,7 +47,6 @@ export const useNotes = (initialValue = []) => {
     }
   };
 };
-
 export const useFetchData =(requestURL,dataType) => {
   const [input, setInput] = useState({device : []});
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +62,9 @@ export const useFetchData =(requestURL,dataType) => {
     setIsLoading(true);
     const result = await axios.get(url);
     switch(type){
+      case 'chart':
+        setInput(result.data)
+        break
       case 'device':
       case 'devicelist':
         if(store.d_No === undefined){
@@ -92,6 +94,9 @@ export const useFetchData =(requestURL,dataType) => {
       case "timetable":
         url+=store.u_Last;
         break;
+      case "chart":
+        url+=store.u_Last;
+        break;
       case "device":
         url+=store.currentDeviceNo;
         break;
@@ -112,24 +117,57 @@ export const useFetchData =(requestURL,dataType) => {
 }
 
 export const useStore = () =>{
-  const state = useSelector(state => state.store,[]);
+  const store = useSelector(state => state.store,[]);
   const dispatch = useDispatch();
   const change_Store = useCallback(data => dispatch(changeStore(data)),[dispatch]);
-  const onChange = useCallback (
+  const onChangeStore = useCallback (
     async (data,type,url) => {
       switch(type){
         case "select":
-          const result = await axios.put(state.url+url,{u_No : state.currentUserNo, d_No : data.d_No});
+          const result = await axios.put(store.url+url,{u_No : store.currentUserNo, d_No : data.d_No});
           if(result.data){
             change_Store({u_Last : data.d_No});
           }
           break;
         default:
+          change_Store(data);
           break;
       }
   })
   return{
-    state,
-    onChange
+    store,
+    onChangeStore
   };
 };
+
+export const useInput = () =>{
+  const [input,setInput] = useState({});
+  const onChangeInput = useCallback(
+    param =>{
+    setInput({...input,...param});
+    console.log(input);
+    }
+  )
+  
+  const onSubmit = useCallback(
+    async (url) =>{
+      console.log(input);
+      const result = await axios.post(url,input);
+      console.log(result);
+      return result.data;
+    }
+  )
+  const onValidate =useCallback(
+    async url =>{
+      const result = await axios.get(url);
+      return result.data;
+    }
+  )
+  return{
+    input,
+    setInput,
+    onChangeInput,
+    onSubmit,
+    onValidate
+  }
+}
