@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sample_log">  
+  <select id="send">
+    SELECT *
+    FROM
+      sample_log 
+    WHERE
+      _sent = 0;
+  </select>
+
+  <update id="sent">
+    UPDATE sample_log
+    SET _sent = 1
+    WHERE _time BETWEEN #{smallest} AND #{biggest};
+  </update>
+</mapper>

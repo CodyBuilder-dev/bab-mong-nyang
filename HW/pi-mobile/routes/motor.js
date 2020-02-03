@@ -18,6 +18,10 @@ router.post('/',function(req,res,next){
             function (err,stdout,stderr){
                 if(err) console.error(err);
             });
+        // exec2('/home/pi/work/pi-mobile/src/starwars',
+        // function (err,stdout,stderr){
+        //     if(err) console.error(err);
+        // });
         exec2('/home/pi/work/pi-mobile/src/mario',
         function (err,stdout,stderr){
             if(err) console.error(err);

@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var motorRouter = require('./routes/motor');
+var fromBackRouter = require('./routes/from-backend');
+var toBackRouter = require('./routes/to-backend');
+
 var app = express();
 
 const CORS = require('cors')();
@@ -24,6 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/motor', motorRouter);
+app.use('/from-backend',fromBackRouter);
+app.use('/to-backend',toBackRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
