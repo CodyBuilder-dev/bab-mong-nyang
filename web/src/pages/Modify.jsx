@@ -33,7 +33,7 @@ const Modify = props => {
     const result = await axios.put(store.url+"/user",input);
     if(result.data){
       alert("수정되었습니다.");
-      props.history.push("/info");
+      props.history.replace("/info");
     }else{
       alert("수정에 실패했습니다.");
     }

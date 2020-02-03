@@ -29,6 +29,7 @@ const App = () => {
           <Route path="/modify" component={Modify} />
           <Route path="/device" component={Device} />
           <Route path="/devicemodify" component = {DeviceModify}/>
+          <Redirect to="/not-found" />
         </Layout>
       </BrowserRouter>
     </>
