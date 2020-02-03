@@ -52,6 +52,23 @@ export const useFetchData =(requestURL,dataType) => {
   const [input, setInput] = useState({device : []});
   const [isLoading, setIsLoading] = useState(false);
   const store = useSelector(state => state.store, []);
+  
+  const onSubmit = useCallback(
+    async (url) =>{
+      console.log(input);
+      const result = await axios.post(url,input);
+      console.log(result);
+      return result.data;
+    }
+  )
+  
+  const onValidate =useCallback(
+    async url =>{
+      const result = await axios.get(url);
+      return result.data;
+    }
+  )
+  
   const updateField = e => {
     let flag = undefined;
     switch (e.target.name){
@@ -86,6 +103,7 @@ export const useFetchData =(requestURL,dataType) => {
       pwValidated : flag
     });
   };
+  
   const dataFetch = async (url,type) => {
     console.log(url);
     setIsLoading(true);
@@ -114,6 +132,7 @@ export const useFetchData =(requestURL,dataType) => {
     setIsLoading(false);
     console.log(result.data);
   };
+  
   useEffect(() => {
     console.log("mount");
     let url = store.url+requestURL;
@@ -140,13 +159,16 @@ export const useFetchData =(requestURL,dataType) => {
       dataFetch(url,dataType);
     }
   }, []);
+  
   return {
     input,
     isLoading,
     setInput,
     setIsLoading,
     dataFetch,
-    updateField
+    updateField,
+    onSubmit,
+    onValidate
   }
 }
 
@@ -178,35 +200,3 @@ export const useStore = () =>{
     
   };
 };
-
-export const useInput = () =>{
-  const [input,setInput] = useState({});
-  const onChangeInput = useCallback(
-    param =>{
-    setInput({...input,...param});
-    console.log(input);
-    }
-  )
-  
-  const onSubmit = useCallback(
-    async (url) =>{
-      console.log(input);
-      const result = await axios.post(url,input);
-      console.log(result);
-      return result.data;
-    }
-  )
-  const onValidate =useCallback(
-    async url =>{
-      const result = await axios.get(url);
-      return result.data;
-    }
-  )
-  return{
-    input,
-    setInput,
-    onChangeInput,
-    onSubmit,
-    onValidate
-  }
-}
