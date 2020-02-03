@@ -3,13 +3,10 @@ import Layout from "../components/layout/LayoutMain";
 import {
   makeStyles,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Button
 } from "@material-ui/core";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import {useFetchData} from "../components/custom-hooks/custom-hooks";
+import {useFetchData, useStore} from "../components/custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -28,31 +25,19 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1)
   }
 }));
-const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
+const Modify = props => {
   const classes = useStyles();
-  const {input, isLoading} = useFetchData('/user/','user');
-  const onChangeInput = e => {
-    //console.log(input);
-    let key = e.target.name;
-    if(input.u_No === undefined) input.u_No = state.currentUserNo;
-    switch (key) {
-      case "pw":
-        input.u_Pw = e.target.value;
-        onChange(input);
-        break;
-      case "email":
-        input.u_Email = e.target.value;
-        onChange(input);
-        break;
-      case "pwconfirm":
-        input.pwcon = e.target.value;
-        onChange(input);
-        break;
-      default:
-        console.log("default");
+  const {input, setInput,isLoading,updateField} = useFetchData('/user/','user');
+  const {store} = useStore();
+  const onClickEvent = async event => {
+    const result = await axios.put(store.url+"/user",input);
+    if(result.data){
+      alert("수정되었습니다.");
+      props.history.push("/info");
+    }else{
+      alert("수정에 실패했습니다.");
     }
-  };
-
+  }
   return (
     <>
       {isLoading ? (
@@ -67,11 +52,10 @@ const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
               margin="normal"
               required
               fullWidth
-              id="name"
+              id="u_Name"
               label="이름"
-              name="name"
+              name="u_Name"
               focused
-              onChange={onChangeInput}
               value={input.u_Name}
               InputProps={{
                 readOnly: true
@@ -83,10 +67,9 @@ const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
               margin="normal"
               required
               fullWidth
-              id="id"
+              id="u_Id"
               label="아이디"
-              name="id"
-              onChange={onChangeInput}
+              name="u_Id"
               value={input.u_Id}
               InputProps={{
                 readOnly: true
@@ -98,31 +81,31 @@ const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
               margin="normal"
               required
               fullWidth
-              name="pw"
+              name="u_Pw"
               label="비밀번호 "
               type="password"
-              id="pw"
+              id="u_Pw"
               autoComplete="current-password"
-              onChange={onChangeInput}
-              value={state.input.u_Pw}
+              onChange={updateField}
+              value={input.u_Pw}
             />
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              name="pwconfirm"
+              name="pwcon"
               label="비밀번호 확인"
               type="password"
-              id="pwconfirm"
+              id="pwcon"
               autoComplete="current-password"
               error={
-                state.input.validated !== undefined && !state.input.validated
+                input.pwValidated !== undefined && !input.pwValidated
               }
-              onChange={onChangeInput}
-              value={state.input.pwcon}
+              onChange={updateField}
+              value={input.pwcon}
               helperText={
-                state.input.validated === undefined || state.input.validated
+                input.pwValidated === undefined || input.pwValidated
                   ? ""
                   : "일치하지 않습니다"
               }
@@ -132,11 +115,11 @@ const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="u_Email"
               label="이메일"
-              name="email"
+              name="u_Email"
               autoComplete="email"
-              onChange={onChangeInput}
+              onChange={updateField}
               value={input.u_Email}
             />
             <Button
@@ -144,7 +127,7 @@ const Modify = ({ props, state, onChange, onSubmit, onLoad }) => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={onSubmit}
+              onClick={onClickEvent}
             >
               수정하기
             </Button>

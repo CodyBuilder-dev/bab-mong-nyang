@@ -9,10 +9,10 @@ import Main from "./pages/Main";
 import Record from "./pages/Record";
 import "./index.css";
 import Info from "./pages/Info";
-import ModifyContainer from "./containers/ModifyContainer";
 import Device from"./pages/Device";
 import DeviceModify from "./pages/DeviceModify";
 import Login from "./pages/Login";
+import Modify from "./pages/Modify";
 const App = () => {
   return (
     <>
@@ -26,7 +26,7 @@ const App = () => {
           <Route path="/record" component={Record} />
           <Route path="/main" component={Main} />
           <Route path="/info" component={Info} />
-          <Route path="/modify" component={ModifyContainer} />
+          <Route path="/modify" component={Modify} />
           <Route path="/device" component={Device} />
           <Route path="/devicemodify" component = {DeviceModify}/>
         </Layout>
