@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 const DrawerList = ({ setOpen, open }) => {
   const classes = useStyles();
   const history = useHistory();
-  const store = useSelector(state => state.store, []);
   const {input, isLoading} = useFetchData("/device/","device_select") 
   if(isLoading){
     return <div>.....Loading</div>

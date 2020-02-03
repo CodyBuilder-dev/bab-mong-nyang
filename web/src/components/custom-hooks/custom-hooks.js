@@ -91,9 +91,6 @@ export const useFetchData =(requestURL,dataType) => {
     setIsLoading(true);
     const result = await axios.get(url);
     switch(type){
-      case 'chart':
-        setInput(result.data)
-        break
       case 'device':
       case 'devicelist':
         if(store.d_No === undefined){
@@ -102,12 +99,9 @@ export const useFetchData =(requestURL,dataType) => {
         else{
           setInput({...result.data,d_No : store.currentDeviceNo});
         }
-        console.log('device');
         break;
       case 'device_select':
         setInput(result.data.filter(device=>device.d_No === store.u_Last)[0]);
-        console.log("device_select");
-        //console.log(result.data);
         break;
       case 'user':
         result.data.u_Pw = "";
@@ -126,8 +120,6 @@ export const useFetchData =(requestURL,dataType) => {
     let flag = true;
     switch(dataType){
       case "timetable":
-        url+=store.u_Last;
-        break;
       case "chart":
         url+=store.u_Last;
         break;
@@ -135,6 +127,8 @@ export const useFetchData =(requestURL,dataType) => {
         url+=store.currentDeviceNo;
         break;
       case "user":
+      case "devicelist":
+      case 'device_select':
         url+=store.currentUserNo;
         break;
       default:
