@@ -41,6 +41,15 @@ const DeviceModify = props =>{
       alert("수정에 실패했습니다.");
     }
   };
+  const onDelete = async (e) => {
+    const result= await axios.delete(store.url+"/device/"+input.d_No);
+    if(result.data){
+      alert("삭제했습니다.");
+      props.history.replace("/device");
+    }else{
+      alert("삭제에 실패했습니다.");
+    }
+  }
   return (
     <>
       {isLoading ? (
@@ -114,6 +123,15 @@ const DeviceModify = props =>{
               onClick={onSubmit}
             >
               수정하기
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+              onClick={onDelete}
+            >
+              삭제하기
             </Button>
           </div>
         </div>

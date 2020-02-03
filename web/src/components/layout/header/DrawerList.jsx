@@ -38,7 +38,14 @@ const DrawerList = ({ setOpen, open }) => {
             <AccountCircle />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={input.d_Name} secondary={input.d_Age+"살"} />
+        {
+          input.device.length === 0 ? (
+            <ListItemText primary="기기를 등록해주세요" />    
+          ) : (
+            <ListItemText primary={input.device.d_Name} secondary={input.device.d_Age+"살"} />
+          )
+        }
+        
       </ListItem>
       <Divider />
       <Container>
