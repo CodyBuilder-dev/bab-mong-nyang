@@ -31,7 +31,7 @@ const Regist =props => {
   const onChangeEvent = event => {
     const param = {};
     if(input.u_No === undefined){
-      param["u_No"] = store.currentUserNo;
+      param["u_No"] = store.u_No;
     }
     param[event.target.name] = event.target.value;
     onChangeInput(param);
@@ -45,34 +45,7 @@ const Regist =props => {
       alert("기기등록에 실패했습니다.")
     }
   }
-  // const onChangeInput = e => {
-  //   let key = e.target.name;
-  //   if(input.u_No === undefined) input.u_No = state.currentUserNo;
-  //   switch (key) {
-  //     case "name":
-  //       input.d_Name = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "age":
-  //       input.d_Age = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "species":
-  //       input.d_Species = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "weight":
-  //       input.d_Weight = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "serialno":
-  //       input.SerialNo = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     default:
-  //       console.log("default");
-  //   }
-  // }
+  
   return (
     <div className={classes.page}>
       <h3>반려동물의 정보를 입력해주세요</h3>

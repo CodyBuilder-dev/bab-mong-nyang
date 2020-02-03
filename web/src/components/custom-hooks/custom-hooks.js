@@ -1,7 +1,7 @@
 import React,{ useState, useEffect,useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import {changeStore} from "../../modules/store"
+import {changeStore,restoreStore} from "../../modules/store"
 import { TrendingUpOutlined } from "@material-ui/icons";
 export const useNotes = (initialValue = []) => {
   const [notes, setNotes] = useState(initialValue);
@@ -105,7 +105,7 @@ export const useFetchData =(requestURL,dataType) => {
         break;
       case 'user':
         result.data.u_Pw = "";
-        result.data["u_No"] = store.currentUserNo;
+        result.data["u_No"] = store.u_No;
         setInput(result.data);
       default : 
         setInput(result.data);
@@ -129,7 +129,7 @@ export const useFetchData =(requestURL,dataType) => {
       case "user":
       case "devicelist":
       case 'device_select':
-        url+=store.currentUserNo;
+        url+=store.u_No;
         break;
       default:
         flag = false;
@@ -153,15 +153,19 @@ export const useFetchData =(requestURL,dataType) => {
 export const useStore = () =>{
   const store = useSelector(state => state.store,[]);
   const dispatch = useDispatch();
+  const restore_Store = useCallback(data=> dispatch(restoreStore("")),[dispatch]);
   const change_Store = useCallback(data => dispatch(changeStore(data)),[dispatch]);
   const onChangeStore = useCallback (
     async (data,type,url) => {
       switch(type){
         case "select":
-          const result = await axios.put(store.url+url,{u_No : store.currentUserNo, d_No : data.d_No});
+          const result = await axios.put(store.url+url,{u_No : store.u_No, d_No : data.d_No});
           if(result.data){
             change_Store({u_Last : data.d_No});
           }
+          break;
+        case "restore":
+          restore_Store("");
           break;
         default:
           change_Store(data);
@@ -170,7 +174,8 @@ export const useStore = () =>{
   })
   return{
     store,
-    onChangeStore
+    onChangeStore,
+    
   };
 };
 

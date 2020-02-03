@@ -41,7 +41,6 @@ const Login = (props) => {
     if(result.u_No > 0){
       result ={
         ...result,
-        currentUserNo : result.u_No
       }
       onChangeStore(result,"","");
       props.history.replace("/main");
