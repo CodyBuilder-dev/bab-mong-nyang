@@ -122,6 +122,7 @@ export const useFetchData =(requestURL,dataType) => {
       case 'device_select':
         if(result.data.length === 0){
           console.log("data없음");
+          console.log("data없음");
           setInput({...input, device : []});
         }else{
           console.log(result.data.filter(device => device.d_No === store.u_Last)[0]);
