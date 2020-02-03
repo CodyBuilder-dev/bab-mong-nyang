@@ -108,6 +108,7 @@ export const useFetchData =(requestURL,dataType) => {
     console.log(url);
     setIsLoading(true);
     const result = await axios.get(url);
+    
     switch(type){
       case 'device':
       case 'devicelist':
@@ -119,18 +120,26 @@ export const useFetchData =(requestURL,dataType) => {
         }
         break;
       case 'device_select':
-        setInput(result.data.filter(device=>device.d_No === store.u_Last)[0]);
+        if(result.data.length === 0){
+          console.log("data없음");
+          console.log("data없음");
+          setInput({...input, device : []});
+        }else{
+          console.log(result.data.filter(device => device.d_No === store.u_Last)[0]);
+          setInput({device : result.data.filter(device => device.d_No === store.u_Last)[0]})
+        }
         break;
       case 'user':
         result.data.u_Pw = "";
         result.data["u_No"] = store.u_No;
         setInput(result.data);
+        break;
       default : 
         setInput(result.data);
         break;
-      }
+    }
     setIsLoading(false);
-    console.log(result.data);
+    console.log(result);
   };
   
   useEffect(() => {
