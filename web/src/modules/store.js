@@ -35,10 +35,11 @@ export const changeStore = data => ({
   payload : data
 });
 
-//70.12.246.68
+//70.12.246.68:3000
+//localhost:3000
 const initialState = {
   input: {},
-  url: "http://70.12.246.68:3000",
+  url: "http://localhost:3000",
   currentUserNo: "",
   currentDeviceNo : "",
 };

@@ -114,7 +114,7 @@ DeviceDialog.propTypes = {
 const DeviceSelect = props => {
   const classes = useStyles();
   const { store, onChangeStore } = useStore();
-  const { input, isLoading } = useFetchData("/Join/main/", "main");
+  const { input, isLoading } = useFetchData("/Join/main/", "user");
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
   useEffect(() => {
