@@ -30,7 +30,7 @@ const UserPopOver = ({ setAnchorEl }) => {
   const onClickLogout = () => {
     setAnchorEl(null);
     logout();
-    history.push("/login");
+    history.replace("/login");
   };
   const onClickUserInfo = () => {
     setAnchorEl(null);

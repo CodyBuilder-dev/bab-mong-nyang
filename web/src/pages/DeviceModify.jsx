@@ -36,7 +36,7 @@ const DeviceModify = props =>{
     const result = await axios.put(store.url+"/device",input);
     console.log(result);
     if(result.data){
-      props.history.push("/device");
+      props.history.replace("/device");
     }else{
       alert("수정에 실패했습니다.");
     }
