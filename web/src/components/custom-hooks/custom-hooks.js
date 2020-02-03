@@ -2,6 +2,7 @@ import React,{ useState, useEffect,useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import {changeStore} from "../../modules/store"
+import { TrendingUpOutlined } from "@material-ui/icons";
 export const useNotes = (initialValue = []) => {
   const [notes, setNotes] = useState(initialValue);
   return {
@@ -52,9 +53,37 @@ export const useFetchData =(requestURL,dataType) => {
   const [isLoading, setIsLoading] = useState(false);
   const store = useSelector(state => state.store, []);
   const updateField = e => {
+    let flag = undefined;
+    switch (e.target.name){
+      case "u_Pw" :
+        if (
+          input.pwcon === undefined ||
+          input.pwcon === "" ||
+          e.target.value === input.pwcon
+        ){
+          flag = true;
+        }else{
+          flag = false;
+        }
+        break;
+      case "pwcon":
+        if(
+          e.target.value === undefined ||
+          e.target.value === ""||
+          input.u_Pw === e.target.value
+        ){
+          flag = true;
+        }else{
+          flag = false;
+        }
+        break;
+      default:
+        break; 
+    }
     setInput({
       ...input,
-      [e.target.name] : e.target.value
+      [e.target.name] : e.target.value,
+      pwValidated : flag
     });
   };
   const dataFetch = async (url,type) => {
@@ -80,6 +109,10 @@ export const useFetchData =(requestURL,dataType) => {
         console.log("device_select");
         //console.log(result.data);
         break;
+      case 'user':
+        result.data.u_Pw = "";
+        result.data["u_No"] = store.currentUserNo;
+        setInput(result.data);
       default : 
         setInput(result.data);
         break;
@@ -90,6 +123,7 @@ export const useFetchData =(requestURL,dataType) => {
   useEffect(() => {
     console.log("mount");
     let url = store.url+requestURL;
+    let flag = true;
     switch(dataType){
       case "timetable":
         url+=store.u_Last;
@@ -100,11 +134,17 @@ export const useFetchData =(requestURL,dataType) => {
       case "device":
         url+=store.currentDeviceNo;
         break;
-      default :
+      case "user":
         url+=store.currentUserNo;
         break;
+      default:
+        flag = false;
+        break;
     }
-    dataFetch(url,dataType);
+    console.log(flag);
+    if(flag){
+      dataFetch(url,dataType);
+    }
   }, []);
   return {
     input,
