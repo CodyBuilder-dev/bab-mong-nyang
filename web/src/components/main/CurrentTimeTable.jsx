@@ -25,8 +25,8 @@ const GlobalCss = withStyles({
 })(() => null);
 const CurrentTimeTable = ({ props }) => {
   const classes = useStyles();
-  const currentUserNo = useSelector(state => state.store.currentUserNo);
-  console.log(currentUserNo);
+  // const currentUserNo = useSelector(state => state.store.currentUserNo);
+  // console.log(currentUserNo);
   const [state, setState] = React.useState({
     columns: [
       {
