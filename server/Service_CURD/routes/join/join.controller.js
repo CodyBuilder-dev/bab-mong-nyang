@@ -21,6 +21,7 @@ const selectMain = function (req, res) {
         if(err) throw err;
         if(!rows[0]){
             console.log('Main_data selectUser fail');
+            res.send(false);
         }
         else{
             console.log('Main_data selectUser ok');
@@ -31,6 +32,7 @@ const selectMain = function (req, res) {
                 if(err2) throw err2;
                 if(!rows2[0]){
                     console.log('Main_data selectDevice fail');
+                    res.send(false);
                 }
                 else{
                     for(var i = 0; i<rows2.length; i++){
