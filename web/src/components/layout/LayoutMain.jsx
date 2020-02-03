@@ -31,10 +31,10 @@ const Layout = props => {
   useEffect(() => {
     console.log(history)
     if (!isLoggedIn()) {
-      history.index = -1;
+      alert('로그인 후 이용하세요!')
       history.push("/login");
     }
-  }, [store.u_No]);
+  }, [window.onpopstate]);
   return (
     <Fragment>
       <CssBaseline />
