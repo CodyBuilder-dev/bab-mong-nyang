@@ -1,7 +1,8 @@
 import React,{ useState, useEffect,useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import {changeStore} from "../../modules/store"
+import {changeStore,restoreStore} from "../../modules/store"
+import { TrendingUpOutlined } from "@material-ui/icons";
 export const useNotes = (initialValue = []) => {
   const [notes, setNotes] = useState(initialValue);
   return {
@@ -51,103 +52,6 @@ export const useFetchData =(requestURL,dataType) => {
   const [input, setInput] = useState({device : []});
   const [isLoading, setIsLoading] = useState(false);
   const store = useSelector(state => state.store, []);
-  const updateField = e => {
-    setInput({
-      ...input,
-      [e.target.name] : e.target.value
-    });
-  };
-  const dataFetch = async (url,type) => {
-    console.log(url);
-    setIsLoading(true);
-    const result = await axios.get(url);
-    switch(type){
-      case 'chart':
-        setInput(result.data)
-        break
-      case 'device':
-      case 'devicelist':
-        if(store.d_No === undefined){
-          setInput(result.data);
-        } 
-        else{
-          setInput({...result.data,d_No : store.currentDeviceNo});
-        }
-        console.log('device');
-        break;
-      case 'device_select':
-        setInput(result.data.filter(device=>device.d_No === store.u_Last)[0]);
-        console.log("device_select");
-        //console.log(result.data);
-        break;
-      default : 
-        setInput(result.data);
-        break;
-      }
-    setIsLoading(false);
-    console.log(result.data);
-  };
-  useEffect(() => {
-    console.log("mount");
-    let url = store.url+requestURL;
-    switch(dataType){
-      case "timetable":
-        url+=store.u_Last;
-        break;
-      case "chart":
-        url+=store.u_Last;
-        break;
-      case "device":
-        url+=store.currentDeviceNo;
-        break;
-      default :
-        url+=store.currentUserNo;
-        break;
-    }
-    dataFetch(url,dataType);
-  }, []);
-  return {
-    input,
-    isLoading,
-    setInput,
-    setIsLoading,
-    dataFetch,
-    updateField
-  }
-}
-
-export const useStore = () =>{
-  const store = useSelector(state => state.store,[]);
-  const dispatch = useDispatch();
-  const change_Store = useCallback(data => dispatch(changeStore(data)),[dispatch]);
-  const onChangeStore = useCallback (
-    async (data,type,url) => {
-      switch(type){
-        case "select":
-          const result = await axios.put(store.url+url,{u_No : store.currentUserNo, d_No : data.d_No});
-          if(result.data){
-            change_Store({u_Last : data.d_No});
-          }
-          break;
-        default:
-          change_Store(data);
-          break;
-      }
-  })
-  return{
-    store,
-    onChangeStore
-  };
-};
-
-export const useInput = () =>{
-  const [input,setInput] = useState({});
-  const onChangeInput = useCallback(
-    param =>{
-    setInput({...input,...param});
-    console.log(input);
-    }
-  )
   
   const onSubmit = useCallback(
     async (url) =>{
@@ -157,17 +61,151 @@ export const useInput = () =>{
       return result.data;
     }
   )
+  
   const onValidate =useCallback(
     async url =>{
       const result = await axios.get(url);
       return result.data;
     }
   )
-  return{
+  
+  const updateField = e => {
+    let flag = undefined;
+    switch (e.target.name){
+      case "u_Pw" :
+        if (
+          input.pwcon === undefined ||
+          input.pwcon === "" ||
+          e.target.value === input.pwcon
+        ){
+          flag = true;
+        }else{
+          flag = false;
+        }
+        break;
+      case "pwcon":
+        if(
+          e.target.value === undefined ||
+          e.target.value === ""||
+          input.u_Pw === e.target.value
+        ){
+          flag = true;
+        }else{
+          flag = false;
+        }
+        break;
+      default:
+        break; 
+    }
+    setInput({
+      ...input,
+      [e.target.name] : e.target.value,
+      pwValidated : flag
+    });
+  };
+  
+  const dataFetch = async (url,type) => {
+    console.log(url);
+    setIsLoading(true);
+    const result = await axios.get(url);
+    
+    switch(type){
+      case 'device':
+      case 'devicelist':
+        if(store.d_No === undefined){
+          setInput(result.data);
+        } 
+        else{
+          setInput({...result.data,d_No : store.currentDeviceNo});
+        }
+        break;
+      case 'device_select':
+        if(result.data.length === 0){
+          console.log("data없음");
+          console.log("data없음");
+          setInput({...input, device : []});
+        }else{
+          console.log(result.data.filter(device => device.d_No === store.u_Last)[0]);
+          setInput({device : result.data.filter(device => device.d_No === store.u_Last)[0]})
+        }
+        break;
+      case 'user':
+        result.data.u_Pw = "";
+        result.data["u_No"] = store.u_No;
+        setInput(result.data);
+        break;
+      default : 
+        setInput(result.data);
+        break;
+    }
+    setIsLoading(false);
+    console.log(result);
+  };
+  
+  useEffect(() => {
+    console.log("mount");
+    let url = store.url+requestURL;
+    let flag = true;
+    switch(dataType){
+      case "timetable":
+      case "chart":
+        url+=store.u_Last;
+        break;
+      case "device":
+        url+=store.currentDeviceNo;
+        break;
+      case "user":
+      case "devicelist":
+      case 'device_select':
+        url+=store.u_No;
+        break;
+      default:
+        flag = false;
+        break;
+    }
+    console.log(flag);
+    if(flag){
+      dataFetch(url,dataType);
+    }
+  }, []);
+  
+  return {
     input,
+    isLoading,
     setInput,
-    onChangeInput,
+    setIsLoading,
+    dataFetch,
+    updateField,
     onSubmit,
     onValidate
   }
 }
+
+export const useStore = () =>{
+  const store = useSelector(state => state.store,[]);
+  const dispatch = useDispatch();
+  const restore_Store = useCallback(data=> dispatch(restoreStore("")),[dispatch]);
+  const change_Store = useCallback(data => dispatch(changeStore(data)),[dispatch]);
+  const onChangeStore = useCallback (
+    async (data,type,url) => {
+      switch(type){
+        case "select":
+          const result = await axios.put(store.url+url,{u_No : store.u_No, d_No : data.d_No});
+          if(result.data){
+            change_Store({u_Last : data.d_No});
+          }
+          break;
+        case "restore":
+          restore_Store("");
+          break;
+        default:
+          change_Store(data);
+          break;
+      }
+  })
+  return{
+    store,
+    onChangeStore,
+    
+  };
+};

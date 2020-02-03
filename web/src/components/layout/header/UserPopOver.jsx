@@ -8,9 +8,8 @@ import {
 } from "@material-ui/core";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { setCurrentUserNo } from "../../../modules/store";
+import {useStore} from "../../custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   noteList: {
     height: "100%"
@@ -25,12 +24,11 @@ const useStyles = makeStyles(theme => ({
 const UserPopOver = ({ setAnchorEl }) => {
   const classes = useStyles();
   const history = useHistory();
-  const dispatch = useDispatch();
-  const logout = useCallback(() => dispatch(setCurrentUserNo("")), [dispatch]);
+  const {store, onChangeStore} = useStore(); 
   const onClickLogout = () => {
     setAnchorEl(null);
-    logout();
-    history.push("/login");
+    onChangeStore("","restore","");
+    history.replace("/login");
   };
   const onClickUserInfo = () => {
     setAnchorEl(null);

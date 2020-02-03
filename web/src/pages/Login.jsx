@@ -7,7 +7,7 @@ import {
   Button
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import {useInput,useStore} from "../components/custom-hooks/custom-hooks"
+import {useFetchData,useStore} from "../components/custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
@@ -27,24 +27,18 @@ const useStyles = makeStyles(theme => ({
 
 const Login = (props) => {
   const classes = useStyles();
-  const{input,onChangeInput,onSubmit} = useInput();
+  const{input,updateField,onSubmit} = useFetchData("","");
   const {store, onChangeStore} = useStore();
-  const onChangeEvent = event =>{
-    const param = {};
-    param[event.target.name] = event.target.value;
-    console.log(param);
-    onChangeInput(param);
-  }
+  
   const onClickEvent =  async event =>{
     let result = await onSubmit(store.url+"/user/login");
     console.log(result)
     if(result.u_No > 0){
       result ={
         ...result,
-        currentUserNo : result.u_No
       }
       onChangeStore(result,"","");
-      props.history.push("/main");
+      props.history.replace("/main");
     }
   }
   return (
@@ -62,7 +56,7 @@ const Login = (props) => {
           name="u_Id"
           autoFocus
           value={input.u_Id}
-          onChange={onChangeEvent}
+          onChange={updateField}
         />
         <TextField
           variant="outlined"
@@ -75,7 +69,7 @@ const Login = (props) => {
           id="u_Pw"
           autoComplete="current-password"
           value={input.u_Pw}
-          onChange={onChangeEvent}
+          onChange={updateField}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}

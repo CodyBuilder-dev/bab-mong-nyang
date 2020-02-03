@@ -4,7 +4,7 @@ import {
   TextField,
   Button
 } from "@material-ui/core";
-import {useInput, useStore} from "../components/custom-hooks/custom-hooks"
+import {useStore, useFetchData} from "../components/custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -26,53 +26,19 @@ const useStyles = makeStyles(theme => ({
 
 const Regist =props => {
   const classes = useStyles();
-  const {input,onChangeInput,onSubmit} = useInput();
+  const {input,updateField,onSubmit} = useFetchData("","");
   const {store} = useStore();
-  const onChangeEvent = event => {
-    const param = {};
-    if(input.u_No === undefined){
-      param["u_No"] = store.currentUserNo;
-    }
-    param[event.target.name] = event.target.value;
-    onChangeInput(param);
-  };
+  
   const onClickEvent = async evnt =>{
     let result = await onSubmit(store.url + "/device");
     if(result){
       alert("기기등록에 성공했습니다.")
-      props.history.push("/device");
+      props.history.replace("/device");
     }else{
       alert("기기등록에 실패했습니다.")
     }
   }
-  // const onChangeInput = e => {
-  //   let key = e.target.name;
-  //   if(input.u_No === undefined) input.u_No = state.currentUserNo;
-  //   switch (key) {
-  //     case "name":
-  //       input.d_Name = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "age":
-  //       input.d_Age = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "species":
-  //       input.d_Species = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "weight":
-  //       input.d_Weight = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     case "serialno":
-  //       input.SerialNo = e.target.value;
-  //       onChange(input);
-  //       break;
-  //     default:
-  //       console.log("default");
-  //   }
-  // }
+  
   return (
     <div className={classes.page}>
       <h3>반려동물의 정보를 입력해주세요</h3>
@@ -86,7 +52,7 @@ const Regist =props => {
           label="이름"
           name="d_Name"
           autoFocus
-          onChange = {onChangeEvent}
+          onChange = {updateField}
           value = {input.d_Name}
         />
 
@@ -99,7 +65,7 @@ const Regist =props => {
           label="나이"
           name="d_Age"
           value = {input.d_Age}
-          onChange = {onChangeEvent}
+          onChange = {updateField}
         />
         <TextField
           variant="outlined"
@@ -110,7 +76,7 @@ const Regist =props => {
           label="종"
           name="d_Species"
           value = {input.d_Species}
-          onChange = {onChangeEvent}
+          onChange = {updateField}
         />
         <TextField
           variant="outlined"
@@ -121,7 +87,7 @@ const Regist =props => {
           label="몸무게"
           name="d_Weight"
           value={input.d_Weight}
-          onChange = {onChangeEvent}
+          onChange = {updateField}
         />
         <TextField
           variant="outlined"
@@ -132,7 +98,7 @@ const Regist =props => {
           label="일려번호 S/N"
           name="SerialNo"
           value = {input.SerialNo}
-          onChange = {onChangeEvent}
+          onChange = {updateField}
         />
         <Button
           type="submit"

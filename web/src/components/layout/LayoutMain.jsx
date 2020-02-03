@@ -1,6 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import Header from "./Header";
 import { CssBaseline, Container, makeStyles } from "@material-ui/core";
+import { useStore } from "../custom-hooks/custom-hooks";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -14,7 +16,25 @@ const useStyles = makeStyles(theme => ({
 
 const Layout = props => {
   const classes = useStyles();
-  console.log(props);
+
+  const { store } = useStore();
+  const history = useHistory();
+  const isLoggedIn = () => {
+    if (
+      ["/", "/login", "/join", ""].indexOf(history.location.pathname) ===
+        -1 &&
+      (store.u_No === "" || store.u_No === undefined)
+    ) {
+      return false;
+    } else return true;
+  };
+  useEffect(() => {
+    console.log(history)
+    if (!isLoggedIn()) {
+      alert('로그인 후 이용하세요!')
+      history.push("/login");
+    }
+  }, [window.onpopstate]);
   return (
     <Fragment>
       <CssBaseline />

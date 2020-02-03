@@ -19,8 +19,6 @@ import DrawerList from "./header/DrawerList";
 import NotificationList from "./header/NotificationList";
 import UserPopOver from "./header/UserPopOver";
 import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
-import { submitForm } from "../../modules/store"
 const useStyles = makeStyles(theme => ({
   appBar: {
     // padding: `0 calc(10px + 2vw)`
@@ -50,8 +48,6 @@ const Header = props => {
   const [userAnchorEl, setUserAnchorEl] = useState(null);
   const notePopOver = Boolean(anchorEl);
   const notePopId = notePopOver ? "popover" : undefined;
-  const dispatch = useDispatch();
-  const refresh = useCallback(() => dispatch(submitForm('')), [dispatch]);
   const userPopOver = Boolean(userAnchorEl);
   const userPopId = userPopOver ? "popover" : undefined;
 
@@ -95,7 +91,6 @@ const Header = props => {
     setUserAnchorEl(null);
   };
   const onClickBackHandler = () => {
-    refresh();
     history.goBack();
   };
   if (
