@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import "./Chart.css";
 import { makeStyles, Card, CardContent, Typography } from "@material-ui/core";
+import { Skeleton } from '@material-ui/lab';
 import { BarChart } from "./index";
 import { useFetchData } from "../custom-hooks/custom-hooks";
 import { useSelector } from "react-redux";
@@ -67,9 +68,9 @@ const Chart = props => {
   return (
     <div className={classes.page}>
       {isLoading ? (
-        <div>dsad</div>
+        <Skeleton animation="wave" variant="rect" className={classes.card} />
       ) : input.length === undefined ? (
-        <div>...</div>
+        <div>표시할 정보가 없어요!!</div>
       ) : (
         <Card className={classes.card} variant="outlined">
           <Wrapper>

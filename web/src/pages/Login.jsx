@@ -44,7 +44,7 @@ const Login = (props) => {
         currentUserNo : result.u_No
       }
       onChangeStore(result,"","");
-      props.history.push("/main");
+      props.history.replace("/main");
     }
   }
   return (

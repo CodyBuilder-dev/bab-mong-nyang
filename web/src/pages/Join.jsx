@@ -73,7 +73,7 @@ const Join = props => {
     console.log(result)
     if(result == true){
       alert("환영합니다. " + input.u_Name + "님");
-      props.history.push("/login");
+      props.history.replace("/login");
     }else{
       alert("회원가입에 실패했습니다.");
     }

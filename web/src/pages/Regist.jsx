@@ -40,7 +40,7 @@ const Regist =props => {
     let result = await onSubmit(store.url + "/device");
     if(result){
       alert("기기등록에 성공했습니다.")
-      props.history.push("/device");
+      props.history.replace("/device");
     }else{
       alert("기기등록에 실패했습니다.")
     }

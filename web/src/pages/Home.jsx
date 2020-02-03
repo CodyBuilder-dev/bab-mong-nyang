@@ -13,7 +13,7 @@ const useStyle = makeStyles(theme => ({
 const Home = props => {
   const classes = useStyle();
   const buttonClick = event => {
-    props.history.push("/login");
+    props.history.replace("/login");
   };
   return (
     <div className={classes.home}>
