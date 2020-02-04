@@ -108,8 +108,8 @@ export const useFetchData =(requestURL,dataType) => {
     console.log(url);
     setIsLoading(true);
     console.log(store.Token);
-    //const result = await axios.get(url,null,{headers : {'Authorization':store.Token}});
-    const result = await axios({method: 'GET' , url : url, headers : store.headers});
+    const result = await axios.get(url,null,{headers : {'Authorization':store.Token+"afafaf"}});
+    //const result = await axios({method: 'GET' , url : url, headers : store.headers});
     switch(type){
       case 'device':
       case 'devicelist':
