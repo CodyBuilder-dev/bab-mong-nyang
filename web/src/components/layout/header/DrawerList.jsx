@@ -111,6 +111,19 @@ const DrawerList = ({ setOpen, open }) => {
           </ListItemIcon>
           <ListItemText primary="급식 기록" />
         </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/feedinfo");
+          }}
+        >
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="사료 정보" />
+        </ListItem>
       </Container>
     </List>
   );

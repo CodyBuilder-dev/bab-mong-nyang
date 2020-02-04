@@ -28,13 +28,13 @@ const Layout = props => {
       return false;
     } else return true;
   };
-  useEffect(() => {
-    console.log(history)
-    if (!isLoggedIn()) {
-      alert('로그인 후 이용하세요!')
-      history.push("/login");
-    }
-  }, [window.onpopstate]);
+  // useEffect(() => {
+  //   console.log(history)
+  //   if (!isLoggedIn()) {
+  //     alert('로그인 후 이용하세요!')
+  //     history.push("/login");
+  //   }
+  // }, [window.onpopstate]);
   return (
     <Fragment>
       <CssBaseline />
