@@ -36,9 +36,12 @@ const Login = (props) => {
     if(result.u_No > 0){
       result ={
         ...result,
+        headers : {authorization : result.Token}
       }
       onChangeStore(result,"","");
       props.history.replace("/main");
+    }else{
+      alert("로그인에 실패했습니다.");
     }
   }
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   makeStyles,
   TextField,
@@ -26,9 +26,11 @@ const useStyles = makeStyles(theme => ({
 
 const Regist =props => {
   const classes = useStyles();
-  const {input,updateField,onSubmit} = useFetchData("","");
+  const {input,updateField,onSubmit,setInput} = useFetchData("","");
   const {store} = useStore();
-  
+  useEffect(()=>{
+    setInput({...input,u_No : store.u_No});
+  },[]);
   const onClickEvent = async evnt =>{
     let result = await onSubmit(store.url + "/device");
     if(result){
