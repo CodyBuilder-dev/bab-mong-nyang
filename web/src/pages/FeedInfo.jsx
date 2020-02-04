@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import FeedMain from "../components/feedinfo/FeedMain";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
+import Feedreview from "../components/feedinfo/Feedreview"
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -90,7 +91,7 @@ const FeedInfo = props => {
             <NutritionInfo />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            Item Two
+            <Feedreview/>
           </TabPanel>
         </SwipeableViews>
       </div>
