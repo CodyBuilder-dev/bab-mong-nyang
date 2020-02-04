@@ -2,8 +2,6 @@ import React from "react";
 import MaterialTable from "material-table";
 import { makeStyles, Button } from "@material-ui/core";
 import Icons from "../set/TableIcons";
-import { useSelector } from "react-redux";
-import {Link} from "react-router-dom";
 import {useFetchData,useStore} from "../custom-hooks/custom-hooks"
 const useStyles = makeStyles(theme => ({
   page: {
@@ -17,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 
 const DeviceListTable = ({props}) => {
   const classes = useStyles();
-  const {store,onChangeStore} = useStore();
+  const {onChangeStore} = useStore();
   const {input, isLoading} = useFetchData('/device/','devicelist');
   return(
     <div className = {classes.page}>

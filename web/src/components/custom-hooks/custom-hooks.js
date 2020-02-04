@@ -56,7 +56,7 @@ export const useFetchData =(requestURL,dataType) => {
   const onSubmit = useCallback(
     async (url) =>{
       console.log(input);
-      const result = await axios.post(url,input);
+      const result = await axios.post(url,input,{headers : store.headers});
       console.log(result);
       return result.data;
     }
@@ -107,8 +107,9 @@ export const useFetchData =(requestURL,dataType) => {
   const dataFetch = async (url,type) => {
     console.log(url);
     setIsLoading(true);
-    const result = await axios.get(url);
-    
+    console.log(store.Token);
+    //const result = await axios.get(url,null,{headers : {'Authorization':store.Token}});
+    const result = await axios({method: 'GET' , url : url, headers : store.headers});
     switch(type){
       case 'device':
       case 'devicelist':
@@ -190,7 +191,7 @@ export const useStore = () =>{
     async (data,type,url) => {
       switch(type){
         case "select":
-          const result = await axios.put(store.url+url,{u_No : store.u_No, d_No : data.d_No});
+          const result = await axios.put(store.url+url,{u_No : store.u_No, d_No : data.d_No},{headers:store.headers});
           if(result.data){
             change_Store({u_Last : data.d_No});
           }

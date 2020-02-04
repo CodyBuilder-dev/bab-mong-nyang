@@ -64,7 +64,7 @@ const TimeTable = props => {
                 console.log(rowData);
                 console.log(event.target);
                 rowData.s_Activate = event.target.checked ? 1 : 0;
-                const result = await axios.put(store.url+'/setting',rowData);
+                const result = await axios.put(store.url+'/setting',rowData,{headers : store.headers});
                 if(result.data){
                   console.log(result.data)
                 setIsLoading(false);
@@ -102,7 +102,7 @@ const TimeTable = props => {
                   s_Activate : 0
                 }
                 console.log(newData);
-                const result = await axios.post(store.url + '/setting/',newData);
+                const result = await axios.post(store.url + '/setting/',newData,{headers : store.headers});
                 if(result.data){
                   dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
                   setIsLoading(false);
@@ -118,7 +118,7 @@ const TimeTable = props => {
                 resolve();
                 setIsLoading(true);
                 console.log(newData);
-                const result = await axios.put(store.url + '/setting', newData);
+                const result = await axios.put(store.url + '/setting', newData,{headers:store.headers});
                 if(result.data){
                   setIsLoading(false);
                   dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
@@ -133,7 +133,7 @@ const TimeTable = props => {
               setTimeout(async () => {
                 resolve();
                 setIsLoading(true);
-                const result = await axios.delete(store.url + '/setting/'+oldData.s_No);
+                const result = await axios.delete(store.url + '/setting/'+oldData.s_No,{headers:store.header});
                 if(result.data){
                   setIsLoading(false);
                   dataFetch(store.url + '/setting/'+store.u_Last,'timetable');

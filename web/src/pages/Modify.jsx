@@ -30,7 +30,7 @@ const Modify = props => {
   const {input, setInput,isLoading,updateField} = useFetchData('/user/','user');
   const {store} = useStore();
   const onClickEvent = async event => {
-    const result = await axios.put(store.url+"/user",input);
+    const result = await axios.put(store.url+"/user",input,{headers : store.headers});
     if(result.data){
       alert("수정되었습니다.");
       props.history.replace("/info");
