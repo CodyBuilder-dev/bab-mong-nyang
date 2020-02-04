@@ -13,7 +13,7 @@ import Device from"./pages/Device";
 import DeviceModify from "./pages/DeviceModify";
 import Login from "./pages/Login";
 import Modify from "./pages/Modify";
-import Feedreview from "./components/feedinfo/Feedreview"
+import FeedInfo from "./pages/FeedInfo"
 const App = () => {
   return (
     <>
@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/modify" component={Modify} />
           <Route path="/device" component={Device} />
           <Route path="/devicemodify" component = {DeviceModify}/>
-          <Route path = "/feedreview" component = {Feedreview}/>
+          <Route path="/feedinfo" component = {FeedInfo}/>
           {/* <Redirect to="/not-found" /> */}
         </Layout>
       </BrowserRouter>
