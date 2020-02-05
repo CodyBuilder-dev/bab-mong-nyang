@@ -71,7 +71,7 @@ const FeedInfo = props => {
   return (
     <div className={classes.page}>
       <Box>{/* <FeedSearch /> */}</Box>
-      <FeedMain />
+      
       {/* <AppBar position="sticky" color="default" style={{top: "56px"}}> */}
       <Tabs
         style={{
@@ -100,7 +100,9 @@ const FeedInfo = props => {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            item1
+            <FeedMain />
+            <FeedMain />
+            <NutritionInfo />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             <NutritionInfo />

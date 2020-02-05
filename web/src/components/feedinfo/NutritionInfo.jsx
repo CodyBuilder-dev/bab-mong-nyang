@@ -68,7 +68,7 @@ const NutritionInfo = props => {
           {testData.others.map(other => (
             <>
               <Grid item xs={3}>
-                <Typography variant="body2">
+                <Typography variant="body2" style={{marginTop: 20}}>
                   {testData.others.indexOf(other) === 0 ? "기타 영양소" : ""}
                 </Typography>
               </Grid>
