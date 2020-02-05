@@ -9,4 +9,6 @@ router.get('/main/:no', controller.selectMain);
 
 router.put('/main', controller.changeLast);
 
+router.post('/test', controller.testcode);
+
 module.exports = router;
