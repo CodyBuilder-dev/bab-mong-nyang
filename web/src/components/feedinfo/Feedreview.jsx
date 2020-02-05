@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Rating from "@material-ui/lab/Rating";
 import {
   Box,
@@ -18,12 +18,13 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+import FeedComments from "./FeedComments";
 
 const useStyles = makeStyles(theme => ({
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
+    //marginTop: theme.spacing(3),
+    //marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
@@ -95,11 +96,23 @@ const dummy = [
 const Feedreview = props => {
   const classes = useStyles();
   const value = 4.6;
+  const [open, setOpen] = useState({});
+  useEffect(() => {
+    let result = {};
+    dummy.map((data, i) => {
+      result = { ...result, [data.r_No]: false };
+    });
+    setOpen(result);
+    console.log(result);
+  }, []);
+  const openComments = event =>{
+    setOpen({...open, [event.currentTarget.value] : !open[event.currentTarget.value]})
+  }
   return (
     <div className={classes.page}>
       <Box>
-        <Box marginBottom="10px">
-          <Paper className={classes.ratingBox} square={false}>
+        <Box marginBottom="21px">
+          <Paper className={classes.ratingBox} square={false}  >
             4.3
           </Paper>
           <Rating name="readonly" value={value} readOnly precision={0.5} />
@@ -143,11 +156,14 @@ const Feedreview = props => {
                     <Box
                       display="flex"
                       width="130px"
-                      alignItems = "center"
-                      justifyContent = "flex-end"
+                      alignItems="center"
+                      justifyContent="flex-end"
                     >
                       <Typography variant="caption">{data.r_Date}</Typography>
-                      <Box m = {1}display = {data.u_Name === "바나맘" ? "flex" : "none"}>
+                      <Box
+                        m={1}
+                        display={data.u_Name === "바나맘" ? "flex" : "none"}
+                      >
                         <EditIcon fontSize="small" />
                         <DeleteIcon fontSize="small" />
                       </Box>
@@ -179,9 +195,9 @@ const Feedreview = props => {
               </List>
             </Box>
             <Box>
-              <Typography variant="body2">
+              <Typography variant="body1">
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   display="inline"
                   className={classes.recommend}
                 >
@@ -189,9 +205,9 @@ const Feedreview = props => {
                 </Typography>{" "}
                 {data.r_Positive}
               </Typography>
-              <Typography variant="body2" gutterBottom>
+              <Typography variant="body1" gutterBottom>
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   display="inline"
                   className={classes.nonrecommend}
                 >
@@ -212,12 +228,22 @@ const Feedreview = props => {
             </Box>
             <Box className={classes.buttonBox}>
               <Button className={classes.buttons} variant="outlined">
-                <ThumbUpAltIcon fontSize = "small" color = "primary"/>
+                <ThumbUpAltIcon fontSize="small" color="primary" />
                 도움이 돼요({data.r_Recommend})
               </Button>
-              <Button className={classes.buttons} variant="outlined">
+              <Button
+                className={classes.buttons}
+                id = {i}
+                name="openButton"
+                value={data.r_No}
+                variant="outlined"
+                onClick={openComments}
+              >
                 댓글
               </Button>
+            </Box>
+            <Box display={open[data.r_No] ? "flex" : "none"}>
+              <FeedComments r_No = {data.r_No} fullWidth/>
             </Box>
           </Box>
         );
