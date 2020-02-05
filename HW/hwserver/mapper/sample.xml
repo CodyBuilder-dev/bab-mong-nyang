@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend_weight_log">  
+  <select id = "selectAll">
+    select * from sample;
+  </select>
+  <select id = "logUpdate">
+    insert into sample (_logtime, _isfeeded) 
+    values (#{_logtime}, #{_isfeeded})
+    on duplicate key update _logtime = values(_logtime);
+  </select>
+</mapper>

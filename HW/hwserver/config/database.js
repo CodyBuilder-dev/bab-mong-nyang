@@ -3,5 +3,6 @@ module.exports = {
     user     : 'dev1',
     password : '1234',
     port     : 3306,
-    database : 'feed'
+    database : 'feed',
+    dateStrings: 'date'
 };
