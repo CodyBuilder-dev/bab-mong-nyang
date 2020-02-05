@@ -10,9 +10,11 @@ import {
   Box,
   AppBar
 } from "@material-ui/core";
+// import zIndex from "@material-ui/core/styles/zIndex";
 import FeedMain from "../components/feedinfo/FeedMain";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
-import Feedreview from "../components/feedinfo/Feedreview"
+import Feedreview from "../components/feedinfo/Feedreview";
+import FeedSearch from "../components/feedinfo/FeedSearch";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -22,8 +24,9 @@ const useStyles = makeStyles(theme => ({
   },
   tab: {
     backgroundColor: theme.palette.background.paper,
+    top: 48,
     width: "100vw",
-    maxWidth: "375px"
+    maxWidth: "500px"
   }
 }));
 function TabPanel(props) {
@@ -67,31 +70,43 @@ const FeedInfo = props => {
   };
   return (
     <div className={classes.page}>
+      <Box>{/* <FeedSearch /> */}</Box>
       <FeedMain />
+      {/* <AppBar position="sticky" color="default" style={{top: "56px"}}> */}
+      <Tabs
+        style={{
+          position: "fixed",
+          width: "100%",
+          top: "56px",
+          backgroundColor: "#f5f5f5",
+          zIndex: 99
+        }}
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="fullWidth"
+        aria-label="full width tabs"
+      >
+        <Tab label="ㅇㅇㅇㅇ" {...a11yProps(0)} />
+        <Tab label="영양 정보" {...a11yProps(1)} />
+        <Tab label="리뷰" {...a11yProps(2)} />
+      </Tabs>
       <div className={classes.tab}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            <Tab label="영양 정보" {...a11yProps(0)} />
-            <Tab label="리뷰" {...a11yProps(1)} />
-          </Tabs>
-        </AppBar>
+        {/* </AppBar> */}
         <SwipeableViews
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={value}
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <NutritionInfo />
+            item1
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <Feedreview/>
+            <NutritionInfo />
+          </TabPanel>
+          <TabPanel value={value} index={2} dir={theme.direction}>
+            <Feedreview />
           </TabPanel>
         </SwipeableViews>
       </div>

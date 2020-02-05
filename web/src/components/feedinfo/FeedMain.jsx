@@ -55,7 +55,7 @@ const FeedInfo = props => {
       )}
       <Box>
         <Typography variant="subtitle2" display="block">
-          {testData.feedName}
+          <strong>{testData.feedName}</strong>
         </Typography>
       </Box>
       <Box className={classes.score}>

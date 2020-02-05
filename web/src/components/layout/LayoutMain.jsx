@@ -11,6 +11,11 @@ const useStyles = makeStyles(theme => ({
   container: {
     marginTop: "100px",
     marginBottom: "30px"
+  },
+  page: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   }
 }));
 

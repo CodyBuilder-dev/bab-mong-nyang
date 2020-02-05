@@ -22,7 +22,7 @@ import { useHistory } from "react-router";
 const useStyles = makeStyles(theme => ({
   appBar: {
     // padding: `0 calc(10px + 2vw)`
-    color: "default"
+    color: "default",
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -194,8 +194,8 @@ const Header = props => {
     );
   };
   return (
-    <>
-      <AppBar position="fixed" color="default" className={classes.appBar}>
+    <div style={{position: "sticky", top: "0px", backgroundColor:"#f5f5f5", zIndex: 100}}>
+      {/* <AppBar position="sticky" color="default" className={classes.appBar}> */}
         {appBarEl()}
         <SwipeableDrawer
           anchor={"left"}
@@ -206,8 +206,8 @@ const Header = props => {
           <DrawerList setOpen={setOpen} open={open} />
         </SwipeableDrawer>
         
-      </AppBar>
-    </>
+      {/* </AppBar> */}
+    </div>
   );
 };
 
