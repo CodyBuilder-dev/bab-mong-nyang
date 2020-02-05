@@ -13,5 +13,8 @@ code {
 }
 
 @font-face {
-  font-family: 'SCDream'; src: url(./fonts/SCDream5.otf) format('truetype');
+  font-family: 'SCDream'; src: url(./fonts/SCDream4.otf) format('truetype');font-weight: normal; font-style: normal;
+}
+@font-face {
+  font-family: 'SCDream'; src: url(./fonts/SCDream5.otf) format('truetype');font-weight: bold; font-style: normal;
 }

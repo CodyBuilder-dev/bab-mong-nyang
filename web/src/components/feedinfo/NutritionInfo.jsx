@@ -47,7 +47,7 @@ const NutritionInfo = props => {
   const classes = useStyles();
   return (
     <>
-      <Box width="99%" maxWidth="375px">
+      <Box width="99%" maxWidth="500px" height="100vh">
         <Typography variant="h6" gutterBottom>
           영양 성분
         </Typography>
