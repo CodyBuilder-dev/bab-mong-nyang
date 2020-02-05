@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <div>
+      <h1> LED 제어부</h1>
+      
+      <form method="post" action="/">
+        <input type="radio" name="led" value="on">LED를 켭니다      
+        <input type="radio" name="led" value="off">LED를 끕니다
+        <input type="submit" value="LED 상태 변경">
+      </form>
+
+      <h3>led가 현재 <%= led %> 입니다</h3>
+      
+    </div>
+    <!--
+    현재 들어온 값은 <%= num %> 입니다
+    <form method="post" action="/">
+      <input type="submit" name="num" value="plus">+
+      <input type="submit" name="num" value="minus">-
+    </form>
+    -->
+    <div>
+      <h1> Speaker 제어부(추후 구현 예정) </h1>
+      <form method="post" action="/">
+        <input type= "submit" name="sound" value="C5">도
+        <input type= "submit" name="sound" value="D5">레
+        <input type= "submit" name="sound" value="E5">미
+        <input type= "submit" name="sound" value="F5">파
+        <input type= "submit" name="sound" value="G5">솔
+        <input type= "submit" name="sound" value="A5">라
+        <input type= "submit" name="sound" value="B5">시
+        <input type= "submit" name="sound" value="C6">도
+      </form>  
+    </div>
+
+    <div>
+      <h1>Motor 제어부</h1>
+      <form method="post" action="/">
+        <input type="number" name="rotat">회전횟수를 적어주세요
+        <input type="submit" name="motor" value="on">모터 on
+        <input type="submit" name="motor" value="off">모터 off
+      </form>
+    </div>
+  </body>
+</html>
