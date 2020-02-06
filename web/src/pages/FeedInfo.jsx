@@ -14,7 +14,6 @@ import {
 import FeedMain from "../components/feedinfo/FeedMain";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
 import Feedreview from "../components/feedinfo/Feedreview";
-import FeedSearch from "../components/feedinfo/FeedSearch";
 
 const useStyles = makeStyles(theme => ({
   page: {
