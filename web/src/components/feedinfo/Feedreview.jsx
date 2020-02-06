@@ -20,6 +20,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import FeedComments from "./FeedComments";
+import {useFetchData} from "../custom-hooks/custom-hooks";
+
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -98,6 +100,7 @@ const Feedreview = props => {
   const classes = useStyles();
   const value = 4.6;
   const [open, setOpen] = useState({});
+  const {input, dataFetch,isLoading} = useFetchData("review","review");
   useEffect(() => {
     let result = {};
     dummy.map((data, i) => {
@@ -143,7 +146,7 @@ const Feedreview = props => {
             borderTop={1}
             marginTop={1}
             width="100%"
-            maxWidth="375px"
+            maxWidth="500px"
           >
             <Box>
               <List dense>
