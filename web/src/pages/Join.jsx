@@ -9,6 +9,7 @@ import {
   OutlinedInput
 } from "@material-ui/core";
 import {useStore,useFetchData} from "../components/custom-hooks/custom-hooks";
+import { useEffect } from "react";
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -54,6 +55,10 @@ const Join = props => {
       setInput({...input,idValidated : result});
     }
   }
+  useEffect(()=>{
+    
+  },[updateField])
+
   return (
     <div className={classes.page}>
       <h2>회원가입</h2>
@@ -76,7 +81,7 @@ const Join = props => {
           helperText={
             input.idValidated === undefined || input.idValidated
               ? ""
-              : "이미 사용중인 아이디입니다"
+              : input.idhelpertext
           }
         />
         <TextField
