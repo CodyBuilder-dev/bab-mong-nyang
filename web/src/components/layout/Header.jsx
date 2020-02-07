@@ -18,7 +18,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import DrawerList from "./header/DrawerList";
 import NotificationList from "./header/NotificationList";
 import UserPopOver from "./header/UserPopOver";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 const useStyles = makeStyles(theme => ({
   appBar: {
     // padding: `0 calc(10px + 2vw)`
@@ -32,6 +32,14 @@ const useStyles = makeStyles(theme => ({
     cursor: "pointer"
   }
 }));
+const pathNameMatch = {
+  '/set': '설정',
+  '/info': '내 정보',
+  '/device': '기기 목록',
+  '/record': '급식 기록',
+  '/feedinfo': '사료 정보',
+  '/feedsearch': '사료 검색', 
+}
 // ========================================================================
 let noteItems = [
   { value: "사료통이 비었어요.", isRead: false },
@@ -43,6 +51,7 @@ let noteItems = [
 const Header = props => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [userAnchorEl, setUserAnchorEl] = useState(null);
@@ -50,7 +59,6 @@ const Header = props => {
   const notePopId = notePopOver ? "popover" : undefined;
   const userPopOver = Boolean(userAnchorEl);
   const userPopId = userPopOver ? "popover" : undefined;
-
   const {
     notes,
     addNote,
@@ -114,8 +122,8 @@ const Header = props => {
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" className={classes.title}>
-            IoT Servent System
+          <Typography variant="body1" className={classes.title}>
+            밥멍냥
           </Typography>
 
           <IconButton
@@ -190,6 +198,9 @@ const Header = props => {
         >
           <ArrowBack />
         </IconButton>
+        <Typography variant="body1" className={classes.title}>
+            {pathNameMatch[location.pathname]}
+          </Typography>
       </Toolbar>
     );
   };

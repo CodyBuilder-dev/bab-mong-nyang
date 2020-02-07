@@ -28,6 +28,12 @@ const testData = [
     name: "맛없는 사료",
     img: "https://picsum.photos/200/300",
     company: "이름없음"
+  },
+  {
+    id: 4,
+    name: "차오츄르",
+    img: "https://picsum.photos/200/300",
+    company: "이시국"
   }
 ];
 const Record = props => {
@@ -35,7 +41,7 @@ const Record = props => {
   return (
     <div className={classes.page}>
       <SearchBar data={testData}/>
-      <SearchResult data={testData}/>
+      {/* <SearchResult data={testData}/> */}
     </div>
   );
 };
