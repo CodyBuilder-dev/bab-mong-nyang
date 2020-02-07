@@ -35,7 +35,6 @@ const SearchResult = props => {
   }
   return (
     <Box className={classes.tab}>
-      <CardMedia image={"https://picsum.photos/200/300"} title="test" />
       <List className={classes.root}>
         {props.data.map(data => (
           <ListItem key={`feedImage${data.id}`} button onClick={() => goFeedInfo(data.id)}>

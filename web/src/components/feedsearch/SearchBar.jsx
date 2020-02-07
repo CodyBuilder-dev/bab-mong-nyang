@@ -67,13 +67,16 @@ const SearchBar = props => {
       active = false;
     };
   }, [inputValue]);
+  const selectOption = () => {};
 
   return (
     <Box className={classes.searchBarRoot}>
       <Autocomplete
         id="feed-search"
         style={{ width: "90%" }}
-        getOptionLabel={option => option.name}
+        getOptionLabel={option =>
+          typeof option === "string" ? option : option.name
+        }
         // return history.push(`/feedinfo/${option.id}`)
         // }
         // }
@@ -83,11 +86,9 @@ const SearchBar = props => {
         includeInputInList
         freeSolo
         disableOpenOnFocus
-        onInputChange={(e, v) => {
-          setInputValue(v);
+        onChange={(e, v) => {
+          if(typeof v === 'object' && v !== null) history.push(`/feedinfo/${v.id}`)
         }}
-        // onChange={(e, v) => {
-        //   if(v !== null) setInputValue(v.name)}}
         renderInput={params => (
           <TextField
             {...params}
@@ -99,7 +100,7 @@ const SearchBar = props => {
             onKeyDown={pressEnter}
           />
         )}
-        renderOption={(option, { inputValue, selected }) => {
+        renderOption={(option, { inputValue }) => {
           const matches = match(
             option.name + " / " + option.company,
             inputValue
@@ -108,7 +109,7 @@ const SearchBar = props => {
 
           return (
             // 자동완성
-            <div>
+            <div key={option.id}>
               {parts.map((part, index) => (
                 <span
                   key={index}
@@ -120,12 +121,10 @@ const SearchBar = props => {
                   {part.text}
                 </span>
               ))}
-              {`${selected}`}
             </div>
           );
         }}
       />
-      <span>{inputValue}</span>
     </Box>
   );
 };

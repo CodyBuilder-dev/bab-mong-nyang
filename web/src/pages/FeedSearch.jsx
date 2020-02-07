@@ -41,7 +41,7 @@ const Record = props => {
   return (
     <div className={classes.page}>
       <SearchBar data={testData}/>
-      {/* <SearchResult data={testData}/> */}
+      <SearchResult data={testData}/>
     </div>
   );
 };
