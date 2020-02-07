@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="device">  
+<mapper namespace="review">  
   <select id = "selectAll">
-    select * from Device where u_No = #{u_No};
+    select r.r_No, (select u_Name from User where u_No = r.u_No) as 'u_Name', r.r_Rank, LEFT(r.r_Date, 10) as 'r_Date', r.r_Positive, r.r_Negative 
+    from Review r where f_No = #{f_No};
   </select>
 
   <select id = "selectOne">

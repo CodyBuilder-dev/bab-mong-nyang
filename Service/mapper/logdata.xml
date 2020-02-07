@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="logdata">  
   <select id = "selectAll">
-    select * from Logdata;
+    select l_Time, l_Remain, l_Empty, l_Amount from LogData where d_No = #{d_No};
   </select>
 
   <select id = "selectOne">
-    select * from Logdata where l_No = #{l_No};
+    select * from LogData where l_No = #{l_No};
   </select>
 
   <insert id = "addLogdata">
@@ -14,11 +14,11 @@
   </insert>
  
   <update id = "updateLogdata">
-    update Logdata set l_Time = #{l_Time}, l_Remain = #{l_Remain} where l_No = #{l_No};
+    update LogData set l_Time = #{l_Time}, l_Remain = #{l_Remain} where l_No = #{l_No};
   </update>
 
   <delete id = "deleteLogdata">
-    delete from Logdata where l_No = #{l_No};
+    delete from LogData where l_No = #{l_No};
   </delete>  
 
   <select id = "selectChart">
