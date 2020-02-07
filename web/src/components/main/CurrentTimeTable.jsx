@@ -1,96 +1,58 @@
 import React from "react";
-import MaterialTable, { MTableBody } from "material-table";
-import { makeStyles } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import { lightBlue } from "@material-ui/core/colors";
+import { makeStyles, Box, Typography } from "@material-ui/core";
+import { useFetchData } from "../custom-hooks/custom-hooks";
 
 const useStyles = makeStyles(theme => ({
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "center"
     //color : lightBlue[300]
+  },
+  time : {
+    color : "#f5e1a4"
+  },
+  remain : {
+    color : "#b93c3c"
+  },
+  empty : {
+    color : "#00ab84"
   }
 }));
-const GlobalCss = withStyles({
-  "@global": {
-    ".MuiTable-root": {
-      borderCollapse: "separate",
-      borderSpacing: "0px 15px"
-    }
-  }
-})(() => null);
 const CurrentTimeTable = ({ props }) => {
   const classes = useStyles();
-  // const currentUserNo = useSelector(state => state.store.currentUserNo);
-  // console.log(currentUserNo);
-  const [state, setState] = React.useState({
-    columns: [
-      {
-        title: "",
-        field: "time",
-        cellStyle: {
-          textAlign: "left",
-          border: "1px solid #FFFFFF",
-          "border-right": "0px",
-          "border-radius": "10px 0 0 10px"
-        },
-        headerStyle: {
-          textAlign: "center",
-          backgroundColor: lightBlue[300]
-        }
-      },
-      {
-        title: "",
-        field: "status",
-        lookup: { 0: "완료", 1: "남음" },
-        cellStyle: {
-          textAlign: "right",
-          border: "1px solid #FFFFFF",
-          width: "100px",
-          "border-left": "0px",
-          "border-radius": "0 10px 10px 0"
-        },
-        headerStyle: {
-          textAlign: "center",
-          backgroundColor: lightBlue[300]
-        }
-      }
-    ],
-    data: [
-      { time: "08:00", status: 0 },
-      { time: "11:00", status: 0 },
-      { time: "13:00", status: 0 },
-      { time: "15:00", status: 1 },
-      { time: "17:00", status: 1 }
-    ]
-  });
+  const { input, isLoading } = useFetchData("/logdata/", "maintable");
 
   return (
     <div className={classes.page}>
-      <GlobalCss />
-      <MaterialTable
-        // icons ={Icons}
-        title="배식상황"
-        columns={state.columns}
-        data={state.data}
-        options={{
-          search: false,
-          paging: false,
-          sorting: false,
-          rowStyle: {
-            backgroundColor: "#EEE"
-          }
-        }}
-        style={{
-          width: "80%",
-          maxWidth: "550px",
-          padding: "10px",
-          backgroundColor: lightBlue[300]
-        }}
-      />
+      {isLoading ? (
+        <div></div>
+      ) : (
+        <Box width="100%" maxWidth="500px" marginTop = "20px">
+          <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px">
+                  <Box  display="flex" width = "50%" justifyContent = "center">
+                    <Typography variant="h5" >시간</Typography>
+                  </Box>
+                  <Box  display="flex" justifyContent = "center" width="50%">
+                    <Typography display="flex" variant="h5" >상태</Typography>
+                  </Box>
+                </Box>
+          {input.map === undefined
+            ? "...loading"
+            : input.map(data => (
+                <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px">
+                  <Box display="flex" width = "50%" justifyContent = "center">
+                    <Typography variant="body1" >{data.l_Time.slice(11,19)}</Typography>
+                  </Box>
+                  <Box  display="flex" justifyContent = "center" width="50%">
+                    <Typography display="flex" variant="body1" className = {data.l_Remain === 0 ? classes.empty : classes.remain}>
+                      {data.l_Remain === 0 ? "다 먹음" : "남김"}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+        </Box>
+      )}
     </div>
   );
 };

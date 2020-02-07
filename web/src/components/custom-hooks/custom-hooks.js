@@ -64,7 +64,7 @@ export const useFetchData =(requestURL,dataType) => {
   
   const onValidate =useCallback(
     async url =>{
-      const result = await axios.get(url);
+      const result = await axios({url : url, method : "get", headers : store.headers});
       return result.data;
     }
   )
@@ -107,9 +107,8 @@ export const useFetchData =(requestURL,dataType) => {
   const dataFetch = async (url,type) => {
     console.log(url);
     setIsLoading(true);
-    console.log(store.Token);
-    const result = await axios.get(url,null,{headers : {'Authorization':store.Token+"afafaf"}});
-    //const result = await axios({method: 'GET' , url : url, headers : store.headers});
+    //console.log(store.Token);
+    const result = await axios({method: 'GET' , url : url, headers : store.headers});
     switch(type){
       case 'device':
       case 'devicelist':
@@ -135,14 +134,16 @@ export const useFetchData =(requestURL,dataType) => {
         result.data["u_No"] = store.u_No;
         setInput(result.data);
         break;
+      case 'feedinfo':
+        setInput(result.data[0]);
+        break;
       default : 
         setInput(result.data);
         break;
     }
-    setIsLoading(false);
     console.log(result);
+    setIsLoading(false);
   };
-  
   useEffect(() => {
     console.log("mount");
     let url = store.url+requestURL;
@@ -150,15 +151,19 @@ export const useFetchData =(requestURL,dataType) => {
     switch(dataType){
       case "timetable":
       case "chart":
+      case "maintable":
         url+=store.u_Last;
         break;
       case "device":
         url+=store.currentDeviceNo;
         break;
+      case 'device_select':
+        if(store.u_Last === 0) flag = false;
       case "user":
       case "devicelist":
-      case 'device_select':
         url+=store.u_No;
+        break;
+      case "feedinfo":
         break;
       default:
         flag = false;

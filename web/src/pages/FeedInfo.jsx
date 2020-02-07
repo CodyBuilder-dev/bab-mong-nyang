@@ -11,10 +11,11 @@ import {
   AppBar
 } from "@material-ui/core";
 // import zIndex from "@material-ui/core/styles/zIndex";
-import FeedMain from "../components/feedinfo/FeedMain";
+import FeedBasic from "../components/feedinfo/FeedBasic";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
 import Feedreview from "../components/feedinfo/Feedreview";
 import FeedSearch from "../components/feedinfo/FeedSearch";
+import color from "@material-ui/core/colors/amber";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   tab: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     top: 48,
     width: "100vw",
     maxWidth: "500px"
@@ -71,7 +72,7 @@ const FeedInfo = props => {
   return (
     <div className={classes.page}>
       <Box>{/* <FeedSearch /> */}</Box>
-      <FeedMain />
+
       {/* <AppBar position="sticky" color="default" style={{top: "56px"}}> */}
       <Tabs
         style={{
@@ -79,16 +80,21 @@ const FeedInfo = props => {
           width: "100%",
           top: "56px",
           backgroundColor: "#f5f5f5",
+          color: "#00b08b",
           zIndex: 99
         }}
         value={value}
         onChange={handleChange}
         indicatorColor="primary"
-        textColor="primary"
         variant="fullWidth"
         aria-label="full width tabs"
+        TabIndicatorProps={{
+            style : {
+              backgroundColor : "#00b08b"
+            }
+        }}
       >
-        <Tab label="ㅇㅇㅇㅇ" {...a11yProps(0)} />
+        <Tab label="기본 정보" {...a11yProps(0)} />
         <Tab label="영양 정보" {...a11yProps(1)} />
         <Tab label="리뷰" {...a11yProps(2)} />
       </Tabs>
@@ -100,7 +106,7 @@ const FeedInfo = props => {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            item1
+            <FeedBasic f_No={1}/>
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             <NutritionInfo />

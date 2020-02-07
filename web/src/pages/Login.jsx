@@ -7,7 +7,10 @@ import {
   Button
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import {useFetchData,useStore} from "../components/custom-hooks/custom-hooks"
+import {
+  useFetchData,
+  useStore
+} from "../components/custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
@@ -22,28 +25,33 @@ const useStyles = makeStyles(theme => ({
   inputText: {
     width: "300px", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
+  },
+  border : {
+    borderColor : "#00b08b",
+    //border :"1px 1px 1px 1px"
+    backgroundColor : "#00b08b"
   }
 }));
 
-const Login = (props) => {
+const Login = props => {
   const classes = useStyles();
-  const{input,updateField,onSubmit} = useFetchData("","");
-  const {store, onChangeStore} = useStore();
-  
-  const onClickEvent =  async event =>{
-    let result = await onSubmit(store.url+"/user/login");
-    console.log(result)
-    if(result.u_No > 0){
-      result ={
+  const { input, updateField, onSubmit } = useFetchData("", "");
+  const { store, onChangeStore } = useStore();
+
+  const onClickEvent = async event => {
+    let result = await onSubmit(store.url + "/user/login");
+    console.log(result);
+    if (result.u_No > 0) {
+      result = {
         ...result,
-        headers : {authorization : result.Token}
-      }
-      onChangeStore(result,"","");
+        headers: { authorization: result.Token }
+      };
+      onChangeStore(result, "", "");
       props.history.replace("/main");
-    }else{
+    } else {
       alert("로그인에 실패했습니다.");
     }
-  }
+  };
   return (
     <div className={classes.page}>
       <h2>로그인</h2>
@@ -73,6 +81,16 @@ const Login = (props) => {
           autoComplete="current-password"
           value={input.u_Pw}
           onChange={updateField}
+          // InputLabelProps={{
+          //   classes: {
+          //     //focused: classes.border,
+          //     root: {
+          //       colorSecondary : classes.border
+          //     },
+          //   },
+          //   color : classes.border,
+            
+          // }}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}

@@ -43,7 +43,12 @@ const DeviceListTable = ({props}) => {
             {
               title: "종",
               field: "d_Species"
-            }]}
+            },
+            {
+              title: "무게",
+              filed : "d_Weight"
+            },
+          ]}
           data={input}
           options={{
             search: false,

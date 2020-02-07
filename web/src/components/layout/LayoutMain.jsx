@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     margin: "0 auto"
   },
   container: {
-    marginTop: "100px",
+    marginTop: "30px",
     marginBottom: "30px"
   },
   page: {

@@ -55,11 +55,11 @@ const FeedComments = ({ r_No }) => {
       marginTop={1}
       marginBottom={2}
       width="100%"
-      maxWidth="375px"
+      maxWidth="500px"
     >
       {dummy.map((data, i) => {
         return (
-          <Box width="100%" maxWidth="375px">
+          <Box width="100%" maxWidth="500px">
             <Box display="flex" alignItems="center">
               <Avatar className={classes.icon}>
                 <AccountCircle />
@@ -67,6 +67,14 @@ const FeedComments = ({ r_No }) => {
               <Typography variant="body2" className={classes.weight}>
                 &nbsp;&nbsp;&nbsp;{data.u_Name}
               </Typography>
+              <Box
+                display={data.u_Name === "바나맘" ? "flex" : "none"}
+                alignItems="center"
+                marginLeft = "10px"
+              >
+                <EditIcon className={classes.icon} />
+                <DeleteIcon className={classes.icon} />
+              </Box>
             </Box>
             <Typography variant="body2">{data.c_Comment}</Typography>
             <Box
@@ -86,13 +94,6 @@ const FeedComments = ({ r_No }) => {
                 <Typography color="secondary" variant="caption">
                   신고
                 </Typography>
-              </Box>
-              <Box
-                display={data.u_Name === "바나맘" ? "flex" : "none"}
-                alignItems="center"
-              >
-                <EditIcon className={classes.icon} />
-                <DeleteIcon className={classes.icon} />
               </Box>
             </Box>
           </Box>
