@@ -11,6 +11,7 @@ mybatisMapper.createMapper(['./mapper/review.xml']);
 let format = {language: 'sql', indent: ' '};
 
 var review = {
+    f_No: 0,
     d_No: 0,
     u_No: 0,
     SerialNo: 'SerialNo',
@@ -22,7 +23,7 @@ var review = {
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)==true) {
-        review.u_No = req.params.no;
+        review.f_No = req.params.no;
         let query = mybatisMapper.getStatement('review', 'selectAll', review, format);
         connection.query(query, function(err, rows) {
             if(err) throw err;

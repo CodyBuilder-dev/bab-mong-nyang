@@ -3,9 +3,11 @@ const router = express.Router();
 
 const controller = require('./logdata.controller');
 
-router.get('/', controller.selectAll);
+router.get('/:no', controller.selectAll);
 
-router.get('/:no', controller.selectOne);
+router.get('/get/:no', controller.selectOne);
+
+router.get('/update/:no', controller.dataUpdate);
 
 router.post('/', controller.add);
 

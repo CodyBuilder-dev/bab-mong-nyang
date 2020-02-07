@@ -6,19 +6,22 @@
   </select>
 
   <select id = "selectOne">
-    select * from Device where d_No = #{d_No};
+    select d_No, u_No, d_Name, d_Age, d_Species, d_Weight, 
+    (select SN from Product where UUID = (select UUID from Device where d_No = #{d_No})) as 'SerialNo' 
+    from Device where d_No = #{d_No};
   </select>
 
   <select id = "deviceCheck">
-    select * from Device where SerialNo = #{SerialNo};
+    select d_No from Device where UUID = (select UUID from Product where SN = #{SerialNo});
   </select>
 
   <insert id = "addDevice">
-    insert into Device values(0, #{u_No}, #{SerialNo}, #{d_Name}, #{d_Age}, #{d_Species}, #{d_Weight});
+    insert into Device values(0, #{u_No}, #{d_Name}, #{d_Age}, #{d_Species}, #{d_Weight}, 
+    (select UUID from Product where SN = #{SerialNo}), null);
   </insert>
 
   <select id = "getDevice">
-    select d_No from Device where u_No = #{u_No} and SerialNo = #{SerialNo};
+    select d_No from Device where u_No = #{u_No} and UUID = (select UUID from Product where SN = #{SerialNo});
   </select>
 
   <update id = "changeLast">
@@ -40,4 +43,12 @@
   <update id = "zeroLast">
     update User set u_Last = 0 where u_No = #{u_No};
   </update>
+
+  <select id = "checkSerial">
+    select UUID from Product where SN = #{SerialNo};
+  </select>
+
+  <select id = "getLast">
+    select u_Last from User where u_No = #{u_No};
+  </select>
 </mapper>

@@ -13,16 +13,23 @@ let format = {language: 'sql', indent: ' '};
 var feed = {
     f_No: 0,
     f_Name: 'f_Name',
+    f_Species: 'f_Species',
     f_Manufacturer: 'f_Manufacturer',
-    f_Calory: 'f_Calory',
-    f_Species: 'f_Species'
-  };
+    f_Protein: 11.11,
+    f_Fat: 11.11,
+    f_Calcium: 11.11,
+    f_Phosphorus: 11.11,
+    f_Fiber: 11.11,
+    f_Ash: 11.11,
+    f_Moisture: 11.11
+};
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)==true) {
         let query = mybatisMapper.getStatement('feed', 'selectAll', format);
         connection.query(query, function(err, rows) {
             if(err) throw err;
+            console.log(rows);
             console.log('Feed selectAll ok');
             res.json(rows);
         });

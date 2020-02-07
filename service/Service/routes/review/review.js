@@ -4,10 +4,10 @@ const router = express.Router();
 const controller = require('./review.controller');
 
 
-router.get('/', controller.selectAll);
+router.get('/:no', controller.selectAll);
 
 
-router.get('/:no', controller.selectOne);
+router.get('/get/:no', controller.selectOne);
 
 
 router.post('/', controller.add);

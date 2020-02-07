@@ -64,7 +64,7 @@ const changeLast = function (req, res) {
             u_No: 0,
             d_No: 0
         }
-        change_temp = req.body;
+        change_temp = {...change_temp , ...req.body};
         let query = mybatisMapper.getStatement('join', 'changeLast', change_temp, format);
         connection.query(query, function(err, rows) {
             if(err) throw err;

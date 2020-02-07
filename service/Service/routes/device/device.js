@@ -18,4 +18,6 @@ router.put('/', controller.update);
 //Device 삭제
 router.delete('/:no', controller.del);
 
+router.get('/check/:no', controller.checkSerial);
+
 module.exports = router;

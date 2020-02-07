@@ -126,32 +126,24 @@ function addCheck(body){
     return true;
 }
 
-function update_hw(no) {
+function update_hw(no) { //setting 정보 수정 시 hw에 전송
     setting.d_No = no;
     let query = mybatisMapper.getStatement('setting', 'updateHW', setting, format);
     connection.query(query, function(err, rows) {
-        if(err) throw err;
-        if(rows[0]){
-            console.log('Setting update_hw ok: ' + setting.d_No);
-            const request = require('request');
-            console.log('ready');
-            var signal = {
-                signal: 1
-            }
-            request.post({
-                headers: {'content-type': 'application/json'},                
-                url: 'http://70.12.247.120:3030/to-backend',              
-                body: signal,
-                json: true
-            });      
-            //url: 'http://70.12.247.120:3030/from-backend',
-            //body: rows,
-            console.log("gogo hw");
-            console.log(signal);
-            //console.log('rows');
-            //console.log(rows);                        
-        }
-        else console.log('Setting update_hw fail');        
+        if(err) throw err;        
+        console.log('Setting update_hw ok: ' + setting.d_No);
+        const request = require('request');
+        const res= request.post({
+            headers: {'content-type': 'application/json'},                
+            url: 'http://70.12.247.120:3000/timeset/update', 
+            body: rows,
+            json: true
+            }, function(error, response, body){     
+            console.log(body);
+        });
+        console.log("response success : " + {...res});      
+        console.log("gogo hw");
+        //console.log(rows);
     });
 }
 

@@ -14,12 +14,15 @@ var logdata = {
     l_No: 0,
     d_No: 0,
     l_Time: 'l_Time',
-    l_Remain: 'l_Remain'
+    l_Remain: 0,
+    l_Empty: false,
+    l_Amount: 0
 };
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)==true) {
-        let query = mybatisMapper.getStatement('logdata', 'selectAll', format);
+        logdata.d_No = req.params.no;
+        let query = mybatisMapper.getStatement('logdata', 'selectAll', logdata, format);
         connection.query(query, function(err, rows) {
             if(err) throw err;
             console.log('Logdata selectAll ok');
@@ -41,6 +44,31 @@ const selectOne = function (req, res) {
     }
     else res.send('다시 로그인 해주세요!!!!!');
 };
+
+const dataUpdate = function (req, res) {
+    if (checkToken(req.headers.authorization) == true) {
+        const request = require('request');
+        const res = request.get({
+            headers: {
+                'content-type': 'application/json'
+            },
+            url: 'http://70.12.247.120:3000/log',
+            body: rows,
+            json: true
+        }, function (error, response, body) {
+            console.log(response);
+            logdata.l_No = req.params.no;
+            let query = mybatisMapper.getStatement('logdata', 'selectOne', logdata, format);
+            connection.query(query, function (err, rows) {
+                if (err) throw err;
+                console.log('Logdata selectOne ok: ' + logdata.l_No);
+                res.json(rows);
+            });
+        });
+    } else 
+        res.send('다시 로그인 해주세요!!!!!');
+    }
+;
 
 const add = function (req, res) {
     if(checkToken(req.headers.authorization)==true) {
@@ -155,5 +183,6 @@ module.exports = {
     add: add,
     update: update,
     del: del,
-    selectChart: selectChart
+    selectChart: selectChart,
+    dataUpdate: dataUpdate
 };
