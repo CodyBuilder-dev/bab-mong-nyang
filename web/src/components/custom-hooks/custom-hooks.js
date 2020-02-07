@@ -134,6 +134,9 @@ export const useFetchData =(requestURL,dataType) => {
         result.data["u_No"] = store.u_No;
         setInput(result.data);
         break;
+      case 'feedinfo':
+        setInput(result.data[0]);
+        break;
       default : 
         setInput(result.data);
         break;
@@ -159,6 +162,8 @@ export const useFetchData =(requestURL,dataType) => {
       case "user":
       case "devicelist":
         url+=store.u_No;
+        break;
+      case "feedinfo":
         break;
       default:
         flag = false;

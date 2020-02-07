@@ -8,6 +8,8 @@ import {
   Typography,
   Grid
 } from "@material-ui/core";
+import {useFetchData} from "../custom-hooks/custom-hooks"
+
 
 const StyledRating = withStyles({
   sizeSmall: {
@@ -62,10 +64,16 @@ const testData = {
   ]
 };
 // ===================
-const FeedBasic = props => {
+const FeedBasic = (props) => {
   const classes = useStyles();
+  const {input,isLoading} = useFetchData("/feed/"+props.f_No,"feedinfo");
+  
   return (
+   
     <div className={classes.page}>
+       {isLoading ? (<div>...loading</div>) : (
+      
+      <>
       {false ? (
         <Skeleton animation="wave" variant="rect" className={classes.media} />
       ) : (
@@ -77,7 +85,7 @@ const FeedBasic = props => {
       )}
       <Box>
         <Typography variant="subtitle2" display="block">
-          <strong>{testData.feedName}</strong>
+          <strong>{input.f_Manufacturer +" " + input.f_Name}</strong>
         </Typography>
       </Box>
       <Box className={classes.score}>
@@ -109,6 +117,8 @@ const FeedBasic = props => {
           ))}
         </Grid>
       </Box>
+      </>
+      )}
     </div>
   );
 };
