@@ -33,7 +33,7 @@ const DeviceModify = props =>{
   const onSubmit = async (e) => {
     console.log("axios요청 보냄");
     console.log(input);
-    const result = await axios.put(store.url+"/device",input);
+    const result = await axios.put(store.url+"/device",input,{headers : store.headers});
     console.log(result);
     if(result.data){
       props.history.replace("/device");
@@ -42,7 +42,7 @@ const DeviceModify = props =>{
     }
   };
   const onDelete = async (e) => {
-    const result= await axios.delete(store.url+"/device/"+input.d_No);
+    const result= await axios.delete(store.url+"/device/"+input.d_No,{headers : store.headers});
     if(result.data){
       alert("삭제했습니다.");
       props.history.replace("/device");

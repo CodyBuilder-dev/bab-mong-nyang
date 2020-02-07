@@ -49,14 +49,14 @@ export const useNotes = (initialValue = []) => {
   };
 };
 export const useFetchData =(requestURL,dataType) => {
-  const [input, setInput] = useState({device : []});
+  const [input, setInput] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const store = useSelector(state => state.store, []);
   
   const onSubmit = useCallback(
     async (url) =>{
       console.log(input);
-      const result = await axios.post(url,input);
+      const result = await axios.post(url,input,{headers : store.headers});
       console.log(result);
       return result.data;
     }
@@ -64,7 +64,7 @@ export const useFetchData =(requestURL,dataType) => {
   
   const onValidate =useCallback(
     async url =>{
-      const result = await axios.get(url);
+      const result = await axios({url : url, method : "get", headers : store.headers});
       return result.data;
     }
   )
@@ -107,8 +107,8 @@ export const useFetchData =(requestURL,dataType) => {
   const dataFetch = async (url,type) => {
     console.log(url);
     setIsLoading(true);
-    const result = await axios.get(url);
-    
+    //console.log(store.Token);
+    const result = await axios({method: 'GET' , url : url, headers : store.headers});
     switch(type){
       case 'device':
       case 'devicelist':
@@ -134,14 +134,19 @@ export const useFetchData =(requestURL,dataType) => {
         result.data["u_No"] = store.u_No;
         setInput(result.data);
         break;
+      case 'feedinfo':
+        setInput(result.data[0]);
+        break;
+      case 'review':
+        setInput(result.data);
+        break;
       default : 
         setInput(result.data);
         break;
     }
-    setIsLoading(false);
     console.log(result);
+    setIsLoading(false);
   };
-  
   useEffect(() => {
     console.log("mount");
     let url = store.url+requestURL;
@@ -149,15 +154,20 @@ export const useFetchData =(requestURL,dataType) => {
     switch(dataType){
       case "timetable":
       case "chart":
+      case "maintable":
         url+=store.u_Last;
         break;
       case "device":
         url+=store.currentDeviceNo;
         break;
+      case 'device_select':
+        if(store.u_Last === 0) flag = false;
       case "user":
       case "devicelist":
-      case 'device_select':
         url+=store.u_No;
+        break;
+      case "feedinfo":
+      case "review" : 
         break;
       default:
         flag = false;
@@ -190,7 +200,7 @@ export const useStore = () =>{
     async (data,type,url) => {
       switch(type){
         case "select":
-          const result = await axios.put(store.url+url,{u_No : store.u_No, d_No : data.d_No});
+          const result = await axios.put(store.url+url,{u_No : store.u_No, d_No : data.d_No},{headers:store.headers});
           if(result.data){
             change_Store({u_Last : data.d_No});
           }

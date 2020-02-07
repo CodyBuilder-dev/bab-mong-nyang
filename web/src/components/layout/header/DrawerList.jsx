@@ -14,8 +14,6 @@ import { useHistory } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useFetchData } from "../../custom-hooks/custom-hooks";
-import {useSelector} from "react-redux";
-import { useEffect } from "react";
 const useStyles = makeStyles(theme => ({
   drawerList: {
     width: 250,
@@ -112,6 +110,19 @@ const DrawerList = ({ setOpen, open }) => {
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary="급식 기록" />
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            setOpen(false);
+            history.push("/feedinfo");
+          }}
+        >
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="사료 정보" />
         </ListItem>
       </Container>
     </List>

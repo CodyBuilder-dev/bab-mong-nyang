@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   makeStyles,
   TextField,
-  Button
+  Button,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput
 } from "@material-ui/core";
-import {useStore, useFetchData} from "../components/custom-hooks/custom-hooks"
+import clsx from "clsx";
+import {
+  useStore,
+  useFetchData
+} from "../components/custom-hooks/custom-hooks";
+
+
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -24,25 +34,45 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Regist =props => {
+const Regist = props => {
   const classes = useStyles();
-  const {input,updateField,onSubmit} = useFetchData("","");
-  const {store} = useStore();
-  
-  const onClickEvent = async evnt =>{
-    let result = await onSubmit(store.url + "/device");
-    if(result){
-      alert("기기등록에 성공했습니다.")
-      props.history.replace("/device");
+  const { input, updateField, onSubmit, setInput,onValidate } = useFetchData("", "");
+  const { store,onChangeStore } = useStore();
+  let checked = false;
+  useEffect(() => {
+    setInput({ ...input, u_No: store.u_No });
+  }, []);
+  const onClickEvent = async event => {
+    if(checked){
+      let result = await onSubmit(store.url + "/device");
+      if (result !== false) {
+        onChangeStore({...store,u_Last : result})
+        alert("기기등록에 성공했습니다.");
+        props.history.goBack();
+      } else {
+        alert("기기등록에 실패했습니다.");
+      }
     }else{
-      alert("기기등록에 실패했습니다.")
+      alert("일련번호 확인이 필요합니다.");
+    }
+  };
+  const onCheckEvent = async event => {
+    if(input.SerialNo === undefined || input.SerialNo === ""){
+      alert("일련번호를 입력해주세요!!");
+    }else{
+      const result = await onValidate(store.url + "/device/check/"+input.SerialNo);
+      if(result){
+        alert("올바른 일련번호입니다.")
+        checked = true;
+      }else{
+        alert("등록되지 않은 일련번호입니다.")
+      }
     }
   }
-  
   return (
     <div className={classes.page}>
       <h3>반려동물의 정보를 입력해주세요</h3>
-        <div className={classes.inputText}>
+      <div className={classes.inputText}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -52,8 +82,8 @@ const Regist =props => {
           label="이름"
           name="d_Name"
           autoFocus
-          onChange = {updateField}
-          value = {input.d_Name}
+          onChange={updateField}
+          value={input.d_Name}
         />
 
         <TextField
@@ -64,8 +94,8 @@ const Regist =props => {
           id="d_Age"
           label="나이"
           name="d_Age"
-          value = {input.d_Age}
-          onChange = {updateField}
+          value={input.d_Age}
+          onChange={updateField}
         />
         <TextField
           variant="outlined"
@@ -75,8 +105,8 @@ const Regist =props => {
           id="d_Species"
           label="종"
           name="d_Species"
-          value = {input.d_Species}
-          onChange = {updateField}
+          value={input.d_Species}
+          onChange={updateField}
         />
         <TextField
           variant="outlined"
@@ -87,19 +117,32 @@ const Regist =props => {
           label="몸무게"
           name="d_Weight"
           value={input.d_Weight}
-          onChange = {updateField}
+          onChange={updateField}
         />
-        <TextField
+
+        <FormControl
+          className={clsx(classes.margin, classes.textField)}
           variant="outlined"
-          margin="normal"
-          required
           fullWidth
-          id="SerialNo"
-          label="일려번호 S/N"
-          name="SerialNo"
-          value = {input.SerialNo}
-          onChange = {updateField}
-        />
+          margin="normal"
+        >
+          <InputLabel htmlFor="outlined-adornment-password" required>
+            일련번호 S/N
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            value={input.SerialNo}
+            onChange={updateField} //나중에 혹시 시간이 되면 바꿀 것
+            name="SerialNo"
+            required = {true}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button onClick = {onCheckEvent}>확인</Button>
+              </InputAdornment>
+            }
+            labelWidth={104}
+          />
+        </FormControl>
         <Button
           type="submit"
           fullWidth

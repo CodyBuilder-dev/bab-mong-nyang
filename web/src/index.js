@@ -11,7 +11,13 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 const theme = createMuiTheme({
   typography: {
     fontFamily: "SCDream"
-  }
+  },
+  palette: {
+    primary: {
+      main: '#00b08b',
+      contrastText: '#fff',
+    },
+  },
 });
 const store = createStore(rootReducer, composeWithDevTools());
 
