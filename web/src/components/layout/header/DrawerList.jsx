@@ -37,7 +37,7 @@ const DrawerList = ({ setOpen, open }) => {
           </Avatar>
         </ListItemAvatar>
         {
-          input.device.length === 0 ? (
+          input.device === undefined ? (
             <ListItemText primary="기기를 등록해주세요" />    
           ) : (
             <ListItemText primary={input.device.d_Name} secondary={input.device.d_Age+"살"} />
@@ -116,7 +116,7 @@ const DrawerList = ({ setOpen, open }) => {
           button
           onClick={() => {
             setOpen(false);
-            history.push("/feedinfo");
+            history.push("/feedsearch");
           }}
         >
           <ListItemIcon>

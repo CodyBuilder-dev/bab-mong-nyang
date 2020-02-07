@@ -31,7 +31,7 @@ const App = () => {
           <Route path="/modify" component={Modify} />
           <Route path="/device" component={Device} />
           <Route path="/devicemodify" component={DeviceModify} />
-          <Route path="/feedinfo/" component={FeedInfo} />
+          <Route path="/feedinfo/:f_No" component={FeedInfo} />
           <Route path="/feedsearch" component={FeedSearch} />
           {/* <Redirect to="/not-found" /> */}
         </Layout>

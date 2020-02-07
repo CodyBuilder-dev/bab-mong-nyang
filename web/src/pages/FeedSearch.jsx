@@ -14,26 +14,26 @@ const testData = [
   {
     id: 1,
     name: "ANF 홀리스틱 그레인프리 Dog 양고기 & 감자",
-    img: "https://picsum.photos/200/300.jpg",
+    img: "http://banhae.pet/feed/1.jpg",
     company: "에이엔에프"
   },
   {
-    id: 2,
-    name: "두번째 사료",
-    img: "https://picsum.photos/200/300",
-    company: "홀리스틱"
+    id: 150,
+    name: "뉴트리나 울트라 퍼포먼스",
+    img: "http://banhae.pet/feed/150.jpg",
+    company: "뉴트리나"
   },
   {
-    id: 3,
-    name: "맛없는 사료",
-    img: "https://picsum.photos/200/300",
-    company: "이름없음"
+    id: 89,
+    name: "게더 프리 런 치킨",
+    img: "http://banhae.pet/feed/89.jpg",
+    company: "게더"
   },
   {
-    id: 4,
-    name: "차오츄르",
-    img: "https://picsum.photos/200/300",
-    company: "이시국"
+    id: 600,
+    name: "블루버팔로 윌더니스 어덜트 독",
+    img: "http://banhae.pet/feed/600.jpg",
+    company: "블루버팔로"
   }
 ];
 const Record = props => {
