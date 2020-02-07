@@ -15,6 +15,7 @@ app.use('/setting', require('./setting/setting.js'));
 app.use('/logdata', require('./logdata/logdata.js'));
 app.use('/feed', require('./feed/feed.js'));
 app.use('/join', require('./join/join.js'));
+app.use('/review', require('./review/review.js'));
 
 //module: 관련된 코드들을 하나의 코드 단위로 캡슐화
 module.exports = app; //app과 관련된 코드들을 module로 캡슐화(다른 파일에서 module을 사용하기 위해서 필요)
