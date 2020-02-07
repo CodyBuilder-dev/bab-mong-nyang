@@ -133,7 +133,8 @@ const TimeTable = props => {
               setTimeout(async () => {
                 resolve();
                 setIsLoading(true);
-                const result = await axios.delete(store.url + '/setting/'+oldData.s_No,{headers:store.header});
+                //const result = await axios({method : "DELETE", url : store.url +'/setting/'+oldData.s_No, headers : store.headers})
+                const result = await axios.delete(store.url + '/setting/'+oldData.s_No,{headers:store.headers});
                 if(result.data){
                   setIsLoading(false);
                   dataFetch(store.url + '/setting/'+store.u_Last,'timetable');

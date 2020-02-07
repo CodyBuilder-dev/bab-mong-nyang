@@ -42,7 +42,7 @@ const DeviceModify = props =>{
     }
   };
   const onDelete = async (e) => {
-    const result= await axios.delete(store.url+"/device/"+input.d_No);
+    const result= await axios.delete(store.url+"/device/"+input.d_No,{headers : store.headers});
     if(result.data){
       alert("삭제했습니다.");
       props.history.replace("/device");

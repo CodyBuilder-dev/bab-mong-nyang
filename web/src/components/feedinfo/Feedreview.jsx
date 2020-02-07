@@ -59,61 +59,64 @@ const useStyles = makeStyles(theme => ({
     color: "#b93c3c"
   }
 }));
-const dummy = [
-  {
-    r_No: 1,
-    u_Name: "바나맘",
-    d_Species: "치와와",
-    r_Rank: 4.5,
-    r_Date: "2020-01-01",
-    r_Positive: "맛있다.",
-    r_Negative: "강아지가 맛없어 한다.",
-    r_Recommend: 1
-  },
-  {
-    r_No: 2,
-    u_Name: "차차",
-    d_Species: "허스키",
-    r_Rank: 2.0,
-    r_Date: "2020-01-04",
-    r_Positive: "물기가 없다.",
-    r_Negative: "물기가 없다.",
-    r_Recommend: 4
-  },
-  {
-    r_No: 3,
-    u_Name: "파파",
-    d_Species: "차우차우",
-    r_Rank: 4.0,
-    r_Date: "2020-01-05",
-    r_Positive: "강아지가 멍멍한다",
-    r_Negative: "강아지가 멍멍한다",
-    r_Recommend: 3,
-    comments: {
-      c_No: 1,
-      c_Comment: "아아",
-      u_No: "김엄마"
-    }
-  }
-];
+
+// const dummy = [
+//   {
+//     r_No: 1,
+//     u_Name: "바나맘",
+//     d_Species: "치와와",
+//     r_Rank: 4.5,
+//     r_Date: "2020-01-01",
+//     r_Positive: "맛있다.",
+//     r_Negative: "강아지가 맛없어 한다.",
+//     r_Recommend: 1
+//   },
+//   {
+//     r_No: 2,
+//     u_Name: "차차",
+//     d_Species: "허스키",
+//     r_Rank: 2.0,
+//     r_Date: "2020-01-04",
+//     r_Positive: "물기가 없다.",
+//     r_Negative: "물기가 없다.",
+//     r_Recommend: 4
+//   },
+//   {
+//     r_No: 3,
+//     u_Name: "파파",
+//     d_Species: "차우차우",
+//     r_Rank: 4.0,
+//     r_Date: "2020-01-05",
+//     r_Positive: "강아지가 멍멍한다",
+//     r_Negative: "강아지가 멍멍한다",
+//     r_Recommend: 3,
+//     comments: {
+//       c_No: 1,
+//       c_Comment: "아아",
+//       u_No: "김엄마"
+//     }
+//   }
+// ];
 const Feedreview = props => {
   const classes = useStyles();
   const value = 4.6;
   const [open, setOpen] = useState({});
-  const {input, dataFetch,isLoading} = useFetchData("review","review");
-  useEffect(() => {
-    let result = {};
-    dummy.map((data, i) => {
-      result = { ...result, [data.r_No]: false };
-    });
-    setOpen(result);
-    console.log(result);
-  }, []);
+  const {input, dataFetch,isLoading} = useFetchData("/review/"+props.f_No,"review");
+  // useEffect(() => {
+  //   let result = {};
+  //   input.map((data, i) => {
+  //     result = { ...result, [data.r_No]: false };
+  //   });
+  //   setOpen(result);
+  //   console.log(result);
+  // }, [input]);
   const openComments = event =>{
     setOpen({...open, [event.currentTarget.value] : !open[event.currentTarget.value]})
   }
   return (
     <div className={classes.page}>
+      {isLoading ? (<div>...loading</div>) : (
+      <>
       <Box>
         <Box marginBottom="15px" marginTop = "10px">
           <Paper className={classes.ratingBox} square={false}  >
@@ -139,7 +142,7 @@ const Feedreview = props => {
         </Button>
         </Box>
       </Box>
-      {dummy.map((data, i) => {
+      {input.map((data, i) => {
         return (
           <Box
             paddingTop={1}
@@ -158,7 +161,7 @@ const Feedreview = props => {
                   </ListItemAvatar>
                   <ListItemText
                     primary={data.u_Name}
-                    secondary={data.d_Species}
+                    //secondary={data.d_Species}
                   />
                   <ListItemSecondaryAction>
                     <Box
@@ -256,6 +259,8 @@ const Feedreview = props => {
           </Box>
         );
       })}
+      </>
+      )}
     </div>
   );
 };

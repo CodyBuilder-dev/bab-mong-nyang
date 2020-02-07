@@ -49,7 +49,7 @@ export const useNotes = (initialValue = []) => {
   };
 };
 export const useFetchData =(requestURL,dataType) => {
-  const [input, setInput] = useState({device : []});
+  const [input, setInput] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const store = useSelector(state => state.store, []);
   
@@ -137,6 +137,9 @@ export const useFetchData =(requestURL,dataType) => {
       case 'feedinfo':
         setInput(result.data[0]);
         break;
+      case 'review':
+        setInput(result.data);
+        break;
       default : 
         setInput(result.data);
         break;
@@ -164,6 +167,7 @@ export const useFetchData =(requestURL,dataType) => {
         url+=store.u_No;
         break;
       case "feedinfo":
+      case "review" : 
         break;
       default:
         flag = false;

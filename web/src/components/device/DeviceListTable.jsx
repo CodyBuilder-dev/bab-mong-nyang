@@ -46,7 +46,7 @@ const DeviceListTable = ({props}) => {
             },
             {
               title: "무게",
-              filed : "d_Weight"
+              field : "d_Weight"
             },
           ]}
           data={input}
