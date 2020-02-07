@@ -9,11 +9,12 @@ import Main from "./pages/Main";
 import Record from "./pages/Record";
 import "./index.css";
 import Info from "./pages/Info";
-import Device from"./pages/Device";
+import Device from "./pages/Device";
 import DeviceModify from "./pages/DeviceModify";
 import Login from "./pages/Login";
 import Modify from "./pages/Modify";
-import FeedInfo from "./pages/FeedInfo"
+import FeedInfo from "./pages/FeedInfo";
+import FeedSearch from "./pages/FeedSearch";
 const App = () => {
   return (
     <>
@@ -29,8 +30,9 @@ const App = () => {
           <Route path="/info" component={Info} />
           <Route path="/modify" component={Modify} />
           <Route path="/device" component={Device} />
-          <Route path="/devicemodify" component = {DeviceModify}/>
-          <Route path="/feedinfo" component = {FeedInfo}/>
+          <Route path="/devicemodify" component={DeviceModify} />
+          <Route path="/feedinfo/" component={FeedInfo} />
+          <Route path="/feedsearch" component={FeedSearch} />
           {/* <Redirect to="/not-found" /> */}
         </Layout>
       </BrowserRouter>

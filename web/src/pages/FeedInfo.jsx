@@ -14,8 +14,6 @@ import {
 import FeedBasic from "../components/feedinfo/FeedBasic";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
 import Feedreview from "../components/feedinfo/Feedreview";
-import FeedSearch from "../components/feedinfo/FeedSearch";
-import color from "@material-ui/core/colors/amber";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -72,7 +70,7 @@ const FeedInfo = props => {
   return (
     <div className={classes.page}>
       <Box>{/* <FeedSearch /> */}</Box>
-
+      
       {/* <AppBar position="sticky" color="default" style={{top: "56px"}}> */}
       <Tabs
         style={{
