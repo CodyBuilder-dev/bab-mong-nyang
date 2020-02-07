@@ -9,7 +9,7 @@ const Main =  props => {
     <>
       <DeviceSelect/>
       <CurTimeTable />
-      <DirectFeedButton/>
+      {/* <DirectFeedButton/> */}
     </>
   );
 };

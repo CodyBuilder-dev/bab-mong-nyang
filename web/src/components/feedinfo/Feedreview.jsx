@@ -20,6 +20,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import FeedComments from "./FeedComments";
+import {useFetchData} from "../custom-hooks/custom-hooks";
+
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -32,7 +34,8 @@ const useStyles = makeStyles(theme => ({
   },
   ratingBox: {
     textTransform: "none",
-    backgroundColor: "#FFCC99",
+    //backgroundColor: "#FFCC99",
+    backgroundColor : "#44d62c",
     display: "inline",
     fontSize: "30px",
     padding: "0 3px",
@@ -50,10 +53,10 @@ const useStyles = makeStyles(theme => ({
     display: "flex-inline"
   },
   recommend: {
-    color: "#44d62c"
+    color: "#00ab84"
   },
   nonrecommend: {
-    color: "#f93822"
+    color: "#b93c3c"
   }
 }));
 const dummy = [
@@ -97,6 +100,7 @@ const Feedreview = props => {
   const classes = useStyles();
   const value = 4.6;
   const [open, setOpen] = useState({});
+  const {input, dataFetch,isLoading} = useFetchData("review","review");
   useEffect(() => {
     let result = {};
     dummy.map((data, i) => {
@@ -111,25 +115,29 @@ const Feedreview = props => {
   return (
     <div className={classes.page}>
       <Box>
-        <Box marginBottom="21px">
+        <Box marginBottom="15px" marginTop = "10px">
           <Paper className={classes.ratingBox} square={false}  >
             4.3
           </Paper>
           <Rating name="readonly" value={value} readOnly precision={0.5} />
         </Box>
-        <Button variant="outlined" fullWidth>
-          작성하기
-        </Button>
+        
       </Box>
-      <Box justifyContent="flex-end" marginTop="10px">
+      <Box display = "flex" marginTop="10px" justifyContent = "space-between" width="100%">
+        <Box>
         <ButtonGroup
           variant="text"
-          color="primary"
           aria-label="text primary button group"
         >
           <Button>베스트순</Button>
           <Button>최신순</Button>
         </ButtonGroup>
+        </Box>
+        <Box>
+          <Button variant="text">
+          작성하기
+        </Button>
+        </Box>
       </Box>
       {dummy.map((data, i) => {
         return (
@@ -138,7 +146,7 @@ const Feedreview = props => {
             borderTop={1}
             marginTop={1}
             width="100%"
-            maxWidth="375px"
+            maxWidth="500px"
           >
             <Box>
               <List dense>
