@@ -137,6 +137,10 @@ export const useFetchData =(requestURL,dataType) => {
       case 'feedinfo':
         setInput(result.data[0]);
         break;
+      case 'feed_all':
+        console.log(result)
+        setInput(result.data);
+        break;
       case 'review':
         setInput(result.data);
         break;
@@ -167,6 +171,7 @@ export const useFetchData =(requestURL,dataType) => {
         url+=store.u_No;
         break;
       case "feedinfo":
+      case "feed_all":
       case "review" : 
         break;
       default:

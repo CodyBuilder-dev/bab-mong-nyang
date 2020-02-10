@@ -8,6 +8,8 @@ import {
   Divider,
   Grid
 } from "@material-ui/core";
+import { useFetchData } from "../custom-hooks/custom-hooks";
+import { keyframes } from "styled-components";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -28,23 +30,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 // ==== 사료 영양 정보 ==================
-const testData = {
-  nutritions: [
-    { ingNm: "조단백", percent: 57.8 },
-    { ingNm: "조지방", percent: 27.5 },
-    { ingNm: "조섬유", percent: 1.9 },
-    { ingNm: "조회분", percent: 8 },
-    { ingNm: "수분", percent: 4.5 },
-    { ingNm: "칼슘", percent: 0 },
-    { ingNm: "인", percent: 0 },
-    { ingNm: "오메가3", percent: 0 },
-    { ingNm: "오메가6", percent: 0 }
-  ],
-  others: [{ ingNm: "탄수화물", percent: "(0 %) 이하" }]
+const nutMatch = {
+  f_Protein: "조단백",
+  f_Fat: "조지방",
+  f_Calcium: "칼슘",
+  f_Phosphorus: "인",
+  f_Fiber: "조섬유",
+  f_Ash: "조회분",
+  f_Moisture: "수분"
 };
 // ======================================
 const NutritionInfo = props => {
   const classes = useStyles();
+  const { input } = useFetchData("/feed/" + props.f_No, "feedinfo");
   return (
     <>
       <Box width="99%" maxWidth="500px" height="100vh">
@@ -53,18 +51,26 @@ const NutritionInfo = props => {
         </Typography>
         <Divider />
         <Grid container spacing={0} alignItems="center" justify="flex-start">
-          {testData.nutritions.map(nutrition => (
-            <>
-              <Grid item xs={3}>
-                <Typography variant="body2">{nutrition.ingNm}</Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <Typography variant="overline">{nutrition.percent}%</Typography>
-              </Grid>
-            </>
-          ))}
+          {Object.entries(input).map(nutrition =>
+            nutMatch === undefined ? (
+              <></>
+            ) : nutMatch[nutrition[0]] === undefined ? (
+              <></>
+            ) : (
+              <>
+                <Grid item xs={3}>
+                  <Typography variant="body2">
+                    {nutMatch[nutrition[0]]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography variant="overline">{nutrition[1]}%</Typography>
+                </Grid>
+              </>
+            )
+          )}
         </Grid>
-        <Grid container spacing={0} alignItems="center" justify="flex-start">
+        {/* <Grid container spacing={0} alignItems="center" justify="flex-start">
           {testData.others.map(other => (
             <>
               <Grid item xs={3}>
@@ -79,7 +85,7 @@ const NutritionInfo = props => {
               </Grid>
             </>
           ))}
-        </Grid>
+        </Grid> */}
       </Box>
     </>
   );

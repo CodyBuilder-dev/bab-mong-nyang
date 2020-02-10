@@ -34,7 +34,6 @@ const Layout = props => {
     } else return true;
   };
   useEffect(() => {
-    console.log(history)
     if (!isLoggedIn()) {
       alert('로그인이 필요한 서비스입니다.')
       history.push("/login");

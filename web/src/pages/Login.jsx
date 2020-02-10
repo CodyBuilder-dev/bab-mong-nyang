@@ -4,13 +4,16 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
-  Button
+  Button,
+  Box
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
+import CatIcon from "../caticon.png";
+import DogIcon from "../dogicon.png";
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
@@ -26,10 +29,14 @@ const useStyles = makeStyles(theme => ({
     width: "300px", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
   },
-  border : {
-    borderColor : "#00b08b",
+  border: {
+    borderColor: "#00b08b",
     //border :"1px 1px 1px 1px"
-    backgroundColor : "#00b08b"
+    backgroundColor: "#00b08b"
+  },
+  icon: {
+    width: '40px',
+    height: '40px'
   }
 }));
 
@@ -54,7 +61,11 @@ const Login = props => {
   };
   return (
     <div className={classes.page}>
-      <h2>로그인</h2>
+      <Box display="flex" alignItems="center">
+        <img src={DogIcon} alt="dogicon" className={classes.icon} />
+        <h2>로그인</h2>
+        <img src={CatIcon} alt="caticon" className={classes.icon} />
+      </Box>
 
       <div className={classes.inputText}>
         <TextField
@@ -89,7 +100,7 @@ const Login = props => {
           //     },
           //   },
           //   color : classes.border,
-            
+
           // }}
         />
         <FormControlLabel
