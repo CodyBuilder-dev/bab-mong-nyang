@@ -90,11 +90,11 @@ const Chart = props => {
               color="textSecondary"
               gutterBottom
             >
-              {input[centerBarIndex].label.slice(0, 2)}월{" "}
-              {input[centerBarIndex].label.slice(3, 5)}일
+              {/* {input[centerBarIndex].label.slice(0, 2)}월{" "}
+              {input[centerBarIndex].label.slice(3, 5)}일 */}
             </Typography>
             <Typography variant="h5" component="h2">
-              {input[centerBarIndex].items[0].value} / {250} Kcal
+              {/* {input[centerBarIndex].items[0].value} / {250} Kcal */}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
               (섭취량 / 설정량)

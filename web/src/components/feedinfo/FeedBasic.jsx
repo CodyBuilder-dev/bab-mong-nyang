@@ -8,8 +8,7 @@ import {
   Typography,
   Grid
 } from "@material-ui/core";
-import {useFetchData} from "../custom-hooks/custom-hooks"
-
+import { useFetchData } from "../custom-hooks/custom-hooks";
 
 const StyledRating = withStyles({
   sizeSmall: {
@@ -42,9 +41,9 @@ const useStyles = makeStyles(theme => ({
   value: {
     fontSize: "13px"
   },
-  grid : {
-    marginTop : "10px",
-    padding : "2px"
+  grid: {
+    marginTop: "10px",
+    padding: "2px"
   }
 }));
 // ==== 사료 정보 요약 ====
@@ -64,60 +63,80 @@ const testData = {
   ]
 };
 // ===================
-const FeedBasic = (props) => {
+const FeedBasic = props => {
   const classes = useStyles();
-  const {input,isLoading} = useFetchData("/feed/"+props.f_No,"feedinfo");
-  
+  console.log(props.f_No);
+  const { input, isLoading } = useFetchData("/feed/" + props.f_No, "feedinfo");
+  const No = props.f_No;
+  const img = {
+    1: "http://banhae.pet/feed/1.jpg",
+    150: "http://banhae.pet/feed/150.jpg",
+    89: "http://banhae.pet/feed/89.jpg",
+    600: "http://banhae.pet/feed/600.jpg"
+  };
+
   return (
-   
     <div className={classes.page}>
-       {isLoading ? (<div>...loading</div>) : (
-      
-      <>
-      {false ? (
-        <Skeleton animation="wave" variant="rect" className={classes.media} />
+      {isLoading ? (
+        <div>...loading</div>
       ) : (
-        <CardMedia
-          className={classes.media}
-          image={testData.feedImg}
-          title="Feed Image"
-        />
-      )}
-      <Box>
-        <Typography variant="subtitle2" display="block">
-          <strong>{input.f_Manufacturer +" " + input.f_Name}</strong>
-        </Typography>
-      </Box>
-      <Box className={classes.score}>
-        <StyledRating
-          name="feed-score"
-          value={testData.feedScore}
-          size="small"
-          precision={0.5}
-          readOnly
-        />
-        <Typography variant="subtitle2" display="block">
-          {testData.feedScore}
-        </Typography>
-        <Typography variant="caption" display="block">
-          ({testData.votedPeopleNum})
-        </Typography>
-      </Box>
-      <Box marginTop={1} borderTop={1} paddingTop={1}>
-        <Grid container spacing={0} justify="flex-start" alignItems = "center">
-          {testData.detail.map(item => (
-            <>
-              <Grid item xs={2} className = {classes.grid}>
-                <Typography className={classes.key}>{item.key}</Typography>
-              </Grid>
-              <Grid item xs={4} className = {classes.grid}>
-                <Typography className={classes.value}>{item.value}</Typography>
-              </Grid>
-            </>
-          ))}
-        </Grid>
-      </Box>
-      </>
+        <>
+          {false ? (
+            <Skeleton
+              animation="wave"
+              variant="rect"
+              className={classes.media}
+            />
+          ) : (
+            <CardMedia
+              className={classes.media}
+              //image={testData.feedImg}
+              image= {img[props.f_No]}
+              title="Feed Image"
+            />
+          )}
+          <Box>
+            <Typography variant="subtitle2" display="block">
+              <strong>{input.f_Manufacturer + " " + input.f_Name}</strong>
+            </Typography>
+          </Box>
+          <Box className={classes.score}>
+            <StyledRating
+              name="feed-score"
+              value={testData.feedScore}
+              size="small"
+              precision={0.5}
+              readOnly
+            />
+            <Typography variant="subtitle2" display="block">
+              {testData.feedScore}
+            </Typography>
+            <Typography variant="caption" display="block">
+              ({testData.votedPeopleNum})
+            </Typography>
+          </Box>
+          <Box marginTop={1} borderTop={1} paddingTop={1}>
+            <Grid
+              container
+              spacing={0}
+              justify="flex-start"
+              alignItems="center"
+            >
+              {testData.detail.map(item => (
+                <>
+                  <Grid item xs={2} className={classes.grid}>
+                    <Typography className={classes.key}>{item.key}</Typography>
+                  </Grid>
+                  <Grid item xs={4} className={classes.grid}>
+                    <Typography className={classes.value}>
+                      {item.value}
+                    </Typography>
+                  </Grid>
+                </>
+              ))}
+            </Grid>
+          </Box>
+        </>
       )}
     </div>
   );

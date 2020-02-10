@@ -23,6 +23,10 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.default,
     width: "100vw",
     maxWidth: "500px"
+  },
+  media:{
+    width : "50px",
+    height : "70px"
   }
 }));
 
@@ -39,7 +43,7 @@ const SearchResult = props => {
         {props.data.map(data => (
           <ListItem key={`feedImage${data.id}`} button onClick={() => goFeedInfo(data.id)}>
             <ListItemAvatar>
-              <CardMedia image="https://picsum.photos/200/300" title="Feed Image" />
+              <CardMedia className = {classes.media} image={data.img} title="Feed Image" />
             </ListItemAvatar>
             <ListItemText primary={data.name} secondary={data.company} />
           </ListItem>
