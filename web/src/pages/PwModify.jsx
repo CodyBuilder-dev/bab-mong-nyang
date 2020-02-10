@@ -48,24 +48,18 @@ const Join = props => {
 
   const onClickEvent = async event => {
     if (
-      (
-        u_IdCheck(input.u_Id) &&
-        u_PwCheck(input.u_Pw) &&
-        u_NameCheck(input.u_Name) &&
-        u_EmailCheck(input.u_Email) &&
-        input.idValidated &&
-        input.pwValidated
-      )
-    ){
-    let result = await onSubmit(store.url + "/user");
-     
+      u_PwCheck(input.u_Pw) &&
+      input.pwValidated
+    ) {
+      let result = await onSubmit(store.url + "/user");
+
       if (result == true) {
         alert("환영합니다. " + input.u_Name + "님");
         props.history.replace("/login");
       } else {
         alert("회원가입에 실패했습니다.");
       }
-    }else {
+    } else {
       alert("올바른 입력을 해주세요");
     }
   };
@@ -86,33 +80,7 @@ const Join = props => {
       <h2>회원가입</h2>
 
       <div className={classes.inputText}>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="u_Id"
-          label="아이디"
-          id="u_Id"
-          error={
-            !(input.u_Id === undefined || input.u_Id === "") &&
-            !(
-              (input.idValidated !== undefined && !input.idValidated) ||
-              u_IdCheck(input.u_Id)
-            )
-          }
-          onChange={updateField}
-          onBlur={onBlurEvent}
-          value={input.u_Id}
-          helperText={
-            input.idValidated === undefined || input.idValidated
-              ? !(input.u_Id === "" || input.u_Id === undefined) &&
-                !u_IdCheck(input.u_Id)
-                ? "ID는 첫째자리는 영문소문자로 시작하고 영문소문자와 숫자를 사용할 수 있으며, 3자리 이상 15자리 이하의 길이여야 합니다"
-                : ""
-              : "이미 존재하는 아이디입니다."
-          }
-        />
+        
         <TextField
           variant="outlined"
           margin="normal"
@@ -155,49 +123,6 @@ const Join = props => {
               : "일치하지 않습니다"
           }
         />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="u_Name"
-          label="이름"
-          name="u_Name"
-          onChange={updateField}
-          value={input.u_Name}
-          error={
-            !(input.u_Name === undefined || input.u_Name === "") &&
-            !u_NameCheck(input.u_Name)
-          }
-          helperText={
-            !(input.u_Name === undefined || input.u_Name === "") &&
-            !u_NameCheck(input.u_Name)
-              ? "이름은 한글 2자리 이상 4자리 이하 또는 영문자 2자리 이상 15자리 이하의 길이여야 합니다"
-              : ""
-          }
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="u_Email"
-          label="이메일"
-          name="u_Email"
-          autoComplete="email"
-          onChange={updateField}
-          value={input.u_Email}
-          error={
-            !(input.u_Email === undefined || input.u_Email === "") &&
-            !u_EmailCheck(input.u_Email)
-          }
-          helperText={
-            !(input.u_Email === undefined || input.u_Email === "") &&
-            !u_EmailCheck(input.u_Email)
-              ? "올바른 이메일 형식에 맞게 입력해주세요"
-              : ""
-          }
-        />
         <Button
           fullWidth
           variant="contained"
@@ -205,7 +130,7 @@ const Join = props => {
           className={classes.submit}
           onClick={onClickEvent}
         >
-          회원 가입
+          비밀번호 변경
         </Button>
       </div>
     </div>
