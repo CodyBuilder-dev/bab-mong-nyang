@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 
 const Chart = props => {
   const classes = useStyles();
-  const [centerBarIndex, setcenterBarIndex] = useState(2);
+  const [centerBarIndex, setcenterBarIndex] = useState(0);
   // const [scroller, setScroller] = useState(window.innerWidth > 400)
   const store = useSelector(state => state.store, []);
 
@@ -63,13 +63,13 @@ const Chart = props => {
   useEffect(() => {
     dataFetch(store.url + "/logdata/chart/" + store.u_Last, "chart");
   }, [store.u_Last])
-  let avg = 0;
+  
 
   return (
     <div className={classes.page}>
       {isLoading ? (
         <Skeleton animation="wave" variant="rect" className={classes.card} />
-      ) : input.length === undefined ? (
+      ) : input.length === undefined || input[centerBarIndex] === undefined ?  (
         <div>표시할 정보가 없어요!!</div>
       ) : (
         <Card className={classes.card} variant="outlined">
@@ -81,7 +81,7 @@ const Chart = props => {
               centerBarIndex={centerBarIndex}
               onBarSelect={selectedBar => {setcenterBarIndex(selectedBar)}}
               selectCenterBarOnScroll={true}
-              showScroll={true}
+              showScroll={false}
             />
           </Wrapper>
           <CardContent>
@@ -90,21 +90,19 @@ const Chart = props => {
               color="textSecondary"
               gutterBottom
             >
-              {/* {input[centerBarIndex].label.slice(0, 2)}월{" "}
-              {input[centerBarIndex].label.slice(3, 5)}일 */}
+              {input[centerBarIndex].label.slice(0, 2)}월{" "}
+              {input[centerBarIndex].label.slice(3, 5)}일
             </Typography>
             <Typography variant="h5" component="h2">
-              {/* {input[centerBarIndex].items[0].value} / {250} Kcal */}
+              {input[centerBarIndex].items[0].value} / {250} Kcal
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
               (섭취량 / 설정량)
             </Typography>
             <Typography variant="body1" component="p">
-              {/* {avg - 100 > 0
-                ? `${avg - 100}%만큼 더 먹었어요`
-                : avg - 100 === 0
-                ? "완벽해요"
-                : `${100 - avg}% 만큼 덜 먹었어요`} */}
+              {100 - Math.ceil(input[centerBarIndex].items[0].value / 250 * 100) > 0
+                ? `${100 - Math.ceil(input[centerBarIndex].items[0].value / 250 * 100)}%만큼 덜 먹었어요`
+                : `다 먹었어요`}
             </Typography>
           </CardContent>
         </Card>
