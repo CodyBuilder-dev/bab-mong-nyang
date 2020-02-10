@@ -13,6 +13,10 @@ import {
   useStore,
   useFetchData
 } from "../components/custom-hooks/custom-hooks";
+import CatIcon from "../caticon.png";
+import DogIcon from "../dogicon.png";
+import CatDisable from "../catDisable.png";
+import DogDisable from "../dogDisable.png";
 
 
 const useStyles = makeStyles(theme => ({
