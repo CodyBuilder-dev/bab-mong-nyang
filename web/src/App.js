@@ -12,9 +12,10 @@ import Info from "./pages/Info";
 import Device from "./pages/Device";
 import DeviceModify from "./pages/DeviceModify";
 import Login from "./pages/Login";
-import Modify from "./pages/Modify";
+import InfoModify from "./pages/InfoModify";
 import FeedInfo from "./pages/FeedInfo";
 import FeedSearch from "./pages/FeedSearch";
+import PwModify from "./pages/PwModify"
 const App = () => {
   return (
     <>
@@ -28,11 +29,12 @@ const App = () => {
           <Route path="/record" component={Record} />
           <Route path="/main" component={Main} />
           <Route path="/info" component={Info} />
-          <Route path="/modify" component={Modify} />
+          <Route path="/infomodify" component={InfoModify} />
           <Route path="/device" component={Device} />
           <Route path="/devicemodify" component={DeviceModify} />
           <Route path="/feedinfo/:f_No" component={FeedInfo} />
           <Route path="/feedsearch" component={FeedSearch} />
+          <Route path="/pwmodify" component={PwModify} />
           {/* <Redirect to="/not-found" /> */}
         </Layout>
       </BrowserRouter>
