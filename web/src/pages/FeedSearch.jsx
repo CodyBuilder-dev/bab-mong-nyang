@@ -21,7 +21,9 @@ const Record = props => {
   return (
     <div className={classes.page}>
       <SearchBar data={input} />
-      {store.options === undefined || store.options === [] ? (
+      {store.options === undefined ? (
+        <></>
+      ) : store.options.length === 0 ? (
         <>
           <Typography variant="body1">검색 결과가 없습니다.</Typography>
         </>

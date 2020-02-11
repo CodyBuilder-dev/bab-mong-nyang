@@ -107,8 +107,6 @@ export const useFetchData = (requestURL, dataType) => {
   };
 
   const dataFetch = async (url, type) => {
-    console.log(url);
-    console.log(store);
     setIsLoading(true);
     //console.log(store.Token);
     await axios({ method: "GET", url: url, headers: {authorization: cookies.Token} })
@@ -117,9 +115,9 @@ export const useFetchData = (requestURL, dataType) => {
           case "device":
           case "devicelist":
             if (store.d_No === undefined) {
-              setInput(result.data);
+              setInput(result.data.data);
             } else {
-              setInput({ ...result.data, d_No: store.currentDeviceNo });
+              setInput({ ...result.data.data, d_No: store.currentDeviceNo });
             }
             break;
           case "device_select":
@@ -142,9 +140,13 @@ export const useFetchData = (requestURL, dataType) => {
             setInput(result.data.data);
             break;
           case "feedinfo":
-            setInput(result.data[0]);
+            setInput(result.data.data);
+            break;
+          case "feed_all":
+            setInput(result.data.data);
             break;
           case "review":
+            console.log(result)
             setInput(result.data);
             break;
           default:
@@ -222,6 +224,7 @@ export const useFetchData = (requestURL, dataType) => {
           url += store.u_No;
           break;
         case "feedinfo":
+        case "feed_all":
         case "review":
           break;
         default:

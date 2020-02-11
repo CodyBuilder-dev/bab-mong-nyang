@@ -1,7 +1,7 @@
 import React from "react";
-import { makeStyles, TextField, Button } from "@material-ui/core";
+import { makeStyles, TextField, Button, Box } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import {useFetchData} from "../components/custom-hooks/custom-hooks";
+import { useFetchData } from "../components/custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(3),
@@ -11,18 +11,22 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
   },
   submit: {
-    margin: theme.spacing(1, 0, 1),
+    marginTop: theme.spacing(2),
+    width: "43vw",
+    maxWidth: "240px",
     lineHeight: "2.5rem",
     fontSize: 16
   }
 }));
 const Info = props => {
+  console.log(props);
   const classes = useStyles();
-  const {input, isLoading} = useFetchData('/user/','user');
+  const { input, isLoading } = useFetchData("/user/", "user");
   //console.log(input);
   return (
     <div className={classes.page}>
@@ -64,26 +68,26 @@ const Info = props => {
             fullWidth
             variant="outlined"
           />
-          <Link to="/infomodify" style={{ textDecoration: "none" }}>
+          <Box display="flex" justifyContent="space-between">
             <Button
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={e => props.history.push("/infomodify")}
             >
               회원정보수정
             </Button>
-          </Link>
-          <Link to="/pwmodify" style={{ textDecoration: "none" }}>
             <Button
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={e => props.history.push("/pwmodify")}
             >
               비밀번호수정
             </Button>
-          </Link>
+          </Box>
         </div>
       )}
     </div>
