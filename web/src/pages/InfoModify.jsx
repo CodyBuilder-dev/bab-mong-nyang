@@ -9,7 +9,9 @@ import { u_EmailCheck, u_NameCheck } from "../modules/regCheck";
 
 const useStyles = makeStyles(theme => ({
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginTop: theme.spacing(2),
+    width: "90vw",
+    maxWidth: "500px",
     lineHeight: "2.5rem",
     fontSize: 16
   },
@@ -21,9 +23,10 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
-  }
+  },
 }));
 const InfoModify = props => {
   const classes = useStyles();

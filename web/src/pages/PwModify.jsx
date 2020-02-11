@@ -17,11 +17,6 @@ import {
 } from "../modules/regCheck";
 
 const useStyles = makeStyles(theme => ({
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-    lineHeight: "2.5rem",
-    fontSize: 16
-  },
   page: {
     marginTop: theme.spacing(6),
     marginBottom: theme.spacing(8),
@@ -30,8 +25,16 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    width: "90vw",
+    maxWidth: "500px",
+    lineHeight: "2.5rem",
+    fontSize: 16
   },
   helperText: {
     color: "red"
@@ -77,7 +80,7 @@ const Join = props => {
 
   return (
     <div className={classes.page}>
-      <h2>회원가입</h2>
+      <h2>비밀번호 수정</h2>
 
       <div className={classes.inputText}>
         
@@ -130,7 +133,7 @@ const Join = props => {
           className={classes.submit}
           onClick={onClickEvent}
         >
-          비밀번호 변경
+          변경하기
         </Button>
       </div>
     </div>

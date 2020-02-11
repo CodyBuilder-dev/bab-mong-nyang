@@ -14,8 +14,6 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
@@ -39,18 +37,18 @@ const DeviceListTable = ({ props }) => {
         <div> Loading.....</div>
       ) : (
         <div className={classes.gridContainer}>
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" justifyContent="center">
             <Typography variant="h6">밥그릇</Typography>
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="flex-end">
+          <Box display="flex" alignItems="center" justifyContent="flex-end" paddingBottom="10px">
             <IconButton
-              style={{padding: "0px 0px 10px 0px"}}
+              style={{padding: "0px"}}
               aria-label="add"
               color="primary"
               onClick={e => props.history.push("regist")}
             >
               <AddCircleOutlineIcon />
-              <Typography>기기 추가</Typography>
+              <Typography>기기 등록</Typography>
             </IconButton>
           </Box>
           <Grid container spacing={2} alignItems="center" justify="flex-start">
@@ -71,7 +69,7 @@ const DeviceListTable = ({ props }) => {
                       className={classes.paper}
                       onClick={e => {
                         onChangeStore({ currentDeviceNo: device.d_No }, "", "");
-                        props.history.push(`/devicemodify`);
+                        props.history.push("/devicemodify");
                       }}
                     >
                       <Typography component="p" variant="body1">
@@ -81,10 +79,10 @@ const DeviceListTable = ({ props }) => {
                         {device.d_Species}
                       </Typography>
                       <Typography component="p" variant="caption">
-                        나이: {device.d_Age}
+                        나이: {parseInt(device.d_Age / 12)? `${parseInt(device.d_Age / 12)}년 `: ''}{device.d_Age % 12}개월
                       </Typography>
                       <Typography component="p" variant="caption">
-                        몸무게: {device.d_Weight}
+                        몸무게: {device.d_Weight} kg
                       </Typography>
                     </Paper>
                   </Grid>
