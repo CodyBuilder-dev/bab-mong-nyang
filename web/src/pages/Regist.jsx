@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   makeStyles,
   TextField,
@@ -6,7 +6,11 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
-  OutlinedInput
+  OutlinedInput,
+  Radio,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel
 } from "@material-ui/core";
 import clsx from "clsx";
 import {
@@ -17,7 +21,6 @@ import CatIcon from "../caticon.png";
 import DogIcon from "../dogicon.png";
 import CatDisable from "../catDisable.png";
 import DogDisable from "../dogDisable.png";
-
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -35,44 +38,76 @@ const useStyles = makeStyles(theme => ({
   inputText: {
     width: "300px", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
+  },
+  icons: {
+    width: "100px",
+    height: "100px"
   }
 }));
-
+const CatRadio = props => {
+  const classes = useStyles();
+  return (
+    <Radio
+      checkedIcon={<img src={CatIcon} alt="cat-check" className={classes.icons} />}
+      icon={<img src={CatDisable} alt="cat-uncheck" className={classes.icons} />}
+      {...props}
+    />
+  );
+};
+const DogRadio = props => {
+  const classes = useStyles();
+  return (
+    <Radio
+      checkedIcon={<img src={DogIcon} alt="dog-check" className={classes.icons} />}
+      icon={<img src={DogDisable} alt="dog-uncheck" className={classes.icons} />}
+      {...props}
+    />
+  );
+};
 const Regist = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit, setInput,onValidate } = useFetchData("", "");
-  const { store,onChangeStore } = useStore();
+  const { input, updateField, onSubmit, setInput, onValidate } = useFetchData(
+    "",
+    ""
+  );
+  const { store, onChangeStore } = useStore();
+  const [species, setSpecies] = useState()
+  const handleChange = e => {
+    setSpecies(e.target.value)
+  }
   let checked = false;
   useEffect(() => {
-    setInput({ ...input, u_No: store.u_No });
+    setInput({ u_No: store.u_No });
   }, []);
   const onClickEvent = async event => {
-    if(checked){
+    if (checked) {
       let result = await onSubmit(store.url + "/device");
       if (result !== false) {
-        onChangeStore({...store,u_Last : result})
+        onChangeStore({ ...store, u_Last: result });
         alert("기기등록에 성공했습니다.");
         props.history.goBack();
       } else {
         alert("기기등록에 실패했습니다.");
       }
-    }else{
+    } else {
       alert("일련번호 확인이 필요합니다.");
     }
   };
   const onCheckEvent = async event => {
-    if(input.SerialNo === undefined || input.SerialNo === ""){
+    if (input.SerialNo === undefined || input.SerialNo === "") {
       alert("일련번호를 입력해주세요!!");
-    }else{
-      const result = await onValidate(store.url + "/device/check/"+input.SerialNo);
-      if(result){
-        alert("올바른 일련번호입니다.")
+    } else {
+      const result = await onValidate(
+        store.url + "/device/check/" + input.SerialNo
+      );
+      if (result) {
+        alert("올바른 일련번호입니다.");
         checked = true;
-      }else{
-        alert("등록되지 않은 일련번호입니다.")
+      } else {
+        alert("등록되지 않은 일련번호입니다.");
       }
     }
-  }
+  };
   return (
     <div className={classes.page}>
       <h3>반려동물의 정보를 입력해주세요</h3>
@@ -101,7 +136,7 @@ const Regist = props => {
           value={input.d_Age}
           onChange={updateField}
         />
-        <TextField
+        {/* <TextField
           variant="outlined"
           margin="normal"
           required
@@ -111,7 +146,28 @@ const Regist = props => {
           name="d_Species"
           value={input.d_Species}
           onChange={updateField}
-        />
+        /> */}
+        <FormControl component="fieldset">
+          <FormLabel component="legend" required>종</FormLabel>
+          <RadioGroup
+            aria-label="species"
+            name="d_Species"
+            value={input.d_Species}
+            onChange={updateField}
+            row
+          >
+            <FormControlLabel
+              value="강아지"
+              control={<DogRadio />}
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="고양이"
+              control={<CatRadio />}
+              labelPlacement="bottom"
+            />
+          </RadioGroup>
+        </FormControl>
         <TextField
           variant="outlined"
           margin="normal"
@@ -138,10 +194,10 @@ const Regist = props => {
             value={input.SerialNo}
             onChange={updateField} //나중에 혹시 시간이 되면 바꿀 것
             name="SerialNo"
-            required = {true}
+            required={true}
             endAdornment={
               <InputAdornment position="end">
-                <Button onClick = {onCheckEvent}>확인</Button>
+                <Button onClick={onCheckEvent}>확인</Button>
               </InputAdornment>
             }
             labelWidth={104}
