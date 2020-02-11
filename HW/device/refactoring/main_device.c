@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 		else {
 		//IR TRANSMITTING
 			IR_TRANSMITTING(checkcnt);
+			melody();
 			exit(1);
 		}
 	}

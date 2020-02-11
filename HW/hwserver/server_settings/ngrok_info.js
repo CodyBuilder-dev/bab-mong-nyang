@@ -26,6 +26,8 @@ const ngrok_info = async function() {
     const api = ngrok.getApi();
     const tunnels = await api.get('api/tunnels');
     var ngrok_url = JSON.parse(tunnels).tunnels[0].public_url;
+    var ngrok_i = ngrok_url.split("//");
+    ngrok_url = ngrok_i[1];
     
     console.log(ngrok_url);
 

@@ -4,10 +4,14 @@
 #include <wiringSerial.h>
 #include <errno.h>
 
+#include <softTone.h> //beef sound
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h> //uint8_t definitions
+
+// speaker pin set
+#define SPEAKER 6
 
 //IR pin set
 #define IRRCV 27
@@ -44,6 +48,7 @@ void setdefault(){
     pinMode(IRTSM, OUTPUT);
 	pinMode(IRRCV, INPUT);
 	digitalWrite(IRTSM, LOW);
+	pinMode(SPEAKER, OUTPUT);
 }
 
 // get arduino signal
@@ -99,6 +104,16 @@ void end() {
 	setsteps(0, 0, 0, 0);
 }
 
+void melody(){
+int scale[23] = { 659, 659, 0, 659, 0, 523, 659, 0, 784, 0,0,0, 392, 0,0,0, 523, 0,0, 392, 0,0,330 } ;
+  softToneCreate (SPEAKER) ;
+  for (int i = 0 ; i < 23 ; ++i){
+      printf ("%3d\n", i) ;
+      softToneWrite (SPEAKER, scale[i]) ;
+      delay (200) ;
+    }
+}
+
 // IR TRNSMITTING
 void IR_TRANSMITTING(int loop){
     while (loop--) {
@@ -112,3 +127,4 @@ int EMPTYCHECK(){
 		return 1;
 	return 0;
 }
+ 
