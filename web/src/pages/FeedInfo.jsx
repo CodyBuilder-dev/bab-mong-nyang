@@ -110,7 +110,7 @@ const FeedInfo = props => {
             <FeedBasic f_No={f_No}/>
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <NutritionInfo />
+            <NutritionInfo f_No={f_No}/>
           </TabPanel>
           <TabPanel value={value} index={2} dir={theme.direction}>
             <Feedreview f_No={f_No}/>
