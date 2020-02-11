@@ -10,7 +10,8 @@ import {
   Radio,
   FormLabel,
   RadioGroup,
-  FormControlLabel
+  FormControlLabel,
+  Box
 } from "@material-ui/core";
 import clsx from "clsx";
 import {
@@ -29,27 +30,38 @@ const useStyles = makeStyles(theme => ({
     fontSize: 16
   },
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
+  },
+  halfInput: {
+    width: "43vw",
+    maxWidth: "240px"
   },
   icons: {
     width: "100px",
     height: "100px"
+  },
+  radioButtons: {
+    display: "flex",
+    justifyContent: "space-around"
   }
 }));
 const CatRadio = props => {
   const classes = useStyles();
   return (
     <Radio
-      checkedIcon={<img src={CatIcon} alt="cat-check" className={classes.icons} />}
-      icon={<img src={CatDisable} alt="cat-uncheck" className={classes.icons} />}
+      checkedIcon={
+        <img src={CatIcon} alt="cat-check" className={classes.icons} />
+      }
+      icon={
+        <img src={CatDisable} alt="cat-uncheck" className={classes.icons} />
+      }
       {...props}
     />
   );
@@ -58,8 +70,12 @@ const DogRadio = props => {
   const classes = useStyles();
   return (
     <Radio
-      checkedIcon={<img src={DogIcon} alt="dog-check" className={classes.icons} />}
-      icon={<img src={DogDisable} alt="dog-uncheck" className={classes.icons} />}
+      checkedIcon={
+        <img src={DogIcon} alt="dog-check" className={classes.icons} />
+      }
+      icon={
+        <img src={DogDisable} alt="dog-uncheck" className={classes.icons} />
+      }
       {...props}
     />
   );
@@ -71,10 +87,6 @@ const Regist = props => {
     ""
   );
   const { store, onChangeStore } = useStore();
-  const [species, setSpecies] = useState()
-  const handleChange = e => {
-    setSpecies(e.target.value)
-  }
   let checked = false;
   useEffect(() => {
     setInput({ u_No: store.u_No });
@@ -110,8 +122,34 @@ const Regist = props => {
   };
   return (
     <div className={classes.page}>
-      <h3>반려동물의 정보를 입력해주세요</h3>
+      <h3>반려동물에 대해 알려주세요</h3>
       <div className={classes.inputText}>
+        <FormControl component="fieldset" fullWidth className={classes.inputText}>
+          <FormLabel component="legend" required>
+            종을 선택해주세요
+          </FormLabel>
+          <RadioGroup
+            aria-label="species"
+            name="d_Species"
+            value={input.d_Species}
+            onChange={updateField}
+            row
+            className={classes.radioButtons}
+          >
+            <FormControlLabel
+              value="강아지"
+              control={<DogRadio />}
+              label="강아지"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="고양이"
+              control={<CatRadio />}
+              label="고양이"
+              labelPlacement="bottom"
+            />
+          </RadioGroup>
+        </FormControl>
         <TextField
           variant="outlined"
           margin="normal"
@@ -124,61 +162,30 @@ const Regist = props => {
           onChange={updateField}
           value={input.d_Name}
         />
-
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="d_Age"
-          label="나이"
-          name="d_Age"
-          value={input.d_Age}
-          onChange={updateField}
-        />
-        {/* <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="d_Species"
-          label="종"
-          name="d_Species"
-          value={input.d_Species}
-          onChange={updateField}
-        /> */}
-        <FormControl component="fieldset">
-          <FormLabel component="legend" required>종</FormLabel>
-          <RadioGroup
-            aria-label="species"
-            name="d_Species"
-            value={input.d_Species}
+        <Box display="flex" justifyContent="space-between">
+          <TextField
+            variant="outlined"
+            margin="normal"
+            className={classes.halfInput}
+            required
+            id="d_Age"
+            label="나이 (개월)"
+            name="d_Age"
+            value={input.d_Age}
             onChange={updateField}
-            row
-          >
-            <FormControlLabel
-              value="강아지"
-              control={<DogRadio />}
-              labelPlacement="bottom"
-            />
-            <FormControlLabel
-              value="고양이"
-              control={<CatRadio />}
-              labelPlacement="bottom"
-            />
-          </RadioGroup>
-        </FormControl>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="d_Weight"
-          label="몸무게"
-          name="d_Weight"
-          value={input.d_Weight}
-          onChange={updateField}
-        />
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            className={classes.halfInput}
+            required
+            id="d_Weight"
+            label="몸무게 (kg)"
+            name="d_Weight"
+            value={input.d_Weight}
+            onChange={updateField}
+          />
+        </Box>
 
         <FormControl
           className={clsx(classes.margin, classes.textField)}
@@ -211,7 +218,7 @@ const Regist = props => {
           className={classes.submit}
           onClick={onClickEvent}
         >
-          기기 등록
+          등록 하기
         </Button>
       </div>
     </div>
