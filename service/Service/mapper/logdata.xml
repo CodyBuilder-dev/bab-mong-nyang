@@ -5,14 +5,6 @@
     select l_Time, l_Remain, l_Empty, l_Amount from LogData where d_No = #{d_No};
   </select>
 
-  <select id = "selectOne">
-    select * from LogData where l_No = #{l_No};
-  </select>
-
-  <insert id = "addLogdata">
-    insert into Logdata values(0, #{d_No}, #{l_Time}, #{l_Remain});
-  </insert>
- 
   <update id = "updateLogdata">
     update LogData set l_Time = #{l_Time}, l_Remain = #{l_Remain} where l_No = #{l_No};
   </update>

@@ -8,16 +8,4 @@
   <select id = "selectOne">
     select * from Feed where f_No = #{f_No};
   </select>
-
-  <insert id = "addFeed">
-    insert into Feed values(0, #{f_Name}, #{f_Manufacturer}, #{f_Calory}, #{f_Species});
-  </insert>
- 
-  <update id = "updateFeed">
-    update Feed set f_Calory = #{f_Calory}, f_Species = #{f_Species} where f_No = #{f_No};
-  </update>
-
-  <delete id = "deleteFeed">
-    delete from Feed where f_No = #{f_No};
-  </delete>
 </mapper>

@@ -11,6 +11,9 @@ router.get('/', controller.selectAll);
 //U_No에 맞는 데이터 호출
 router.get('/:no', controller.selectOne);
 
+//새로고침 후 u_No, u_Last 호출
+router.get('/main/:token', controller.userMain);
+
 //id 중복 확인
 router.get('/idCheck/:id', controller.idCheck);
 
@@ -22,6 +25,9 @@ router.post('/login', controller.login);
 
 //회원 정보 수정
 router.put('/', controller.update);
+
+//비밀번호 수정
+router.put('/pass', controller.updatePass);
 
 //회원 정보 삭제
 router.delete('/:no', controller.del);

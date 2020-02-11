@@ -18,13 +18,15 @@ var device = {
     d_Species: 'd_Species',
     d_Weight: 'd_Weight',
     SerialNo: 'SerialNo',
-    UUID: 'UUID'
+    UUID: 'UUID',
+    d_Ip: 'd_Ip'
 };
 
-var err_result = {
-    IsError: true,
-    Message: 'msg'
-}
+var result = {
+    validation: false,
+    message: '',
+    data: []
+};
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)) {
@@ -33,19 +35,20 @@ const selectAll = function (req, res) {
         connection.query(query, function(err, rows) {
             if(err) {
                 console.log(err);
-                err_result.Message = '해당 유저의 전체 Device 데이터를 불러오는 데 오류가 발생하였습니다';
-                res.json(err_result);
+                result.validation = false;
+                result.message = '해당 유저의 전체 Device 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
                 return;
             }
             console.log('device selectAll ok: ' + device.u_No);
-            console.log(rows);
-            res.json(rows);
+            result.validation = true;
+            result.message = '해당 유저의 전체 Device 호출 성공';
+            result.data = rows;
+            res.json(result);
         });
     }
-    else{
-        console.log('device selectAll fail: ' + device.u_No);
-        res.json(err_result);
-    }
+    else res.json(result);
 };
 
 const selectOne = function (req, res) {
@@ -55,18 +58,20 @@ const selectOne = function (req, res) {
         connection.query(query, function(err, rows) {
             if(err) {
                 console.log(err);
-                err_result.Message = '해당 Device 데이터를 불러오는 데 오류가 발생하였습니다';
-                res.json(err_result);
+                result.validation = false;
+                result.message = '해당 Device 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
                 return;
-            }
+            }            
             console.log('device selectOne ok: ' + device.d_No);
-            res.json(rows[0]);
+            result.validation = true;
+            result.message = '해당 Device 정보 호출 성공';
+            result.data = rows[0];
+            res.json(result);
         });
     }
-    else {        
-        console.log('device selectOne fail: ' + device.d_No);
-        res.json(err_result);        
-    }
+    else res.json(result);
 };
 
 const checkSerial = function (req, res) {
@@ -76,200 +81,226 @@ const checkSerial = function (req, res) {
         connection.query(query, function(err, rows) {
             if(err) {
                 console.log(err);
-                err_result.Message = '해당 시리얼 번호를 확인 오류가 발생하였습니다';
-                res.json(err_result);
+                result.validation = false;
+                result.message = '해당 시리얼 번호를 확인 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
                 return;
             }
             if(rows[0]){
-                device.UUID = rows[0].UUID;
+                //device.UUID = rows[0].UUID;
                 console.log('device checkSerial ok: ' + device.SerialNo);
-                res.send(true);
+                result.validation = true;
+                result.message = '해당 시리얼 번호와 일치하는 UUID 확인 완료'
+                result.data = [];
+                res.json(result);                
             }
             else{
                 console.log('device checkSerial fail: ' + device.SerialNo);
-                res.send(false);
+                result.validation = false;
+                result.message = '해당 시리얼 번호와 일치하는 UUID 미확인'
+                result.data = [];
+                res.json(result);                
             }
         });
     }
-    else {        
-        console.log('device checkSerial fail: ' + device.SerialNo);
-        res.json(err_result);        
-    }
+    else res.json(result);
 };
 
 const add = function (req, res) {
-    if(checkToken(req.headers.authorization)) {        
-        device = {...device , ...req.body};
+    if(checkToken(req.headers.authorization)) {   
+        device = {...device , ...req.body}; //u_No, d_Name, d_Age, d_Species, d_Weight, SerialNo
         let check_query = mybatisMapper.getStatement('device', 'deviceCheck', device, format);
         connection.query(check_query, function(check_err, check_rows){
             if(check_err) {
                 console.log(check_err);
-                err_result.Message = '해당 기기 등록 여부를 확인하던 중 오류가 발생하였습니다';
-                res.json(err_result);
+                result.validation = false;
+                result.message = '해당 기기 등록 여부를 확인하던 중 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
                 return;
             }
             if(check_rows[0]){
                 console.log('Device add fail: ' + device.d_Name);
-                res.send(false);
+                result.validation = false;
+                result.message = '해당 기기는 이미 등록되어 있습니다';
+                result.data = [];
+                res.json(result);
             }
             else{
                 let query = mybatisMapper.getStatement('device', 'addDevice', device, format);
                 connection.query(query, function(err, rows){
                     if(err) {
                         console.log(err);
-                        err_result.Message = '기기를 등록하던 중 오류가 발생하였습니다';
-                        res.json(err_result);
+                        result.validation = false;
+                        result.message = '기기 등록 중 오류가 발생하였습니다';
+                        result.data = [];
+                        res.json(result);
                         return;
                     }
                     let get_query = mybatisMapper.getStatement('device', 'getDevice', device, format);
                     connection.query(get_query, function(get_err, get_rows){
                         if(get_err) {
                             console.log(get_err);
-                            err_result.Message = '기기를 등록 후 기기 번호를 가져오던 중 오류가 발생하였습니다';
-                            res.json(err_result);
+                            result.validation = false;
+                            result.message = '기기를 등록 후 기기 번호를 가져오던 중 오류가 발생하였습니다';
+                            result.data = [];
+                            res.json(result);
                             return;
                         }
-                        if(get_rows[0]){
-                            device.d_No = get_rows[0].d_No;
-                            let change_query = mybatisMapper.getStatement('device', 'changeLast', device, format);
-                            connection.query(change_query, function(change_err, change_rows){
-                                if(change_err) {
-                                    console.log(change_err);
-                                    err_result.Message = '유저의 최신 기기 번호를 갱신하던 중 오류가 발생하였습니다';
-                                    res.json(err_result);
-                                    return;
-                                }
-                                if(change_rows.changedRows>0) {
-                                    console.log('Device add ok: ' + device.d_Name);
-                                    res.json(device.d_No);
-                                }
-                                else {
-                                    console.log('Device add fail: ' + device.d_Name);
-                                    res.send(false);
-                                }
-                            });
-                        }                        
-                        else {
-                            console.log('Device add fail: ' + device.d_Name);
-                            res.send(false);
-                        }
+                        device.d_No = get_rows[0].d_No;
+                        let change_query = mybatisMapper.getStatement('device', 'changeLast', device, format);
+                        connection.query(change_query, function(change_err, change_rows){
+                            if(change_err) {
+                                console.log(change_err);
+                                result.validation = false;
+                                result.message = '유저의 최신 기기 번호를 갱신하던 중 오류가 발생하였습니다';
+                                result.data = [];
+                                res.json(result);
+                                return;
+                            }
+                            if(change_rows.changedRows>0) {
+                                console.log('Device add ok: ' + device.d_Name);
+                                result.validation = true;
+                                result.message = '기기 등록 후 유저의 최신 기기 번호 갱신 성공'
+                                result.data = {d_No: device.d_No};
+                                res.json(result);
+                            }
+                            else {
+                                result.validation = false;
+                                result.message = '유저의 최신 기기 번호를 갱신하는 데 실패하였습니다';
+                                result.data = [];
+                                res.json(result);                                    
+                            }
+                        });                        
                     });
                 });            
             }
         });               
     }
-    else {        
-        console.log('device add fail: ' + device.d_Name);
-        res.json(err_result);        
-    }
+    else res.json(result);
 };
 
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
-        device = {...device , ...req.body};
-        console.log(req.body);
+        device = {...device , ...req.body}; //d_No, d_Name, d_Age, d_Species, d_Weight        
         let query = mybatisMapper.getStatement('device', 'updateDevice', device, format);
         connection.query(query, function(err, rows) {
             if(err) {
                 console.log(err);
-                err_result.Message = '기기 정보를 수정하던 중 오류가 발생하였습니다';
-                res.json(err_result);
+                result.validation = false;
+                result.message = '기기 정보를 수정하던 중 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
                 return;
             }
-            if(rows.changedRows>0){
-                console.log('device update ok: ' + device.d_No);
-                res.send(true);
-            }
-            else{
-                console.log('device update fail: ' + device.d_No);
-                res.send(false);
-            }
+            console.log('device update ok: ' + device.d_No);
+            result.validation = true;
+            result.message = '기기 수정 성공';
+            result.data = [];
         });
     }
-    else {        
-        console.log('device update fail: ' + device.d_No);
-        res.json(err_result);        
-    }
+    else res.json(result);
 };
 
 const del = function (req, res) {
-    if(checkToken(req.headers.authorization)) {
+    if(checkToken_del(req.headers.authorization)) {
         device.d_No = req.params.no;
         let query = mybatisMapper.getStatement('device', 'deleteDevice', device, format);
         connection.query(query, function(err, rows) {
             if(err) {
                 console.log(err);
-                err_result.Message = '기기 정보를 삭제하던 중 오류가 발생하였습니다';
-                res.json(err_result);
+                result.validation = false;
+                result.message = '기기 정보를 삭제하던 중 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
                 return;
             }
-            if(rows.affectedRows>0){
-                console.log('device delete ok: ' + device.d_No);
-                let del_query = mybatisMapper.getStatement('device', 'deleteLast', device, format);
-                connection.query(del_query, function(del_err, del_rows){
-                    if(del_err) {
-                        console.log(del_err);
-                        err_result.Message = '유저의 최신 기기 번호를 삭제하던 중 오류가 발생하였습니다';
-                        res.json(err_result);
-                        return;
-                    }
-                    if(del_rows.changedRows>0) {
-                        let get_query = mybatisMapper.getStatement('device', 'getLast', device, format);
-                        connection.query(get_query, function(get_err, get_rows){
-                            if(get_err) {
-                                console.log(get_err);
-                                err_result.Message = '유저의 최신 기기 번호를 갱신하던 중 오류가 발생하였습니다';
-                                res.json(err_result);
-                                return;
-                            }
-                            res.send(get_rows[0]);
-                        });
-                    }
-                    else{
-                        let zero_query = mybatisMapper.getStatement('device', 'zeroLast', device, format);
-                        connection.query(zero_query, function(zero_err, zero_rows){
-                            if(zero_err) {
-                                console.log(zero_err);
-                                err_result.Message = '유저의 최신 기기 번호를 갱신하던 중 오류가 발생하였습니다';
-                                res.json(err_result);
-                                return;
-                            }
-                            res.send(0);
-                        });
-                    }
-                });
-            }
-            else{
-                console.log('device delete fail: ' + device.d_No);
-                res.send(false);
-            }
+            console.log('device delete ok: ' + device.d_No);
+            let del_query = mybatisMapper.getStatement('device', 'deleteLast', device, format);
+            connection.query(del_query, function(del_err, del_rows){
+                if(del_err) {
+                    console.log(del_err);
+                    result.validation = false;
+                    result.message = '유저의 최신 기기 번호를 삭제하던 중 오류가 발생하였습니다';
+                    result.data = [];
+                    res.json(result);
+                    return;
+                }
+                if(del_rows.changedRows>0) { //기기 삭제 후 다른 기기번호로 u_Last 갱신에 성공한 경우
+                    let get_query = mybatisMapper.getStatement('device', 'getLast', device, format);
+                    connection.query(get_query, function(get_err, get_rows){
+                        if(get_err) {
+                            console.log(get_err);
+                            result.validation = false;
+                            result.message = '유저의 최신 기기 번호를 갱신하던 중 오류가 발생하였습니다';
+                            result.data = [];
+                            res.json(result);
+                            return;
+                        }
+                        result.validation = true;
+                        result.message = '유저의 최신 기기 번호 갱신 성공';
+                        result.data = get_rows[0];
+                        res.json(result);
+                    });
+                }
+                else{ //삭제하기 전 기기의 개수가 1개라서 삭제 후 u_Last가 갱신되지 않은 경우
+                    let zero_query = mybatisMapper.getStatement('device', 'zeroLast', device, format);
+                    connection.query(zero_query, function(zero_err, zero_rows){
+                        if(zero_err) {
+                            console.log(zero_err);
+                            result.validation = false;
+                            result.message = '유저의 최신 기기 번호를 갱신하던 중 오류2가 발생하였습니다';
+                            result.data = [];
+                            res.json(result);
+                            return;
+                        }
+                        result.validation = true;
+                        result.message = '유저의 최신 기기 번호를 0으로 갱신 성공';
+                        result.data = {u_Last: 0};
+                        res.json(result);
+                    });
+                }
+            });
         });
     }
-    else {        
-        console.log('device delete fail: ' + device.d_No);
-        res.json(err_result);        
-    }
+    else res.json(result);
 };
 
-function checkToken(token) {
+function checkToken(token){
     var tempToken = false;
     jwt.verify(token, secretKey.secret, (err, decoded) => {
         if(err) {
             console.log('토큰 에러 발생!');
             console.log(err);
-            err_result.Message = '토큰 에러 발생! 로그인을 다시 해주세요';
+            result.validation = false;
+            result.message = '다시 로그인 해주세요!';
+            result.data = [];
             tempToken = false;
         }
         else {
-            if(decoded) {
-                console.log('유효한 토큰입니다!');                
-                tempToken = true;
-            }
-            else{
-                console.log('권한이 없습니다!');
-                err_result.Message = '토큰 권한이 만료되었습니다! 로그인을 다시 해주세요';
-                tempToken = false;
-            }
+            console.log('유효한 토큰입니다!');
+            tempToken = true;
+        }
+    });
+    return tempToken;
+}
+
+function checkToken_del(token){
+    var tempToken = false;
+    jwt.verify(token, secretKey.secret, (err, decoded) => {
+        if(err) {
+            console.log('토큰 에러 발생!');
+            console.log(err);
+            result.validation = false;
+            result.message = '다시 로그인 해주세요!';
+            result.data = [];
+            tempToken = false;
+        }
+        else {
+            console.log('유효한 토큰입니다!');
+            device.u_No = decoded.u_No;
+            tempToken = true;
         }
     });
     return tempToken;
@@ -278,8 +309,8 @@ function checkToken(token) {
 module.exports = {
     selectAll: selectAll,
     selectOne: selectOne,
+    checkSerial: checkSerial,
     add: add,
     update: update,
-    del: del,
-    checkSerial: checkSerial
+    del: del
 };

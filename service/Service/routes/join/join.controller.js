@@ -17,15 +17,23 @@ var Main_data = {
     device : []
 };
 
+var result = {
+    validation: false,
+    message: '',
+    data: []
+};
+
 const selectMain = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         Main_data.u_No = req.params.no;
         let query = mybatisMapper.getStatement('join', 'selectUser', Main_data, format);
-        connection.query(query, function(err, rows) {
-            if(err) throw err;
-            if(!rows[0]){
-                console.log('Main_data selectUser fail');
-                res.send(false);
+        connection.query(query, function(err, rows) {            
+            if(err){
+                result.validation = false;
+                result.message = 'Join Controller에서 u_Name, u_Last를 호출하는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
             }
             else{
                 console.log('Main_data selectUser ok');
@@ -33,12 +41,22 @@ const selectMain = function (req, res) {
                 Main_data.u_Last = rows[0].u_Last;
                 let query2 = mybatisMapper.getStatement('join', 'selectDevice', Main_data, format);
                 connection.query(query2, function(err2, rows2) {
-                    if(err2) throw err2;
+                    if(err2){
+                        result.validation = false;
+                        result.message = 'Join Controller에서 d_No, d_Name을 호출하는 데 오류가 발생하였습니다';
+                        result.data = [];
+                        res.json(result);
+                        return;
+                    }
                     if(!rows2[0]){
                         console.log('Main_data selectDevice fail');
-                        res.send(false);
+                        result.validation = false;
+                        result.message = 'Join Controller: u_No 유저가 가진 Device 정보가 존재하지 않습니다';                        
+                        result.data = [];
+                        res.json(result);
                     }
                     else{
+                        console.log('Main_data selectDevice ok');
                         for(var i = 0; i<rows2.length; i++){
                             var device_temp = {
                                 d_No : 0,
@@ -47,19 +65,21 @@ const selectMain = function (req, res) {
                             device_temp = rows2[i];
                             Main_data.device.push(device_temp);
                         }
-                        console.log('Main_data selectDevice ok');
-                        res.send(Main_data);
+                        result.validation = true;
+                        result.message = 'Join Controller: u_No 유저가 가진 Device 데이터 호출 성공';
+                        result.data = Main_data;
+                        res.json(result);
                         Main_data.device = [];
                     }
                 });            
             };
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
 const changeLast = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         var change_temp = {
             u_No: 0,
             d_No: 0
@@ -67,49 +87,43 @@ const changeLast = function (req, res) {
         change_temp = {...change_temp , ...req.body};
         let query = mybatisMapper.getStatement('join', 'changeLast', change_temp, format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
-            if(rows.changedRows>0) {
-                console.log('u_Last update ok: ' + change_temp.u_No);
-                res.send(true);
+            if(err){
+                result.validation = false;
+                result.message = 'Join Controller에서 u_Last 갱신하는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
             }
-            else{
-                console.log('u_Last update fail' + change_temp.u_No);
-                res.send(false);
-            }
+            console.log('u_Last update ok: ' + change_temp.u_No);
+            result.validation = true;
+            result.message = 'Join Controller에서 u_Last 갱신 성공';
+            result.data = [];
+            res.json(result);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
-const testcode = function (req, res) {
-    console.log('hi testcode');
-    console.log(req.body.data);
-};
-
-function checkToken(token) {
-    var temp2 = false;
+function checkToken(token){
+    var tempToken = false;
     jwt.verify(token, secretKey.secret, (err, decoded) => {
         if(err) {
             console.log('토큰 에러 발생!');
             console.log(err);
-            temp2 = false;
+            result.validation = false;
+            result.message = '다시 로그인 해주세요!';
+            result.data = [];
+            tempToken = false;
         }
         else {
-            if(decoded) {
-                console.log('유효한 토큰입니다!');
-                temp2 = true;
-            }
-            else{
-                console.log('권한이 없습니다!');
-                temp2 = false;
-            }
+            console.log('유효한 토큰입니다!');
+            tempToken = true;
         }
     });
-    return temp2;
+    return tempToken;
 }
 
 module.exports = {
     selectMain: selectMain,
-    changeLast: changeLast,
-    testcode: testcode
+    changeLast: changeLast
 };
