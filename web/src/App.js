@@ -16,9 +16,12 @@ import InfoModify from "./pages/InfoModify";
 import FeedInfo from "./pages/FeedInfo";
 import FeedSearch from "./pages/FeedSearch";
 import PwModify from "./pages/PwModify"
+import {CookiesProvider} from "react-cookie"
+
 const App = () => {
   return (
     <>
+      <CookiesProvider>
       <BrowserRouter>
         <Layout>
           <Route exact path="/" component={Home} />
@@ -38,6 +41,7 @@ const App = () => {
           {/* <Redirect to="/not-found" /> */}
         </Layout>
       </BrowserRouter>
+      </CookiesProvider>
     </>
   );
 };

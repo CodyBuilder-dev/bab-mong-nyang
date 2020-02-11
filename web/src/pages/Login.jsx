@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   TextField,
@@ -42,18 +42,33 @@ const useStyles = makeStyles(theme => ({
 
 const Login = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit } = useFetchData("", "");
+  const { input, updateField, onSubmit, setInput } = useFetchData("", "");
+  const [remember, setRemember] = useState(
+    localStorage.getItem("item") ? true : false
+  );
   const { store, onChangeStore } = useStore();
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  useEffect(() => {
+    if (localStorage.getItem("item")) {
+      setInput({ u_Id: localStorage.getItem("item") });
+    }
+  }, []);
 
   const onClickEvent = async event => {
     let result = await onSubmit(store.url + "/user/login");
     console.log(result);
-    if (result.u_No > 0) {
-      result = {
-        ...result,
-        headers: { authorization: result.Token }
-      };
-      onChangeStore(result, "", "");
+    if (result.validation) {
+      onChangeStore(
+        { ...result.data, headers: { authorization: result.data.Token } },
+        "",
+        ""
+      );
+      setCookie("Token", result.data.Token, "/");
+      if (remember) {
+        localStorage.setItem("item", input.u_Id);
+      } else {
+        localStorage.removeItem("item");
+      }
       props.history.replace("/main");
     } else {
       alert("로그인에 실패했습니다.");
@@ -104,7 +119,15 @@ const Login = props => {
           // }}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={
+            <Checkbox
+              name="remember"
+              color="primary"
+              onChange={(e, c) => setRemember(c)}
+              checked={remember}
+              defaultChecked={false}
+            />
+          }
           label="아이디 저장"
           className={classes.label}
         />
