@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   TextField,
@@ -11,6 +11,8 @@ import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
+import { useCookies } from "react-cookie";
+
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
@@ -26,27 +28,42 @@ const useStyles = makeStyles(theme => ({
     width: "300px", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
   },
-  border : {
-    borderColor : "#00b08b",
+  border: {
+    borderColor: "#00b08b",
     //border :"1px 1px 1px 1px"
-    backgroundColor : "#00b08b"
+    backgroundColor: "#00b08b"
   }
 }));
 
 const Login = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit } = useFetchData("", "");
+  const { input, updateField, onSubmit, setInput } = useFetchData("", "");
+  const [remember, setRemember] = useState(
+    localStorage.getItem("item") ? true : false
+  );
   const { store, onChangeStore } = useStore();
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  useEffect(() => {
+    if (localStorage.getItem("item")) {
+      setInput({ u_Id: localStorage.getItem("item") });
+    }
+  }, []);
 
   const onClickEvent = async event => {
     let result = await onSubmit(store.url + "/user/login");
     console.log(result);
-    if (result.u_No > 0) {
-      result = {
-        ...result,
-        headers: { authorization: result.Token }
-      };
-      onChangeStore(result, "", "");
+    if (result.validation) {
+      onChangeStore(
+        { ...result.data, headers: { authorization: result.data.Token } },
+        "",
+        ""
+      );
+      setCookie("Token", result.data.Token, "/");
+      if (remember) {
+        localStorage.setItem("item", input.u_Id);
+      } else {
+        localStorage.removeItem("item");
+      }
       props.history.replace("/main");
     } else {
       alert("로그인에 실패했습니다.");
@@ -55,7 +72,7 @@ const Login = props => {
   return (
     <div className={classes.page}>
       <h2>로그인</h2>
-
+      {/* <img src = "C:\ssafy\work_react\image\1.jpg"/> */}
       <div className={classes.inputText}>
         <TextField
           variant="outlined"
@@ -89,11 +106,19 @@ const Login = props => {
           //     },
           //   },
           //   color : classes.border,
-            
+
           // }}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={
+            <Checkbox
+              name="remember"
+              color="primary"
+              onChange={(e, c) => setRemember(c)}
+              checked={remember}
+              defaultChecked={false}
+            />
+          }
           label="아이디 저장"
           className={classes.label}
         />
