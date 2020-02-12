@@ -12,6 +12,8 @@ router.get('/:no', controller.selectOne);
 //Setting 등록
 router.post('/', controller.add);
 
+
+//setting activate 제거
 //Setting 수정
 router.put('/', controller.update);
 

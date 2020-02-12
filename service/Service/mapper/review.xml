@@ -2,43 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="review">  
   <select id = "selectAll">
-    select r.r_No, (select u_Name from User where u_No = r.u_No) as 'u_Name', r.r_Rank, LEFT(r.r_Date, 10) as 'r_Date', r.r_Positive, r.r_Negative 
-    from Review r where f_No = #{f_No};
+    select r.r_No, r.u_No, (select u_Name from User where u_No = r.u_No) as 'u_Name', r.r_Rank, LEFT(r.r_Date, 10) as 'r_Date', 
+    r.r_Positive, r.r_Negative from Review r where f_No = #{f_No};
   </select>
 
   <select id = "selectOne">
-    select * from Device where d_No = #{d_No};
+    select r.r_No, (select u_Name from User where u_No = r.u_No) as 'u_Name', r.r_Rank, LEFT(r.r_Date, 10) as 'r_Date', 
+    r.r_Positive, r.r_Negative from Review r where r_No = #{r_No};
   </select>
 
-  <select id = "deviceCheck">
-    select * from Device where SerialNo = #{SerialNo};
-  </select>
-
-  <insert id = "addDevice">
-    insert into Device values(0, #{u_No}, #{SerialNo}, #{d_Name}, #{d_Age}, #{d_Species}, #{d_Weight});
+  <insert id = "addReview">
+    insert into Review values(0, #{u_No}, #{f_No}, #{r_Rank}, curdate(), #{r_Positive}, #{r_Negative});
   </insert>
-
-  <select id = "getDevice">
-    select d_No from Device where u_No = #{u_No} and SerialNo = #{SerialNo};
-  </select>
-
-  <update id = "changeLast">
-    update User set u_Last = #{d_No} where u_No = #{u_No};
-  </update>
  
-  <update id = "updateDevice">
-    update Device set d_Name = #{d_Name}, d_Age = #{d_Age}, d_Species = #{d_Species}, d_Weight = #{d_Weight} where d_No = #{d_No};
+  <update id = "updateReview">
+    update Review set r_Rank = #{r_Rank}, r_Date = curdate(), r_Positive = #{r_Positive}, r_Negative = #{r_Negative} where r_No = #{r_No};
   </update>
 
-  <delete id = "deleteDevice">
-    delete from Device where d_No = #{d_No};
+  <delete id = "deleteReview">
+    delete from Review where r_No = #{r_No};
   </delete>
 
-  <update id = "deleteLast">
-    update User u set u.u_Last = (select min(d.d_No) from Device d where d.u_No = #{u_No}) where u.u_No = #{u_No};
-  </update>
-
-  <update id = "zeroLast">
-    update User set u_Last = 0 where u_No = #{u_No};
-  </update>
 </mapper>

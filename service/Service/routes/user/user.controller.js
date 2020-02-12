@@ -164,7 +164,7 @@ const add = function (req, res) {
     });
 };
 
-//로그인
+//로그인 - 초기화가 안되있어서 로그인이 됨
 const login = function (req, res) {
     user = {...user , ...req.body}; //u_Id, u_Pw
     let query = mybatisMapper.getStatement('user', 'loginUser', user, format);

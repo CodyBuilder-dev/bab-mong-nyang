@@ -15,8 +15,7 @@ var setting = {
     s_No: 0,
     d_No: 0,
     s_Time: 's_Time',
-    s_Amount: 's_Amount',
-    s_Activate: true
+    s_Amount: 's_Amount'
 };
 
 var result = {
@@ -71,8 +70,8 @@ const selectOne = function (req, res) {
 };
 
 const add = function (req, res) {
-    if(checkToken(req.headers.authorization)) {
-        setting = {...setting , ...req.body}; //d_No, s_Time, s_Amount, s_Activate
+    if(checkToken(req.headers.authorization)) {        
+        setting = {...setting , ...req.body}; //d_No, s_Time, s_Amount
         let check_query = mybatisMapper.getStatement('setting', 'settingCheck', setting, format);
         connection.query(check_query, function(check_err, check_rows){
             if(check_err) {
@@ -117,7 +116,7 @@ const add = function (req, res) {
 
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
-        setting = {...setting , ...req.body}; //s_No, s_Time, s_Amount, s_Activate
+        setting = {...setting , ...req.body}; //s_No, s_Time, s_Amount
         let query = mybatisMapper.getStatement('setting', 'updateSetting', setting, format);
         connection.query(query, function(err, rows) {
             if(err) {
@@ -203,9 +202,9 @@ function update_hw_setting(no) { //setting 정보 수정 시 hw에 전송, 삭�
                 body: rows,
                 json: true
             }, 
-            function(error, response){
+            function(error, response, body){
                 if(error) console.log(error);
-                console.log(response.body);
+                console.log(body);
         });
         console.log("response success : " + {...res});      
         console.log("Setting update_hw completed");

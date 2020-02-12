@@ -34,45 +34,43 @@ const selectMain = function (req, res) {
                 result.data = [];
                 res.json(result);
                 return;
-            }
-            else{
-                console.log('Main_data selectUser ok');
-                Main_data.u_Name = rows[0].u_Name;
-                Main_data.u_Last = rows[0].u_Last;
-                let query2 = mybatisMapper.getStatement('join', 'selectDevice', Main_data, format);
-                connection.query(query2, function(err2, rows2) {
-                    if(err2){
-                        result.validation = false;
-                        result.message = 'Join Controller에서 d_No, d_Name을 호출하는 데 오류가 발생하였습니다';
-                        result.data = [];
-                        res.json(result);
-                        return;
-                    }
-                    if(!rows2[0]){
-                        console.log('Main_data selectDevice fail');
-                        result.validation = false;
-                        result.message = 'Join Controller: u_No 유저가 가진 Device 정보가 존재하지 않습니다';                        
-                        result.data = [];
-                        res.json(result);
-                    }
-                    else{
-                        console.log('Main_data selectDevice ok');
-                        for(var i = 0; i<rows2.length; i++){
-                            var device_temp = {
-                                d_No : 0,
-                                d_Name : 'd_Name'
-                            }
-                            device_temp = rows2[i];
-                            Main_data.device.push(device_temp);
+            }            
+            console.log('Main_data selectUser ok');
+            Main_data.u_Name = rows[0].u_Name;
+            Main_data.u_Last = rows[0].u_Last;
+            let query2 = mybatisMapper.getStatement('join', 'selectDevice', Main_data, format);
+            connection.query(query2, function(err2, rows2) {
+                if(err2){
+                    result.validation = false;
+                    result.message = 'Join Controller에서 d_No, d_Name을 호출하는 데 오류가 발생하였습니다';
+                    result.data = [];
+                    res.json(result);
+                    return;
+                }
+                if(!rows2[0]){
+                    console.log('Main_data selectDevice fail');
+                    result.validation = false;
+                    result.message = 'Join Controller: u_No 유저가 가진 Device 정보가 존재하지 않습니다';                        
+                    result.data = [];
+                    res.json(result);
+                }
+                else{
+                    console.log('Main_data selectDevice ok');
+                    for(var i = 0; i<rows2.length; i++){
+                        var device_temp = {
+                            d_No : 0,
+                            d_Name : 'd_Name'
                         }
-                        result.validation = true;
-                        result.message = 'Join Controller: u_No 유저가 가진 Device 데이터 호출 성공';
-                        result.data = Main_data;
-                        res.json(result);
-                        Main_data.device = [];
+                        device_temp = rows2[i];
+                        Main_data.device.push(device_temp);
                     }
-                });            
-            };
+                    result.validation = true;
+                    result.message = 'Join Controller: u_No 유저가 가진 Device 데이터 호출 성공';
+                    result.data = Main_data;
+                    res.json(result);
+                    Main_data.device = [];
+                }
+            });            
         });
     }
     else res.json(result);
