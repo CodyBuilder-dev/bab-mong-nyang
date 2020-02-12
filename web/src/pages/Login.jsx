@@ -14,6 +14,9 @@ import {
 } from "../components/custom-hooks/custom-hooks";
 import CatIcon from "../caticon.png";
 import DogIcon from "../dogicon.png";
+import {useCookies} from "react-cookie"
+
+
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)

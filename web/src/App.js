@@ -17,7 +17,6 @@ import FeedInfo from "./pages/FeedInfo";
 import FeedSearch from "./pages/FeedSearch";
 import PwModify from "./pages/PwModify"
 import {CookiesProvider} from "react-cookie"
-
 const App = () => {
   return (
     <>

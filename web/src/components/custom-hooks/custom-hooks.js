@@ -99,11 +99,25 @@ export const useFetchData = (requestURL, dataType) => {
       default:
         break;
     }
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value,
-      pwValidated: flag
-    });
+    if (e.target.name === "hour") {
+      setInput({
+        ...input,
+        [e.target.name]: e.target.value,
+        s_Time: e.target.value + ":" + input.minute
+      });
+    } else if (e.target.name === "minute") {
+      setInput({
+        ...input,
+        [e.target.name]: e.target.value,
+        s_Time: input.hour + ":" + e.target.value
+      });
+    } else {
+      setInput({
+        ...input,
+        [e.target.name]: e.target.value,
+        pwValidated: flag
+      });
+    }
   };
 
   const dataFetch = async (url, type) => {
@@ -111,7 +125,11 @@ export const useFetchData = (requestURL, dataType) => {
     console.log(store);
     setIsLoading(true);
     //console.log(store.Token);
-    await axios({ method: "GET", url: url, headers: {authorization: cookies.Token} })
+    await axios({
+      method: "GET",
+      url: url,
+      headers: { authorization: cookies.Token }
+    })
       .then(result => {
         switch (type) {
           case "device":
@@ -127,8 +145,6 @@ export const useFetchData = (requestURL, dataType) => {
               console.log("data없음");
               setInput({ ...input, device: [] });
             } else {
-              //console.log(result.data.filter(device => device.d_No === store.u_Last)[0]);
-              console.log(result);
               setInput({
                 device: result.data.data.filter(
                   device => device.d_No === store.u_Last
@@ -152,6 +168,7 @@ export const useFetchData = (requestURL, dataType) => {
             break;
         }
         setIsLoading(false);
+        console.log(result);
       })
       .catch(error => {
         console.log(error);
@@ -174,16 +191,16 @@ export const useFetchData = (requestURL, dataType) => {
       .get(store.url + "/user/main/" + cookies.Token)
       .then(async response => {
         console.log(response);
-        if(response.data.validation){
+        if (response.data.validation) {
           onChangeStore({
             ...response.data.data,
             headers: { authorization: cookies.Token }
           });
-          if(dataType === "maintable"){
-            dataFetch(url+response.data.data.u_Last,dataType);
+          if (dataType === "maintable") {
+            dataFetch(url + response.data.data.u_Last, dataType);
           }
           history.replace("/main");
-        }else{
+        } else {
           alert(response.data.message);
           history.replace("/login");
         }
@@ -193,7 +210,6 @@ export const useFetchData = (requestURL, dataType) => {
         alert("로그인해주세요");
         history.replace("/login");
       });
-      
   };
 
   useEffect(() => {
