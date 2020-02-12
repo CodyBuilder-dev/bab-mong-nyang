@@ -78,26 +78,25 @@ const FeedBasic = props => {
   return (
     <div className={classes.page}>
       {isLoading ? (
-        <div>...loading</div>
+        <>
+          <Skeleton animation="wave" variant="rect" className={classes.media} />
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Skeleton width="50px" />
+            <Skeleton width="150px" />
+          </Box>
+        </>
       ) : (
         <>
-          {false ? (
-            <Skeleton
-              animation="wave"
-              variant="rect"
-              className={classes.media}
-            />
-          ) : (
-            <CardMedia
-              className={classes.media}
-              //image={testData.feedImg}
-              image= {img[props.f_No]}
-              title="Feed Image"
-            />
-          )}
-          <Box>
+          <CardMedia
+            className={classes.media}
+            //image={testData.feedImg}
+            image={img[props.f_No]}
+            title="Feed Image"
+          />
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Typography variant="caption">{input.f_Manufacturer}</Typography>
             <Typography variant="subtitle2" display="block">
-              <strong>{input.f_Manufacturer + " " + input.f_Name}</strong>
+              <strong>{input.f_Name}</strong>
             </Typography>
           </Box>
           <Box className={classes.score}>

@@ -7,29 +7,28 @@ import {
   Button,
   Box
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
-import CatIcon from "../caticon.png";
-import DogIcon from "../dogicon.png";
-import {useCookies} from "react-cookie"
-
+import CatIcon from "../assets/icons/caticon.png";
+import DogIcon from "../assets/icons/dogicon.png";
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
   },
   page: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(15),
     marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
   },
   border: {
@@ -38,8 +37,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#00b08b"
   },
   icon: {
-    width: '40px',
-    height: '40px'
+    width: "40px",
+    height: "40px"
   }
 }));
 
@@ -52,14 +51,14 @@ const Login = props => {
   const { store, onChangeStore } = useStore();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   useEffect(() => {
-    if (localStorage.getItem("item")) {
-      setInput({ u_Id: localStorage.getItem("item") });
+    setInput({})
+    if (localStorage.getItem("u_id")) {
+      setInput({ u_Id: localStorage.getItem("u_id") });
     }
   }, []);
-
-  const onClickEvent = async event => {
+  const onLoginClick = async event => {
     let result = await onSubmit(store.url + "/user/login");
-    console.log(result);
+    setInput({...input,u_Pw:""})
     if (result.validation) {
       onChangeStore(
         { ...result.data, headers: { authorization: result.data.Token } },
@@ -68,9 +67,9 @@ const Login = props => {
       );
       setCookie("Token", result.data.Token, "/");
       if (remember) {
-        localStorage.setItem("item", input.u_Id);
+        localStorage.setItem("u_id", input.u_Id);
       } else {
-        localStorage.removeItem("item");
+        localStorage.removeItem("u_id");
       }
       props.history.replace("/main");
     } else {
@@ -139,20 +138,19 @@ const Login = props => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={onClickEvent}
+          onClick={onLoginClick}
         >
-          로그인
+          <strong>로 그 인</strong>
         </Button>
-        <Link to="/join" style={{ textDecoration: "none" }}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            회원가입
-          </Button>
-        </Link>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={e => props.history.push("/join")}
+        >
+          <strong>회원가입</strong>
+        </Button>
       </div>
     </div>
   );

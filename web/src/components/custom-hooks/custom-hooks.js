@@ -198,10 +198,10 @@ export const useFetchData = (requestURL, dataType) => {
             ...response.data.data,
             headers: { authorization: cookies.Token }
           });
-          if (dataType === "maintable") {
-            dataFetch(url + response.data.data.u_Last, dataType);
-          }
-          history.replace("/main");
+          // if (dataType === "maintable") {
+            // dataFetch(url + response.data.data.u_Last, dataType);
+          // }
+          // history.replace("/main");
         } else {
           alert(response.data.message);
           history.replace("/login");

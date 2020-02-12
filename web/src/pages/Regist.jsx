@@ -18,10 +18,12 @@ import {
   useStore,
   useFetchData
 } from "../components/custom-hooks/custom-hooks";
-import CatIcon from "../caticon.png";
-import DogIcon from "../dogicon.png";
-import CatDisable from "../catDisable.png";
-import DogDisable from "../dogDisable.png";
+import CatIcon from "../assets/icons/caticon.png";
+import DogIcon from "../assets/icons/dogicon.png";
+import CatDisable from "../assets/icons/catDisable.png";
+import DogDisable from "../assets/icons/dogDisable.png";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -80,6 +82,16 @@ const DogRadio = props => {
     />
   );
 };
+const CheckRadio = props => {
+  const classes = useStyles();
+  return (
+    <Radio
+      checkedIcon={<CheckBoxIcon />}
+      icon={<CheckBoxOutlineBlankIcon />}
+      {...props}
+    />
+  );
+};
 const Regist = props => {
   const classes = useStyles();
   const { input, updateField, onSubmit, setInput, onValidate } = useFetchData(
@@ -124,14 +136,18 @@ const Regist = props => {
     <div className={classes.page}>
       <h3>반려동물에 대해 알려주세요</h3>
       <div className={classes.inputText}>
-        <FormControl component="fieldset" fullWidth className={classes.inputText}>
+        <FormControl
+          component="fieldset"
+          fullWidth
+          className={classes.inputText}
+        >
           <FormLabel component="legend" required>
             종을 선택해주세요
           </FormLabel>
           <RadioGroup
             aria-label="species"
             name="d_Species"
-            value={input.d_Species}
+            value={input.d_Species ? input.d_Species : ""}
             onChange={updateField}
             row
             className={classes.radioButtons}
@@ -160,29 +176,71 @@ const Regist = props => {
           name="d_Name"
           autoFocus
           onChange={updateField}
-          value={input.d_Name}
+          value={input.d_Name ? input.d_Name : ""}
         />
+          <FormControl
+            component="fieldset"
+            fullWidth
+            className={classes.inputText}
+          >
+            <FormLabel component="legend" required>
+              생애상태를 알려주세요
+            </FormLabel>
+            <RadioGroup
+              aria-label="lifeState"
+              name="d_LifeState"
+              value={input.d_LifeState ? input.d_LifeState : ""}
+              onChange={updateField}
+              row
+              className={classes.radioButtons}
+            >
+              <FormControlLabel
+                value="infancy"
+                control={<CheckRadio />}
+                label="유아기"
+                labelPlacement="bottom"
+              />
+              <FormControlLabel
+                value="growing"
+                control={<CheckRadio />}
+                label="성장기"
+                labelPlacement="bottom"
+              />
+              <FormControlLabel
+                value="midlife"
+                control={<CheckRadio />}
+                label="중년기"
+                labelPlacement="bottom"
+              />
+              <FormControlLabel
+                value="oldstage"
+                control={<CheckRadio />}
+                label="노년기"
+                labelPlacement="bottom"
+              />
+            </RadioGroup>
+          </FormControl>
         <Box display="flex" justifyContent="space-between">
+        <TextField
+          variant="outlined"
+          margin="normal"
+          className={classes.halfInput}
+          required
+          id="d_Weight"
+          label="몸무게 (kg)"
+          name="d_Weight"
+          value={input.d_Weight ? input.d_Weight : ""}
+          onChange={updateField}
+        />
           <TextField
             variant="outlined"
             margin="normal"
             className={classes.halfInput}
             required
             id="d_Age"
-            label="나이 (개월)"
+            label="생일"
             name="d_Age"
-            value={input.d_Age}
-            onChange={updateField}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            className={classes.halfInput}
-            required
-            id="d_Weight"
-            label="몸무게 (kg)"
-            name="d_Weight"
-            value={input.d_Weight}
+            value={input.d_Age ? input.d_Age : ""}
             onChange={updateField}
           />
         </Box>
@@ -198,7 +256,7 @@ const Regist = props => {
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            value={input.SerialNo}
+            value={input.SerialNo ? input.SerialNo : ""}
             onChange={updateField} //나중에 혹시 시간이 되면 바꿀 것
             name="SerialNo"
             required={true}

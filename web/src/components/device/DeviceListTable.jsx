@@ -1,5 +1,4 @@
 import React from "react";
-import MaterialTable from "material-table";
 import {
   makeStyles,
   Button,
@@ -7,9 +6,13 @@ import {
   Paper,
   Typography,
   IconButton,
-  Box
+  Box,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActionArea
 } from "@material-ui/core";
-import Icons from "../set/TableIcons";
+import Caticon from "../../assets/icons/caticon2.png"
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
@@ -24,6 +27,9 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(1)
+  },
+  media: {
+    height: "50px"
   }
 }));
 
@@ -40,9 +46,14 @@ const DeviceListTable = ({ props }) => {
           <Box display="flex" alignItems="center" justifyContent="center">
             <Typography variant="h6">밥그릇</Typography>
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="flex-end" paddingBottom="10px">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            paddingBottom="10px"
+          >
             <IconButton
-              style={{padding: "0px"}}
+              style={{ padding: "0px" }}
               aria-label="add"
               color="primary"
               onClick={e => props.history.push("regist")}
@@ -64,8 +75,39 @@ const DeviceListTable = ({ props }) => {
                     key={device.d_No}
                     alignItems="center"
                   >
-                    {console.log(device)}
-                    <Paper
+                    <Card
+                      onClick={e => {
+                        onChangeStore({ currentDeviceNo: device.d_No }, "", "");
+                        props.history.push("/devicemodify");
+                      }}
+                    >
+                      <CardActionArea>
+                        <CardMedia
+                        component="img"
+                          className={classes.media}
+                          image={Caticon}
+                        />
+                        <CardContent>
+                          <Typography component="p" variant="body1">
+                            {device.d_Name}
+                          </Typography>
+                          <Typography component="p" variant="caption">
+                            {device.d_Species}
+                          </Typography>
+                          <Typography component="p" variant="caption">
+                            나이:{" "}
+                            {parseInt(device.d_Age / 12)
+                              ? `${parseInt(device.d_Age / 12)}년 `
+                              : ""}
+                            {device.d_Age % 12}개월
+                          </Typography>
+                          <Typography component="p" variant="caption">
+                            몸무게: {device.d_Weight} kg
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                    {/* <Paper
                       className={classes.paper}
                       onClick={e => {
                         onChangeStore({ currentDeviceNo: device.d_No }, "", "");
@@ -79,16 +121,28 @@ const DeviceListTable = ({ props }) => {
                         {device.d_Species}
                       </Typography>
                       <Typography component="p" variant="caption">
-                        나이: {parseInt(device.d_Age / 12)? `${parseInt(device.d_Age / 12)}년 `: ''}{device.d_Age % 12}개월
+                        나이:{" "}
+                        {parseInt(device.d_Age / 12)
+                          ? `${parseInt(device.d_Age / 12)}년 `
+                          : ""}
+                        {device.d_Age % 12}개월
                       </Typography>
                       <Typography component="p" variant="caption">
                         몸무게: {device.d_Weight} kg
                       </Typography>
-                    </Paper>
+                    </Paper> */}
                   </Grid>
                 </>
               )
             )}
+            <Grid item xs={6} sm={4} alignItems="center">
+              <Paper
+                className={classes.paper}
+                onClick={e => props.history.push("/regist")}
+              >
+                <Typography>기기 등록</Typography>
+              </Paper>
+            </Grid>
           </Grid>
           {/* {console.log(input)}
           <MaterialTable
