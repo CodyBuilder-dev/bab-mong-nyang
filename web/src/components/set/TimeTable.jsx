@@ -22,6 +22,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import AddSetting from "./AddSetting";
 import { hour, minute } from "./Time";
+import { s_AmountCheck } from "../../modules/regCheck";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -42,27 +43,32 @@ const TimeTable = props => {
   const store = useSelector(state => state.store, []);
   const [editable, setEditable] = useState({});
   const modifyClickEvent = async event => {
-    const index = event.currentTarget.value
+    const index = event.currentTarget.value;
     if (editable === {} || !editable[index]) {
       setEditable({ ...editable, [index]: true });
-
     } else {
-      await axios({
-        method : "PUT",
-        url : store.url +"/setting",
-        headers: store.headers,
-        data: input.data[index]
-      }).then(res=>{
-        if(res.data.validation){
-          alert(res.data.message);
-          setEditable({ ...editable, [index]: false });
-          dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-        }else{
-          alert(res.data.message);
-        }
-      }).catch(error => {
-        console.log(error);
-      })
+      if (s_AmountCheck(input.data[index].s_Amount)) {
+        await axios({
+          method: "PUT",
+          url: store.url + "/setting",
+          headers: store.headers,
+          data: input.data[index]
+        })
+          .then(res => {
+            if (res.data.validation) {
+              alert(res.data.message);
+              setEditable({ ...editable, [index]: false });
+              dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+            } else {
+              alert(res.data.message);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }else{
+        alert("1~999사이의 값을 입력해주세요");
+      }
     }
   };
 
@@ -110,7 +116,7 @@ const TimeTable = props => {
       ) : input.data === undefined ? (
         <div>데이터가 없습니다.</div>
       ) : (
-        <Box width="100%" maxWidth = "500px">
+        <Box width="100%" maxWidth="500px">
           <Box
             width="100%"
             maxWidth="500px"
@@ -129,7 +135,6 @@ const TimeTable = props => {
               padding={2}
               borderColor="primary.main"
               width="100%"
-              
               marginTop={2}
               justifyContent="space-between"
               key={index}
@@ -141,7 +146,8 @@ const TimeTable = props => {
                 onChange={event => {
                   const value = event.target.value;
                   let tmp = input.data;
-                  tmp[index].s_Time = value +":"+tmp[index].s_Time.slice(3,5);
+                  tmp[index].s_Time =
+                    value + ":" + tmp[index].s_Time.slice(3, 5);
                   setInput({ data: tmp });
                 }}
                 variant="standard"
@@ -177,7 +183,8 @@ const TimeTable = props => {
                 onChange={event => {
                   const value = event.target.value;
                   let tmp = input.data;
-                  tmp[index].s_Time = tmp[index].s_Time.slice(0,2) +":"+value;
+                  tmp[index].s_Time =
+                    tmp[index].s_Time.slice(0, 2) + ":" + value;
                   setInput({ data: tmp });
                 }}
                 inputProps={{
@@ -203,7 +210,7 @@ const TimeTable = props => {
                 variant="standard"
                 value={inputData.s_Amount}
                 name="s_Amount"
-                onChange={(event) => {
+                onChange={event => {
                   const value = event.target.value;
                   let tmp = input.data;
                   tmp[index].s_Amount = Number(value);
