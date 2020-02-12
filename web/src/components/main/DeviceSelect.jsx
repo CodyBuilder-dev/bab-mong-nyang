@@ -68,7 +68,7 @@ function DeviceDialog(props) {
   const handleListItemClick = value => {
     onClose(value);
   };
-  
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="device-dialog" open={open}>
       <DialogTitle id="device-dialog" className={classes.dialogTitle}>
@@ -107,7 +107,7 @@ DeviceDialog.propTypes = {
 const DeviceSelect = props => {
   const classes = useStyles();
   const { store, onChangeStore } = useStore();
-  const { input, isLoading, setInput } = useFetchData(
+  const { input, isLoading, dataFetch } = useFetchData(
     "/Join/main/",
     "devicelist"
   );
@@ -122,16 +122,25 @@ const DeviceSelect = props => {
     } else {
       setSelectedValue({});
     }
+    
   }, [input]);
+  useEffect(()=>{
+    if(store.u_No !== undefined || store.u_No !== ""){
+      dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist")
+    }
+  },[store])
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = value => {
+  const handleClose =async  value => {
     setOpen(false);
+    if (store.u_Last === 0) {
+    }
     setSelectedValue(value);
-    onChangeStore(value, "select", "/Join/main");
+    await onChangeStore(value, "select", "/Join/main");
+    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist")
   };
   //console.log(input);
   return (

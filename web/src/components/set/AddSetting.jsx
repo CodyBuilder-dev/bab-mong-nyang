@@ -15,38 +15,49 @@ import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { hour, minute } from "./Time";
 import axios from "axios";
 import { useEffect } from "react";
+import { s_AmountCheck } from "../../modules/regCheck";
 
 const AddSetting = props => {
   const { input, onSubmit, updateField, setInput } = useFetchData("", "");
   const [open, setOpen] = React.useState(false);
   const { store, onChangeStore } = useStore();
   useEffect(() => {
-    setInput({ ...input, d_No: store.u_Last });
+    setInput({
+      ...input,
+      d_No: store.u_Last,
+      s_Time: "00:00",
+      hour: "00",
+      minute: "00"
+    });
   }, []);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = async event => {
-    
+    console.log(input);
     if (event.currentTarget.name === "close") {
+      setInput({});
       setOpen(false);
     } else {
-      await onSubmit(store.url + "/setting")
-        .then(res => {
-          
-          if (res.validation) {
-            alert(res.message);
-            setOpen(false);
-            onChangeStore({ render: true });
-            setInput({});
-          } else {
-            alert(res.message);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      if (s_AmountCheck(input.s_Amount)) {
+        await onSubmit(store.url + "/setting")
+          .then(res => {
+            if (res.validation) {
+              alert(res.message);
+              setInput({});
+              setOpen(false);
+              onChangeStore({ render: true });
+            } else {
+              alert(res.message);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }else{
+        alert("1~999사이의 값을 입력해주세요");
+      }
     }
   };
   return (
