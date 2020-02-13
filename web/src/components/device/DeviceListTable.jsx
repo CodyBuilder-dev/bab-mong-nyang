@@ -12,9 +12,10 @@ import {
   CardContent,
   CardActionArea
 } from "@material-ui/core";
-import Caticon from "../../assets/icons/caticon2.png"
+import Caticon from "../../assets/icons/caticon2.png";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
+import { useEffect } from "react";
 const useStyles = makeStyles(theme => ({
   page: {
     display: "flex",
@@ -29,14 +30,20 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   media: {
-    height: "50px"
+    height: "100px"
   }
 }));
 
 const DeviceListTable = ({ props }) => {
   const classes = useStyles();
-  const { onChangeStore } = useStore();
-  const { input, isLoading } = useFetchData("/device/", "devicelist");
+  const { onChangeStore, store } = useStore();
+  const { input, isLoading, dataFetch } = useFetchData(
+    "/device/",
+    "devicelist"
+  );
+  useEffect(() => {
+    dataFetch(store.url + "/device/" + store.u_No, "devicelist");
+  }, [store]);
   return (
     <div className={classes.page}>
       {isLoading ? (
@@ -67,47 +74,47 @@ const DeviceListTable = ({ props }) => {
               device === undefined ? (
                 <></>
               ) : (
-                <>
-                  <Grid
-                    item
-                    xs={6}
-                    sm={4}
-                    key={device.d_No}
-                    alignItems="center"
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  key={`d_${device.d_No}`}
+                  alignItems="center"
+                >
+                  <Card
+                    onClick={e => {
+                      onChangeStore({ currentDeviceNo: device.d_No }, "", "");
+                      props.history.push("/devicemodify");
+                    }}
                   >
-                    <Card
-                      onClick={e => {
-                        onChangeStore({ currentDeviceNo: device.d_No }, "", "");
-                        props.history.push("/devicemodify");
-                      }}
-                    >
-                      <CardActionArea>
-                        <CardMedia
+                    <CardActionArea>
+                      <CardMedia
                         component="img"
-                          className={classes.media}
-                          image={Caticon}
-                        />
-                        <CardContent>
-                          <Typography component="p" variant="body1">
-                            {device.d_Name}
-                          </Typography>
-                          <Typography component="p" variant="caption">
-                            {device.d_Species}
-                          </Typography>
-                          <Typography component="p" variant="caption">
+                        // className={classes.media}
+                        image={Caticon}
+                        height="100%"
+                      />
+                      <CardContent>
+                        <Typography component="p" variant="body1">
+                          {device.d_Name}
+                        </Typography>
+                        <Typography component="p" variant="caption">
+                          {device.d_Species}
+                        </Typography>
+                        {/* <Typography component="p" variant="caption">
                             나이:{" "}
                             {parseInt(device.d_Age / 12)
                               ? `${parseInt(device.d_Age / 12)}년 `
                               : ""}
                             {device.d_Age % 12}개월
-                          </Typography>
-                          <Typography component="p" variant="caption">
-                            몸무게: {device.d_Weight} kg
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                    {/* <Paper
+                          </Typography> */}
+                        <Typography component="p" variant="caption">
+                          몸무게: {device.d_Weight} kg
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                  {/* <Paper
                       className={classes.paper}
                       onClick={e => {
                         onChangeStore({ currentDeviceNo: device.d_No }, "", "");
@@ -131,8 +138,7 @@ const DeviceListTable = ({ props }) => {
                         몸무게: {device.d_Weight} kg
                       </Typography>
                     </Paper> */}
-                  </Grid>
-                </>
+                </Grid>
               )
             )}
             <Grid item xs={6} sm={4} alignItems="center">

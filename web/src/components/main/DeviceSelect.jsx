@@ -122,25 +122,23 @@ const DeviceSelect = props => {
     } else {
       setSelectedValue({});
     }
-    
   }, [input]);
-  useEffect(()=>{
-    if(store.u_No !== undefined || store.u_No !== ""){
-      dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist")
-    }
-  },[store])
+  useEffect(() => {
+    setSelectedValue(store.u_Last)
+    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
+  }, [store]);
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose =async  value => {
+  const handleClose = async value => {
     setOpen(false);
     if (store.u_Last === 0) {
     }
     setSelectedValue(value);
     await onChangeStore(value, "select", "/Join/main");
-    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist")
+    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
   //console.log(input);
   return (
@@ -161,7 +159,7 @@ const DeviceSelect = props => {
           ) : (
             <div className={classes.deviceInfoBox}>
               <Typography variant="subtitle1" display={"inline"}>
-                {selectedValue.d_Name}'s 밥그릇
+                {selectedValue? selectedValue.d_Name: undefined}'s 밥그릇
               </Typography>
               <IconButton onClick={handleClickOpen}>
                 <ArrowDropDown />

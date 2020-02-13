@@ -101,9 +101,10 @@ const Regist = props => {
   const { store, onChangeStore } = useStore();
   let checked = false;
   useEffect(() => {
-    setInput({ u_No: store.u_No });
-  }, []);
+    setInput({ u_No: store.u_No, d_Bday: "" });
+  }, [store]);
   const onClickEvent = async event => {
+    console.log(input)
     if (checked) {
       let result = await onSubmit(store.url + "/device");
       if (result !== false) {
@@ -188,32 +189,32 @@ const Regist = props => {
             </FormLabel>
             <RadioGroup
               aria-label="lifeState"
-              name="d_LifeState"
-              value={input.d_LifeState ? input.d_LifeState : ""}
+              name="d_Age"
+              value={input.d_Age ? input.d_Age : ""}
               onChange={updateField}
               row
               className={classes.radioButtons}
             >
               <FormControlLabel
-                value="infancy"
+                value="유아기"
                 control={<CheckRadio />}
                 label="유아기"
                 labelPlacement="bottom"
               />
               <FormControlLabel
-                value="growing"
+                value="성장기"
                 control={<CheckRadio />}
                 label="성장기"
                 labelPlacement="bottom"
               />
               <FormControlLabel
-                value="midlife"
+                value="중년기"
                 control={<CheckRadio />}
                 label="중년기"
                 labelPlacement="bottom"
               />
               <FormControlLabel
-                value="oldstage"
+                value="노년기"
                 control={<CheckRadio />}
                 label="노년기"
                 labelPlacement="bottom"
@@ -225,6 +226,10 @@ const Regist = props => {
           variant="outlined"
           margin="normal"
           className={classes.halfInput}
+          type="number"
+          inputProps={{
+            step: 0.1
+          }}
           required
           id="d_Weight"
           label="몸무게 (kg)"
@@ -236,12 +241,20 @@ const Regist = props => {
             variant="outlined"
             margin="normal"
             className={classes.halfInput}
-            required
-            id="d_Age"
-            label="생일"
-            name="d_Age"
-            value={input.d_Age ? input.d_Age : ""}
+            type="date"
+            id="d_Bday"
+            label="생일 (선택)"
+            inputProps={{
+              min: "1900-01-01",
+              max: "2100-12-31"
+            }
+            }
+            name="d_Bday"
+            value={input.d_Bday ? input.d_Bday : ""}
             onChange={updateField}
+            InputLabelProps={{
+              shrink: true
+            }}
           />
         </Box>
 

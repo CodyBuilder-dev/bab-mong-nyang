@@ -21,7 +21,7 @@ import UserPopOver from "./header/UserPopOver";
 import { useHistory, useLocation } from "react-router";
 const useStyles = makeStyles(theme => ({
   toolBar: {
-    color: "#2cd5c4",
+    color: "#7dabd0",
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -206,7 +206,7 @@ const Header = props => {
     );
   };
   return ( // #23d5c4
-    <div style={{position: "sticky", top: "0px", backgroundColor:"#2cd5c4", zIndex: 100}}>
+    <div style={{position: "sticky", top: "0px", background:"linear-gradient(45deg, #7dabd0 20%, #cfe7ea 100%)", zIndex: 100}}>
       {/* <AppBar position="sticky" color="default" className={classes.appBar}> */}
         {appBarEl()}
         <SwipeableDrawer

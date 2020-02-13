@@ -253,7 +253,6 @@ export const useFetchData = (requestURL, dataType) => {
       }
     }
   }, []);
-
   return {
     input,
     isLoading,
