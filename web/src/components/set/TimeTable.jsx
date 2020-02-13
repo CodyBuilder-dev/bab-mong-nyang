@@ -1,21 +1,13 @@
 import React, { useState } from "react";
-import MaterialTable from "material-table";
 import {
   makeStyles,
-  Switch,
   Box,
-  FormControl,
-  InputLabel,
-  Select,
   Typography,
-  MenuItem,
   InputAdornment,
   TextField,
   Button,
   ButtonGroup
 } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import Icons from "./TableIcons";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -26,8 +18,6 @@ import { s_AmountCheck } from "../../modules/regCheck";
 
 const useStyles = makeStyles(theme => ({
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
@@ -66,7 +56,7 @@ const TimeTable = props => {
           .catch(error => {
             console.log(error);
           });
-      }else{
+      } else {
         alert("1~999사이의 값을 입력해주세요");
       }
     }
@@ -208,12 +198,22 @@ const TimeTable = props => {
 
               <TextField
                 variant="standard"
-                value={inputData.s_Amount}
+                value={
+                  Number(inputData.s_Amount) === NaN
+                    ? 0
+                    : Number(inputData.s_Amount)
+                }
                 name="s_Amount"
                 onChange={event => {
-                  const value = event.target.value;
+                  let value = event.target.value;
                   let tmp = input.data;
-                  tmp[index].s_Amount = Number(value);
+                  if (isNaN(value)) {
+                    value = 0;
+                  }
+                  if (Number(value) > 999) {
+                    value = 999;
+                  }
+                  tmp[index].s_Amount = value;
                   setInput({ data: tmp });
                 }}
                 InputProps={{
@@ -223,7 +223,7 @@ const TimeTable = props => {
                   ),
                   style: {
                     width: "75px",
-                    textAlignLast: "center"
+                    textAlignLast: "right"
                   }
                 }}
               />

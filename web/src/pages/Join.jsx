@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  makeStyles,
-  TextField,
-  Button,
-} from "@material-ui/core";
+import { makeStyles, TextField, Button } from "@material-ui/core";
 import {
   useStore,
   useFetchData
@@ -47,24 +43,26 @@ const Join = props => {
 
   const onClickEvent = async event => {
     if (
-      (
-        u_IdCheck(input.u_Id) &&
-        u_PwCheck(input.u_Pw) &&
-        u_NameCheck(input.u_Name) &&
-        u_EmailCheck(input.u_Email) &&
-        input.idValidated &&
-        input.pwValidated
-      )
-    ){
-    let result = await onSubmit(store.url + "/user");
-     
-      if (result == true) {
+      u_IdCheck(input.u_Id) &&
+      u_PwCheck(input.u_Pw) &&
+      u_NameCheck(input.u_Name) &&
+      u_EmailCheck(input.u_Email) &&
+      input.idValidated &&
+      (input.pwValidated === undefined || input.pwValidated)
+    ) {
+      let result = await onSubmit(store.url + "/user");
+      console.log(result);
+      if (result.validation === true) {
         alert("환영합니다. " + input.u_Name + "님");
         props.history.replace("/login");
       } else {
         alert("회원가입에 실패했습니다.");
       }
-    }else {
+    } else {
+      console.log("id : " + u_IdCheck(input.u_Id) + "" + input.idValidated);
+      console.log("pw : " + u_PwCheck(input.u_Pw) + "" + input.pwValidated);
+      console.log("name : " + u_NameCheck(input.u_Name) );
+      console.log("email : " + u_EmailCheck(input.u_Email) );
       alert("올바른 입력을 해주세요");
     }
   };
@@ -75,7 +73,8 @@ const Join = props => {
       const result = await onValidate(
         store.url + "/user/idCheck/" + event.target.value
       );
-      setInput({ ...input, idValidated: result });
+      console.log(result);
+      setInput({ ...input, idValidated: result.validation });
     }
   };
   useEffect(() => {}, [updateField]);
@@ -94,11 +93,12 @@ const Join = props => {
           label="아이디"
           id="u_Id"
           error={
-            !(input.u_Id === undefined || input.u_Id === "") &&
-            !(
-              (input.idValidated !== undefined && !input.idValidated) ||
-              u_IdCheck(input.u_Id)
-            )
+            // input.u_Id가 비었으면 error false
+            // idvalidate false 면 error true
+            //u_Idcheck가 false 면 error true
+            !(input.u_Id ===undefined || input.u_Id === "") &&(
+            ( input.idValidated !==undefined && !input.idValidated)
+            || (input.u_Id !== undefined && !u_IdCheck(input.u_Id)))
           }
           onChange={updateField}
           onBlur={onBlurEvent}
