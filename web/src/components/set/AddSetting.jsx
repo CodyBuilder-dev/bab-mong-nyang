@@ -35,8 +35,7 @@ const AddSetting = props => {
   };
 
   const handleClose = async event => {
-    console.log(input);
-    if (event.currentTarget.name === "close") {
+    if (event.currentTarget.name !== "add") {
       setInput({});
       setOpen(false);
     } else {
@@ -55,7 +54,7 @@ const AddSetting = props => {
           .catch(error => {
             console.log(error);
           });
-      }else{
+      } else {
         alert("1~999사이의 값을 입력해주세요");
       }
     }
@@ -142,7 +141,16 @@ const AddSetting = props => {
               variant="standard"
               name="s_Amount"
               value={input.s_Amount}
-              onChange={updateField}
+              onChange={event => {
+                let value = event.target.value;
+                if (isNaN(value)) {
+                  value = 0;
+                }
+                if (Number(value) > 999) {
+                  value = 999;
+                }
+                setInput({ ...input, s_Amount: Number(value) });
+              }}
               InputProps={{
                 endAdornment: <InputAdornment position="end">g</InputAdornment>,
                 style: {
