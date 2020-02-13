@@ -16,6 +16,7 @@ import AddSetting from "./AddSetting";
 import { hour, minute } from "./Time";
 import { s_AmountCheck } from "../../modules/regCheck";
 
+import AmountSetting from "./AmountSetting"
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -112,9 +113,10 @@ const TimeTable = props => {
             width="100%"
             maxWidth="500px"
             display="flex"
-            justifyContent="spcae-between"
+            justifyContent="space-between"
           >
-             
+            <AmountSetting></AmountSetting>
+
             <AddSetting></AddSetting>
           </Box>
           {/* 반복내용 시작 */}
