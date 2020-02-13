@@ -1,13 +1,24 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { changeStore, restoreStore } from "../../modules/store";
+import store, { changeStore, restoreStore } from "../../modules/store";
 import { TrendingUpOutlined, RepeatOneSharp } from "@material-ui/icons";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 
 export const useNotes = (initialValue = []) => {
   const [notes, setNotes] = useState(initialValue);
+  // useEffect(() => {
+  //   axios({
+  //     method: "GET",
+  //     url: store.url + "/note/" + store.u_No,
+  //     headers: store.headers
+  //   }).then(res => {
+  //     if (res.data.validation) {
+  //       setNotes(res.data.data);
+  //     }
+  //   });
+  // }, []);
   return {
     notes,
     addNote: text => {
@@ -26,7 +37,6 @@ export const useNotes = (initialValue = []) => {
           if (idx === index) {
             note.isRead = !note.isRead;
           }
-
           return note;
         })
       );
