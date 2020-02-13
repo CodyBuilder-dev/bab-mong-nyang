@@ -6,7 +6,7 @@
   </select>
 
   <select id = "selectOne">
-    select d_No, u_No, d_Name, d_Age, d_Species, d_Weight, 
+    select d_No, u_No, d_Name, d_Age, if(d_Bday=null, '', d_Bday) as 'd_Bday', d_Species, d_Weight, 
     (select SN from Product where UUID = (select UUID from Device where d_No = #{d_No})) as 'SerialNo' 
     from Device where d_No = #{d_No};
   </select>
@@ -20,7 +20,7 @@
   </select>
 
   <insert id = "addDevice">
-    insert into Device values(0, #{u_No}, #{d_Name}, #{d_Age}, #{d_Species}, #{d_Weight}, 
+    insert into Device values(0, #{u_No}, #{d_Name}, #{d_Age}, #{d_Bday}, #{d_Species}, #{d_Weight}, 
     (select UUID from Product where SN = #{SerialNo}), null);
   </insert>
 
@@ -33,7 +33,7 @@
   </update>
  
   <update id = "updateDevice">
-    update Device set d_Name = #{d_Name}, d_Age = #{d_Age}, d_Species = #{d_Species}, d_Weight = #{d_Weight} where d_No = #{d_No};
+    update Device set d_Name = #{d_Name}, d_Age = #{d_Age}, d_Bday = #{d_Bday}, d_Species = #{d_Species}, d_Weight = #{d_Weight} where d_No = #{d_No};
   </update>
 
   <delete id = "deleteDevice">

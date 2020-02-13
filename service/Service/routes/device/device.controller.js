@@ -15,6 +15,7 @@ var device = {
     u_No: 0,    
     d_Name: 'd_Name',
     d_Age: 'd_Age',
+    d_Bday: '0000-00-00',
     d_Species: 'd_Species',
     d_Weight: 'd_Weight',
     SerialNo: 'SerialNo',
@@ -108,8 +109,9 @@ const checkSerial = function (req, res) {
 };
 
 const add = function (req, res) {
-    if(checkToken(req.headers.authorization)) {   
-        device = {...device , ...req.body}; //u_No, d_Name, d_Age, d_Species, d_Weight, SerialNo
+    if(checkToken(req.headers.authorization)) { 
+        device = {...device , ...req.body}; //u_No, d_Name, d_Age, (d_Bday) d_Species, d_Weight, SerialNo
+        if(device.d_Bday == '') device.d_Bday = null;
         let check_query = mybatisMapper.getStatement('device', 'deviceCheck', device, format);
         connection.query(check_query, function(check_err, check_rows){
             if(check_err) {
@@ -183,7 +185,8 @@ const add = function (req, res) {
 
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
-        device = {...device , ...req.body}; //d_No, d_Name, d_Age, d_Species, d_Weight        
+        device = {...device , ...req.body}; //d_No, d_Name, d_Age, #{d_Bday}, d_Species, d_Weight
+        if(device.d_Bday == '') device.d_Bday = null;
         let query = mybatisMapper.getStatement('device', 'updateDevice', device, format);
         connection.query(query, function(err, rows) {
             if(err) {

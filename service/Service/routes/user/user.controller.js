@@ -145,10 +145,10 @@ const idCheck = function (req, res) {
 //회원가입
 const add = function (req, res) {
     user = {...user , ...req.body};
+    console.log(req.body);
     let query = mybatisMapper.getStatement('user', 'addUser', user, format);
     connection.query(query, function(err, rows) {
         if(err) {      
-            console.log(err);
             result.validation = false;            
             result.message = '회원 가입 중 오류가 발생하였습니다';
             result.data = [];
@@ -159,8 +159,7 @@ const add = function (req, res) {
         result.validation = true;
         result.message = '회원 가입 성공';
         result.data = [];
-        res.send(result);
-        //res.send(true);
+        res.json(result);
     });
 };
 
