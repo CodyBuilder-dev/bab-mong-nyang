@@ -1,5 +1,4 @@
 import React from "react";
-import MaterialTable from "material-table";
 import {
   makeStyles,
   Button,
@@ -9,7 +8,6 @@ import {
   IconButton,
   Box
 } from "@material-ui/core";
-import Icons from "../set/TableIcons";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
