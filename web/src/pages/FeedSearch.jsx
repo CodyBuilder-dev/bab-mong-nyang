@@ -6,6 +6,7 @@ import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
+import { useEffect } from "react";
 const useStyles = makeStyles(theme => ({
   page: {
     display: "flex",
@@ -16,8 +17,11 @@ const useStyles = makeStyles(theme => ({
 
 const Record = props => {
   const classes = useStyles();
-  const { input } = useFetchData("/feed", "feed_all");
+  const { input, dataFetch } = useFetchData("/feed", "feed_all");
   const { store } = useStore();
+  useEffect(() => {
+    dataFetch(store.url + "/feed", "feed_all")
+  }, [store])
   return (
     <div className={classes.page}>
       <SearchBar data={input} />

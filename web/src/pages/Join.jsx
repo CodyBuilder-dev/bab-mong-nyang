@@ -19,14 +19,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: 16
   },
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
   },
   helperText: {
@@ -205,7 +204,7 @@ const Join = props => {
           className={classes.submit}
           onClick={onClickEvent}
         >
-          회원 가입
+          가입하기
         </Button>
       </div>
     </div>

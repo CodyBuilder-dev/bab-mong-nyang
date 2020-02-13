@@ -6,6 +6,7 @@ import {
   useStore
 } from "../components/custom-hooks/custom-hooks";
 import { u_EmailCheck, u_NameCheck } from "../modules/regCheck";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -26,15 +27,18 @@ const useStyles = makeStyles(theme => ({
     width: "90vw",
     maxWidth: "500px",
     marginTop: theme.spacing(1)
-  },
+  }
 }));
 const InfoModify = props => {
   const classes = useStyles();
-  const { input, setInput, isLoading, updateField } = useFetchData(
+  const { input, setInput, isLoading, updateField, dataFetch } = useFetchData(
     "/user/",
     "user"
   );
   const { store } = useStore();
+  useEffect(() => {
+    dataFetch(store.url + "/user/" + store.u_No, "user");
+  }, [store]);
   const onClickEvent = async event => {
     if (u_NameCheck(input.u_Name) && u_EmailCheck(input.u_Email)) {
       const result = await axios.put(store.url + "/user", input, {
@@ -67,7 +71,7 @@ const InfoModify = props => {
               id="u_Id"
               label="아이디"
               name="u_Id"
-              value={input.u_Id}
+              value={input.u_Id ? input.u_Id : ""}
               InputProps={{
                 readOnly: true
               }}
@@ -80,8 +84,8 @@ const InfoModify = props => {
               id="u_Name"
               label="이름"
               name="u_Name"
-              value={input.u_Name}
-              onChange = {updateField}
+              value={input.u_Name ? input.u_Name : ""}
+              onChange={updateField}
               error={
                 !(input.u_Name === undefined || input.u_Name === "") &&
                 !u_NameCheck(input.u_Name)
@@ -103,7 +107,7 @@ const InfoModify = props => {
               name="u_Email"
               autoComplete="email"
               onChange={updateField}
-              value={input.u_Email}
+              value={input.u_Email ? input.u_Email : ""}
               error={
                 !(input.u_Email === undefined || input.u_Email === "") &&
                 !u_EmailCheck(input.u_Email)

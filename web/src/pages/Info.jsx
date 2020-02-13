@@ -1,7 +1,12 @@
 import React from "react";
-import { makeStyles, TextField, Button, Box } from "@material-ui/core";
+import { makeStyles, TextField, Button, Box, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { useFetchData } from "../components/custom-hooks/custom-hooks";
+import {
+  useFetchData,
+  useStore
+} from "../components/custom-hooks/custom-hooks";
+import { useEffect } from "react";
+
 const useStyles = makeStyles(theme => ({
   page: {
     marginTop: theme.spacing(3),
@@ -26,7 +31,11 @@ const useStyles = makeStyles(theme => ({
 const Info = props => {
   console.log(props);
   const classes = useStyles();
-  const { input, isLoading } = useFetchData("/user/", "user");
+  const { input, isLoading, dataFetch } = useFetchData("/user/", "user");
+  const { store } = useStore();
+  useEffect(() => {
+    dataFetch(store.url + "/user/" + store.u_No, "user");
+  }, [store]);
   //console.log(input);
   return (
     <div className={classes.page}>
@@ -35,7 +44,10 @@ const Info = props => {
         <div>Loading....</div>
       ) : (
         <div className={classes.inputText}>
-          <TextField
+          <Typography>{input.u_Id}</Typography>
+          <Typography>{input.u_Name}</Typography>
+          <Typography>{input.u_Email}</Typography>
+          {/* <TextField
             id="outlined-read-only-input"
             label="아이디"
             value={input.u_Id}
@@ -67,7 +79,7 @@ const Info = props => {
             margin="normal"
             fullWidth
             variant="outlined"
-          />
+          /> */}
           <Box display="flex" justifyContent="space-between">
             <Button
               fullWidth

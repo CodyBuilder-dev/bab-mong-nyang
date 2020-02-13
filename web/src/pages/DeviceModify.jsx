@@ -16,10 +16,10 @@ import {
   Box
 } from "@material-ui/core";
 
-import CatIcon from "../caticon.png";
-import DogIcon from "../dogicon.png";
-import CatDisable from "../catDisable.png";
-import DogDisable from "../dogDisable.png";
+import CatIcon from "../assets/icons/caticon.png";
+import DogIcon from "../assets/icons/dogicon.png";
+import CatDisable from "../assets/icons/catDisable.png";
+import DogDisable from "../assets/icons/dogDisable.png";
 import clsx from "clsx";
 import axios from "axios";
 const useStyles = makeStyles(theme => ({
