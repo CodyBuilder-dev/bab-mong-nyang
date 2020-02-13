@@ -12,12 +12,22 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
+import HomeIcon from '@material-ui/icons/Home';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import StorageIcon from '@material-ui/icons/Storage';
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import FeedIcon from "../../../assets/icons/feeddish.svg";
 import { useFetchData } from "../../custom-hooks/custom-hooks";
 const useStyles = makeStyles(theme => ({
   drawerList: {
     width: 250,
     backgroundColor: theme.palette.background.paper
+  },
+  icons: {
+    height: "24px"
+  },
+  iconContainer: {
+    textAlign: "center"
   }
 }));
 
@@ -55,7 +65,7 @@ const DrawerList = ({ setOpen, open }) => {
           }}
         >
           <ListItemIcon>
-            <PersonIcon />
+            <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="홈" />
         </ListItem>
@@ -68,9 +78,9 @@ const DrawerList = ({ setOpen, open }) => {
           }}
         >
           <ListItemIcon>
-            <PersonIcon />
+            <StorageIcon />
           </ListItemIcon>
-          <ListItemText primary="설정" />
+          <ListItemText primary="급여 설정" />
         </ListItem>
         <Divider />
         <ListItem
@@ -94,7 +104,7 @@ const DrawerList = ({ setOpen, open }) => {
           }}
         >
           <ListItemIcon>
-            <PersonIcon />
+            <img className={classes.icons} src={FeedIcon} alt="feedIcon" />
           </ListItemIcon>
           <ListItemText primary="기기 목록" />
         </ListItem>
@@ -107,7 +117,7 @@ const DrawerList = ({ setOpen, open }) => {
           }}
         >
           <ListItemIcon>
-            <PersonIcon />
+            <EqualizerIcon />
           </ListItemIcon>
           <ListItemText primary="급식 기록" />
         </ListItem>

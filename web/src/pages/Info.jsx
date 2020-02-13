@@ -1,5 +1,11 @@
 import React from "react";
-import { makeStyles, TextField, Button, Box, Typography } from "@material-ui/core";
+import {
+  makeStyles,
+  TextField,
+  Button,
+  Box,
+  Typography
+} from "@material-ui/core";
 import { Link } from "react-router-dom";
 import {
   useFetchData,
@@ -44,13 +50,13 @@ const Info = props => {
         <div>Loading....</div>
       ) : (
         <div className={classes.inputText}>
-          <Typography>{input.u_Id}</Typography>
+          {/* <Typography>{input.u_Id}</Typography>
           <Typography>{input.u_Name}</Typography>
-          <Typography>{input.u_Email}</Typography>
-          {/* <TextField
+          <Typography>{input.u_Email}</Typography> */}
+          <TextField
             id="outlined-read-only-input"
             label="아이디"
-            value={input.u_Id}
+            value={input.u_Id ? input.u_Id : ""}
             InputProps={{
               readOnly: true
             }}
@@ -61,7 +67,7 @@ const Info = props => {
           <TextField
             id="outlined-read-only-input"
             label="이름"
-            defaultValue={input.u_Name}
+            value={input.u_Name ? input.u_Name : ""}
             InputProps={{
               readOnly: true
             }}
@@ -72,14 +78,14 @@ const Info = props => {
           <TextField
             id="outlined-read-only-input"
             label="이메일"
-            defaultValue={input.u_Email}
+            value={input.u_Email ? input.u_Email : ""}
             InputProps={{
               readOnly: true
             }}
             margin="normal"
             fullWidth
             variant="outlined"
-          /> */}
+          />
           <Box display="flex" justifyContent="space-between">
             <Button
               fullWidth

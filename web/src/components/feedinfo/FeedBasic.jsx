@@ -47,7 +47,6 @@ const useStyles = makeStyles(theme => ({
     padding: "2px"
   }
 }));
-const dataMatch = {};
 const FeedBasic = props => {
   // const f_Image = 
   const classes = useStyles();
@@ -59,12 +58,6 @@ const FeedBasic = props => {
     useEffect(() => {
       dataFetch(store.url + "/feed/basic/" + props.f_No, "feedinfo");
     }, [store]);
-    const img = {
-      1: "http://banhae.pet/feed/1.jpg",
-      150: "http://banhae.pet/feed/150.jpg",
-      89: "http://banhae.pet/feed/89.jpg",
-      600: "http://banhae.pet/feed/600.jpg"
-    };
     
     return (
       <div className={classes.page}>
@@ -104,7 +97,7 @@ const FeedBasic = props => {
               ({input.f_Count})
             </Typography>
           </Box>
-          <Box width="90%" maxWidth="500px">
+          <Box width="90vw" maxWidth="500px">
             <Grid
               container
               spacing={0}
