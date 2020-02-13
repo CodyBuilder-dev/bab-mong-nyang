@@ -162,7 +162,7 @@ export const useFetchData = (requestURL, dataType) => {
             setInput(result.data.data);
             break;
           case "review":
-            console.log(result)
+            console.log(result);
             setInput(result.data);
             break;
           default:
@@ -237,11 +237,11 @@ export const useFetchData = (requestURL, dataType) => {
           if (store.u_Last === 0) flag = false;
         case "user":
         case "devicelist":
+        case "review":
           url += store.u_No;
           break;
         case "feedinfo":
         case "feed_all":
-        case "review":
           break;
         default:
           flag = false;
