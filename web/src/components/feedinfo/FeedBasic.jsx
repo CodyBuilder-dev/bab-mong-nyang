@@ -80,7 +80,7 @@ const FeedBasic = props => {
         <>
           <CardMedia
             className={classes.media}
-            image={"../../assets/images/1.jpg"}
+            image={`/images/${props.f_No}.jpg`}
             title="Feed Image"
             />
           <Box display="flex" flexDirection="column" alignItems="center">
@@ -104,7 +104,7 @@ const FeedBasic = props => {
               ({input.f_Count})
             </Typography>
           </Box>
-          <Box width="90vw" maxWidth="500px">
+          <Box width="90%" maxWidth="500px">
             <Grid
               container
               spacing={0}
