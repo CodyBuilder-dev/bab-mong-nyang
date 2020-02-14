@@ -52,7 +52,7 @@ const AddSetting = props => {
             }
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
       } else {
         alert("1~999사이의 값을 입력해주세요");

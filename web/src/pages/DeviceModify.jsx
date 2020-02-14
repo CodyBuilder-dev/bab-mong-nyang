@@ -109,19 +109,15 @@ const DeviceModify = props => {
     "device"
   );
   useEffect(() => {
-    console.log(store);
     dataFetch(store.url + "/device/get/" + cookies.d_CurNo , "device");
   }, [store]);
   const [open, setOpen] = React.useState(false);
   const onSubmit = async e => {
-    console.log("axios요청 보냄");
-    console.log(input);
     await axios
       .put(store.url + "/device", input, {
         headers: store.headers
       })
       .then(res => {
-        console.log(res);
         if (res.data.validation) {
           alert(res.data.message);
           props.history.replace("/device");
@@ -130,7 +126,7 @@ const DeviceModify = props => {
         }
       })
       .catch(error => {
-        console.log("심각한 통신 장애");
+        console.error(error);
       });
   };
 

@@ -114,7 +114,6 @@ const DeviceSelect = props => {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
   useEffect(() => {
-    console.log(input.device);
     if (input.u_Last !== undefined && input.u_Last !== 0) {
       setSelectedValue(
         input.device.filter(device => device.d_No === store.u_Last)[0]
@@ -124,7 +123,7 @@ const DeviceSelect = props => {
     }
   }, [input]);
   useEffect(() => {
-    setSelectedValue(store.u_Last)
+    setSelectedValue(store.u_Last);
     dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   }, [store]);
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
@@ -138,10 +137,9 @@ const DeviceSelect = props => {
     }
     setSelectedValue(value);
     await onChangeStore(value, "select", "/Join/main");
-    onChangeStore({render:true})
+    onChangeStore({ render: true });
     dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
-  //console.log(input);
   return (
     <div className={classes.deviceSelectForm}>
       {isLoading ? (
@@ -160,7 +158,7 @@ const DeviceSelect = props => {
           ) : (
             <div className={classes.deviceInfoBox}>
               <Typography variant="subtitle1" display={"inline"}>
-                {selectedValue? selectedValue.d_Name: undefined}'s 밥그릇
+                {selectedValue ? selectedValue.d_Name : undefined}'s 밥그릇
               </Typography>
               <IconButton onClick={handleClickOpen}>
                 <ArrowDropDown />

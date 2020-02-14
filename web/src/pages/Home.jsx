@@ -12,13 +12,13 @@ const useStyle = makeStyles(theme => ({
     marginTop: "30vh"
   },
   icon: {
-    width: '125px',
-    height: '125px'
+    width: "125px",
+    height: "125px"
   },
   smallIcon: {
-    width: '50px',
-    height: '50px',
-    paddingBottom: '10px'
+    width: "50px",
+    height: "50px",
+    paddingBottom: "10px"
   }
 }));
 const Home = props => {
@@ -31,7 +31,9 @@ const Home = props => {
         <img src={FeedIcon} alt="feedicon" className={classes.smallIcon} />
         <img src={CatIcon} alt="caticon" className={classes.icon} />
       </Box>
-      <Typography variant="h5" gutterBottom>밥 먹 냥</Typography>
+      <Typography variant="h5" gutterBottom>
+        밥 먹 냥
+      </Typography>
       <Typography variant="body1">반려동물 스마트 자동급식기</Typography>
       <Button color="primary" onClick={e => props.history.replace("/login")}>
         시작하기

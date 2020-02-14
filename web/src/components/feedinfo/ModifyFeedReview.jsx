@@ -53,7 +53,7 @@ const ModifyFeedReview = props => {
               }
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           alert("최저 평점은 0.5점, 최고 평점은 5.0점 입니다.");

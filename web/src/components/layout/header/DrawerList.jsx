@@ -55,7 +55,6 @@ const DrawerList = ({ setOpen, open }) => {
     birth = birth.replace("-", "").replace("-", "");
     let birthdayy = birth.substr(0, 4);
     let birthdaymd = birth.substr(4, 4);
-    console.log(birthdayy, birthdaymd)
     let age = monthDay < birthdaymd ? year - birthdayy - 1 : year - birthdayy;
     if(age < 1) {
       let monthAge = monthDay.substr(0, 2) - birthdaymd.substr(0, 2)
@@ -72,9 +71,6 @@ const DrawerList = ({ setOpen, open }) => {
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            {console.log(
-              input.device !== undefined ? calcAge(input.device.d_Bday) : null
-            )}
             {input.device !== undefined ? (
               input.device.d_Species === "강아지" ? (
                 <img src={DogBlack} alt="dog" className={classes.icons} />
@@ -91,7 +87,7 @@ const DrawerList = ({ setOpen, open }) => {
         ) : (
           <ListItemText
             primary={input.device.d_Name}
-            secondary={calcAge(input.device.d_Bday)}
+            secondary={input.device.d_Bday? calcAge(input.device.d_Bday) : '-'}
           />
         )}
       </ListItem>

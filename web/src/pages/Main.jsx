@@ -7,7 +7,6 @@ import {useHistory} from "react-router-dom"
 const Main =  props => {
   const history = useHistory();
   const action = e => {
-    console.log(history);
     history.replace("/main",[]);
   }
   return(  
