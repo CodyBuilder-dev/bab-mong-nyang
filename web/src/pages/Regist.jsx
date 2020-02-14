@@ -104,7 +104,6 @@ const Regist = props => {
     setInput({ u_No: store.u_No, d_Bday: "" });
   }, [store]);
   const onClickEvent = async event => {
-    console.log(input);
     if (checked) {
       let result = await onSubmit(store.url + "/device");
       if (result !== false) {

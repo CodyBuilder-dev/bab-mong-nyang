@@ -59,9 +59,9 @@ const AmountSetting = props => {
   const { input, setInput } = useFetchData("", "");
   const [open, setOpen] = useState(false);
   const { store, onChangeStore } = useStore();
-  useEffect(()=>{
+  useEffect(() => {
     setInput();
-  },[store])
+  }, [store]);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [value, setValue] = React.useState(0);
@@ -71,13 +71,13 @@ const AmountSetting = props => {
   };
 
   const handleClose = async event => {
-    onChangeStore({dayAmount :"", dayCalory:""});
+    onChangeStore({ dayAmount: "", dayCalory: "" });
     setOpen(false);
   };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    onChangeStore({dayAmount:"",dayCalory:""})
+    onChangeStore({ dayAmount: "", dayCalory: "" });
   };
   return (
     <>
@@ -141,14 +141,22 @@ const AmountSetting = props => {
           >
             <TabPanel value={value} index={0}>
               <Box minHeight="250px">
-                <Typography>사료검색기능은 곧 업데이트 될 예정입니다</Typography>
+                <Typography>
+                  사료검색기능은 곧 업데이트 될 예정입니다
+                </Typography>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Ingredient fullScreen = {fullScreen} d_No = {store.u_Last}></Ingredient>
+              <Ingredient
+                fullScreen={fullScreen}
+                d_No={store.u_Last}
+              ></Ingredient>
             </TabPanel>
             <TabPanel value={value} index={2}>
-             <DirectCalculate fullScreen = {fullScreen} d_No = {store.u_Last}></DirectCalculate>
+              <DirectCalculate
+                fullScreen={fullScreen}
+                d_No={store.u_Last}
+              ></DirectCalculate>
             </TabPanel>
           </Box>
           <Box marginTop={1} display="flex">
@@ -159,7 +167,7 @@ const AmountSetting = props => {
                 </Typography>
                 <TextField
                   variant="standard"
-                  value = {store.dayCalory ? store.dayCalory : ""}
+                  value={store.dayCalory ? store.dayCalory : ""}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment
@@ -172,7 +180,7 @@ const AmountSetting = props => {
                       />
                     ),
                     readOnly: true,
-                    style:{textAlignLast : "center"}
+                    style: { textAlignLast: "center" }
                   }}
                   margin="normal"
                 />
@@ -198,7 +206,7 @@ const AmountSetting = props => {
                       />
                     ),
                     readOnly: true,
-                    style:{textAlignLast : "center"}
+                    style: { textAlignLast: "center" }
                   }}
                   margin="normal"
                 />
@@ -210,7 +218,6 @@ const AmountSetting = props => {
           <Button name="close" onClick={handleClose} color="primary">
             확인
           </Button>
-          
         </DialogActions>
       </Dialog>
     </>

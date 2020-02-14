@@ -41,7 +41,6 @@ const AddFeedReview = props => {
       setInput({});
       setOpen(false);
     } else {
-      console.log(input);
       if (input.r_Positive === "" || input.r_Negative === "") {
         alert("정확한 리뷰를 위해 장, 단점 모두 작성해주시기 바랍니다");
       } else {
@@ -58,7 +57,7 @@ const AddFeedReview = props => {
               }
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           alert("최저 평점은 0.5점, 최고 평점은 5.0점 입니다.");

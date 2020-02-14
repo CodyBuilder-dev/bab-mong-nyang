@@ -10,8 +10,7 @@ import {
   Box,
   AppBar
 } from "@material-ui/core";
-// import zIndex from "@material-ui/core/styles/zIndex";
-import {useParams} from "react-router"
+import { useParams } from "react-router";
 import FeedBasic from "../components/feedinfo/FeedBasic";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
 import Feedreview from "../components/feedinfo/Feedreview";
@@ -61,7 +60,7 @@ const FeedInfo = props => {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-  const {f_No} = useParams();
+  const { f_No } = useParams();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -73,7 +72,7 @@ const FeedInfo = props => {
   return (
     <div className={classes.page}>
       <Box>{/* <FeedSearch /> */}</Box>
-      
+
       {/* <AppBar position="sticky" color="default" style={{top: "56px"}}> */}
       <Tabs
         style={{
@@ -90,9 +89,9 @@ const FeedInfo = props => {
         variant="fullWidth"
         aria-label="full width tabs"
         TabIndicatorProps={{
-            style : {
-              backgroundColor : "#789cce"
-            }
+          style: {
+            backgroundColor: "#789cce"
+          }
         }}
       >
         <Tab label="기본 정보" {...a11yProps(0)} />
@@ -107,13 +106,13 @@ const FeedInfo = props => {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <FeedBasic f_No={f_No}/>
+            <FeedBasic f_No={f_No} />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <NutritionInfo f_No={f_No}/>
+            <NutritionInfo f_No={f_No} />
           </TabPanel>
           <TabPanel value={value} index={2} dir={theme.direction}>
-            <Feedreview f_No={f_No}/>
+            <Feedreview f_No={f_No} />
           </TabPanel>
         </SwipeableViews>
       </div>

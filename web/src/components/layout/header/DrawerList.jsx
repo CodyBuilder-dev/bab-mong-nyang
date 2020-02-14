@@ -55,7 +55,6 @@ const DrawerList = ({ setOpen, open }) => {
     birth = birth.replace("-", "").replace("-", "");
     let birthdayy = birth.substr(0, 4);
     let birthdaymd = birth.substr(4, 4);
-    console.log(birthdayy, birthdaymd)
     let age = monthDay < birthdaymd ? year - birthdayy - 1 : year - birthdayy;
     if(age < 1) {
       let monthAge = monthDay.substr(0, 2) - birthdaymd.substr(0, 2)

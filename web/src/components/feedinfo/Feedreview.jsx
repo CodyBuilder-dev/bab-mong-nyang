@@ -71,7 +71,7 @@ const Feedreview = props => {
 
   const { store } = useStore();
   useEffect(() => {
-    dataFetch(store.url + "/review/" + props.f_No + "/"+store.u_No, "review");
+    dataFetch(store.url + "/review/" + props.f_No + "/" + store.u_No, "review");
   }, [store]);
   const openComments = event => {
     setOpen({
@@ -100,9 +100,7 @@ const Feedreview = props => {
                     : "#000000"
                 }}
               >
-                {console.log(input)}
                 {input.validation ? input.data.rank.r_Rank : "0"}
-                {/* {4.3} */}
               </Paper>
               <Rating
                 name="readonly"
@@ -183,7 +181,11 @@ const Feedreview = props => {
                                   }).then(res => {
                                     if (res.data.validation) {
                                       dataFetch(
-                                        store.url + "/review/" + props.f_No+ "/"+store.u_No,
+                                        store.url +
+                                          "/review/" +
+                                          props.f_No +
+                                          "/" +
+                                          store.u_No,
                                         "review"
                                       );
                                     }
@@ -249,19 +251,33 @@ const Feedreview = props => {
                     <Box display="flex" alignItems="center">
                       <ThumbUpAltIcon
                         fontSize="small"
-                        color={data.r_Good===1 ? "primary" : "action"}
-                        onClick={event => { 
-                          axios({method:"POST",url : store.url + "/review/good" , headers : store.headers , data : {r_No : data.r_No, u_No : store.u_No}}).then(res=>{
-                            if(res.data.validation){
-                              dataFetch(store.url + "/review/" + props.f_No+ "/"+store.u_No, "review");
-                            }else{
+                        color={data.r_Good === 1 ? "primary" : "action"}
+                        onClick={event => {
+                          axios({
+                            method: "POST",
+                            url: store.url + "/review/good",
+                            headers: store.headers,
+                            data: { r_No: data.r_No, u_No: store.u_No }
+                          }).then(res => {
+                            if (res.data.validation) {
+                              dataFetch(
+                                store.url +
+                                  "/review/" +
+                                  props.f_No +
+                                  "/" +
+                                  store.u_No,
+                                "review"
+                              );
+                            } else {
                               alert(res.data.message);
                             }
-                          })
+                          });
                         }}
                       />
-                      <Typography color = {data.r_Good===1 ? "primary" : "action"}>
-                        추천   {data.r_Count}
+                      <Typography
+                        color={data.r_Good === 1 ? "primary" : "action"}
+                      >
+                        추천 {data.r_Count}
                       </Typography>
                     </Box>
                     {/* <Typography variant="caption" color="textSecondary">

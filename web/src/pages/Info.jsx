@@ -35,14 +35,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const Info = props => {
-  console.log(props);
   const classes = useStyles();
   const { input, isLoading, dataFetch } = useFetchData("/user/", "user");
   const { store } = useStore();
   useEffect(() => {
     dataFetch(store.url + "/user/" + store.u_No, "user");
   }, [store]);
-  //console.log(input);
   return (
     <div className={classes.page}>
       <h2>내 정보</h2>

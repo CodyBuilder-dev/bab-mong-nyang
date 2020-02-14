@@ -20,8 +20,8 @@ const Record = props => {
   const { input, dataFetch } = useFetchData("/feed", "feed_all");
   const { store } = useStore();
   useEffect(() => {
-    dataFetch(store.url + "/feed", "feed_all")
-  }, [store])
+    dataFetch(store.url + "/feed", "feed_all");
+  }, [store]);
   return (
     <div className={classes.page}>
       <SearchBar data={input} />

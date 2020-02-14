@@ -26,11 +26,9 @@ const DirectCalculate = props => {
       data: input
     })
       .then(res => {
-        console.log(res);
         if (res.data.validation) {
           onChangeStore({ ...res.data.data });
-          setInput({...input,ME:""});
-          //alert(res.data.message);
+          setInput({ ...input, ME: "" });
         } else {
           alert(res.data.message);
         }
@@ -77,7 +75,7 @@ const DirectCalculate = props => {
                 }
               ></InputAdornment>
             ),
-            style:{textAlignLast : "center"}
+            style: { textAlignLast: "center" }
           }}
         />
         <Button
@@ -89,7 +87,7 @@ const DirectCalculate = props => {
             fontSize: fullScreen ? "13px" : "16px",
             height: "100%"
           }}
-          onClick = {computeEvent}
+          onClick={computeEvent}
         >
           계산
         </Button>

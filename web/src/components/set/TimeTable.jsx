@@ -15,8 +15,7 @@ import AddSetting from "./AddSetting";
 import { hour, minute } from "./Time";
 import { s_AmountCheck } from "../../modules/regCheck";
 import AmountSetting from "./AmountSetting";
-import {useCookies} from "react-cookie"
-
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 const TimeTable = props => {
   const classes = useStyles();
   const [cookies] = useCookies();
-  const {store,onChangeStore} = useStore();
+  const { store, onChangeStore } = useStore();
   const [editable, setEditable] = useState({});
   const modifyClickEvent = async event => {
     const index = event.currentTarget.value;
@@ -57,7 +56,7 @@ const TimeTable = props => {
             }
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
       } else {
         alert("1~999사이의 값을 입력해주세요");
@@ -68,14 +67,12 @@ const TimeTable = props => {
   const delteClickEvent = async event => {
     if (event.currentTarget.name === "삭제") {
       const targetIndex = event.currentTarget.value;
-
       await axios({
         method: "DELETE",
         url: store.url + "/setting/" + input.data[targetIndex].s_No,
         headers: store.headers
       })
         .then(res => {
-          console.log(res);
           if (res.data.validation) {
             alert(res.data.message);
             dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
@@ -98,16 +95,14 @@ const TimeTable = props => {
   );
 
   useEffect(() => {
-    
     if (store.render) {
       dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
       onChangeStore({ render: false });
     }
   }, [store]);
-  useEffect(()=> {
-    console.log(store.u_Last)
+  useEffect(() => {
     dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-  },[store.headers])
+  }, [store.headers]);
 
   return (
     <div className={classes.page}>
