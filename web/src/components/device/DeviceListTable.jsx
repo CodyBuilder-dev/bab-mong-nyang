@@ -13,9 +13,11 @@ import {
   CardActionArea
 } from "@material-ui/core";
 import Caticon from "../../assets/icons/caticon2.png";
+import Dogicon from "../../assets/icons/dogicon.png";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
+import { Cookies, useCookies } from "react-cookie";
 const useStyles = makeStyles(theme => ({
   page: {
     display: "flex",
@@ -30,18 +32,42 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   media: {
-    height: "100px"
+    height: "100px",
+    alignItems: "center"
   }
 }));
 
 const DeviceListTable = ({ props }) => {
   const classes = useStyles();
   const { onChangeStore, store } = useStore();
+  const [cookies, setCookies, removeCookies] = useCookies(["d_CurNo"]);
   const { input, isLoading, dataFetch } = useFetchData(
     "/device/",
     "devicelist"
   );
+  const calcAge = birth => {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+    let monthDay = month + day;
+    birth = birth.replace("-", "").replace("-", "");
+    let birthdayy = birth.substr(0, 4);
+    let birthdaymd = birth.substr(4, 4);
+    console.log(birthdayy, birthdaymd);
+    let age = monthDay < birthdaymd ? year - birthdayy - 1 : year - birthdayy;
+    if (age < 1) {
+      let monthAge = monthDay.substr(0, 2) - birthdaymd.substr(0, 2);
+      return monthAge === 0
+        ? "1개월 미만"
+        : (monthAge < 0 ? 12 + monthAge : monthAge) + "개월";
+    }
+    return age + "살";
+  };
   useEffect(() => {
+    removeCookies("d_CurNo", { path: "/" });
     dataFetch(store.url + "/device/" + store.u_No, "devicelist");
   }, [store]);
   return (
@@ -83,6 +109,7 @@ const DeviceListTable = ({ props }) => {
                 >
                   <Card
                     onClick={e => {
+                      setCookies("d_CurNo", device.d_No, { path: "/" });
                       onChangeStore({ currentDeviceNo: device.d_No }, "", "");
                       props.history.push("/devicemodify");
                     }}
@@ -91,9 +118,11 @@ const DeviceListTable = ({ props }) => {
                       <CardMedia
                         component="img"
                         // className={classes.media}
-                        image={Caticon}
+                        image={device.d_Species === "고양이" ? Caticon: Dogicon}
                         height="100%"
-                      />
+                      >
+                        {/* <img className={classes.media} src={device.d_Species === "고양이" ? Caticon: Dogicon} alt=""/> */}
+                      </CardMedia>
                       <CardContent>
                         <Typography component="p" variant="body1">
                           {device.d_Name}
@@ -101,13 +130,9 @@ const DeviceListTable = ({ props }) => {
                         <Typography component="p" variant="caption">
                           {device.d_Species}
                         </Typography>
-                        {/* <Typography component="p" variant="caption">
-                            나이:{" "}
-                            {parseInt(device.d_Age / 12)
-                              ? `${parseInt(device.d_Age / 12)}년 `
-                              : ""}
-                            {device.d_Age % 12}개월
-                          </Typography> */}
+                        <Typography component="p" variant="caption">
+                          나이: {device.d_Bday ? calcAge(device.d_Bday) : "   -"}
+                        </Typography>
                         <Typography component="p" variant="caption">
                           몸무게: {device.d_Weight} kg
                         </Typography>

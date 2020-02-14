@@ -81,7 +81,7 @@ const FeedInfo = props => {
           width: "100%",
           top: "56px",
           backgroundColor: "#f5f5f5",
-          color: "#00b08b",
+          color: "#789cce",
           zIndex: 99
         }}
         value={value}
@@ -91,7 +91,7 @@ const FeedInfo = props => {
         aria-label="full width tabs"
         TabIndicatorProps={{
             style : {
-              backgroundColor : "#00b08b"
+              backgroundColor : "#789cce"
             }
         }}
       >

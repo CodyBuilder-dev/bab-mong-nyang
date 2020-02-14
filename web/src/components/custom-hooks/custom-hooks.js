@@ -142,6 +142,7 @@ export const useFetchData = (requestURL, dataType) => {
       .then(result => {
         switch (type) {
           case "device":
+            console.log(result, url, type)
           case "devicelist":
             if (store.d_No === undefined) {
               setInput(result.data.data);

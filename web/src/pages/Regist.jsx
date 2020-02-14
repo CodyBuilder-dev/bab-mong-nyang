@@ -104,7 +104,7 @@ const Regist = props => {
     setInput({ u_No: store.u_No, d_Bday: "" });
   }, [store]);
   const onClickEvent = async event => {
-    console.log(input)
+    console.log(input);
     if (checked) {
       let result = await onSubmit(store.url + "/device");
       if (result !== false) {
@@ -179,64 +179,66 @@ const Regist = props => {
           onChange={updateField}
           value={input.d_Name ? input.d_Name : ""}
         />
-          <FormControl
-            component="fieldset"
-            fullWidth
-            className={classes.inputText}
+        <FormControl
+          component="fieldset"
+          fullWidth
+          className={classes.inputText}
+        >
+          <FormLabel component="legend" required>
+            생애상태를 알려주세요
+          </FormLabel>
+          <RadioGroup
+            aria-label="lifeState"
+            name="d_Age"
+            value={input.d_Age ? input.d_Age : ""}
+            onChange={updateField}
+            row
+            className={classes.radioButtons}
           >
-            <FormLabel component="legend" required>
-              생애상태를 알려주세요
-            </FormLabel>
-            <RadioGroup
-              aria-label="lifeState"
-              name="d_Age"
-              value={input.d_Age ? input.d_Age : ""}
-              onChange={updateField}
-              row
-              className={classes.radioButtons}
-            >
-              <FormControlLabel
-                value="유아기"
-                control={<CheckRadio />}
-                label="유아기"
-                labelPlacement="bottom"
-              />
-              <FormControlLabel
-                value="성장기"
-                control={<CheckRadio />}
-                label="성장기"
-                labelPlacement="bottom"
-              />
-              <FormControlLabel
-                value="중년기"
-                control={<CheckRadio />}
-                label="중년기"
-                labelPlacement="bottom"
-              />
-              <FormControlLabel
-                value="노년기"
-                control={<CheckRadio />}
-                label="노년기"
-                labelPlacement="bottom"
-              />
-            </RadioGroup>
-          </FormControl>
+            <FormControlLabel
+              value="유아기"
+              control={<CheckRadio />}
+              label="유아기"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="성장기"
+              control={<CheckRadio />}
+              label="성장기"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="중년기"
+              control={<CheckRadio />}
+              label="중년기"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="노년기"
+              control={<CheckRadio />}
+              label="노년기"
+              labelPlacement="bottom"
+            />
+          </RadioGroup>
+        </FormControl>
         <Box display="flex" justifyContent="space-between">
-        <TextField
-          variant="outlined"
-          margin="normal"
-          className={classes.halfInput}
-          type="number"
-          inputProps={{
-            step: 0.1
-          }}
-          required
-          id="d_Weight"
-          label="몸무게 (kg)"
-          name="d_Weight"
-          value={input.d_Weight ? input.d_Weight : ""}
-          onChange={updateField}
-        />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            className={classes.halfInput}
+            type="number"
+            inputProps={{
+              step: 0.1,
+              min: 0,
+              max: 100
+            }}
+            required
+            id="d_Weight"
+            label="몸무게 (kg)"
+            name="d_Weight"
+            value={input.d_Weight ? input.d_Weight : ""}
+            onChange={updateField}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -247,8 +249,7 @@ const Regist = props => {
             inputProps={{
               min: "1900-01-01",
               max: "2100-12-31"
-            }
-            }
+            }}
             name="d_Bday"
             value={input.d_Bday ? input.d_Bday : ""}
             onChange={updateField}

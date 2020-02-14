@@ -42,7 +42,7 @@ const nutMatch = {
 // ======================================
 const NutritionInfo = props => {
   const classes = useStyles();
-  const { input } = useFetchData("/feed/" + props.f_No, "feedinfo");
+  const { input } = useFetchData("/feed/nutrient/" + props.f_No, "feedinfo");
   return (
     <>
       <Box width="99%" maxWidth="500px" height="100vh">
@@ -58,7 +58,7 @@ const NutritionInfo = props => {
               <></>
             ) : (
               <>
-                <Grid item xs={3}>
+                <Grid item xs={3} key={`nutrition`}>
                   <Typography variant="body2">
                     {nutMatch[nutrition[0]]}
                   </Typography>
