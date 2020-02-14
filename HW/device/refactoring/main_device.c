@@ -28,19 +28,23 @@ int main(int argc, char *argv[])
 	int remainfood = atoi(data);
 	MYSQL_ROW row = get_field(conn);
 	int loopcnt=0;
-	if (argc > 1) loopcnt=atoi(argv[1])/50;
-	else if (row) loopcnt=atoi(row[1])/50;
-	
+	if (argc > 1) loopcnt=atoi(argv[1])*3;
+	else if (row) loopcnt=atoi(row[1])*3;
+	int intdata= atoi(data);
 	// food distribute
 	if(loopcnt){
-		for (int i = 0; i < loopcnt; ++i)
-			goFront(128); //512 for 1loop
-		end();
-		printf("feed %d Times!\n", loopcnt);
-		if (EMPTYCHECK()==1) {
-		insert_query(conn,1,loopcnt*50,remainfood);
+		while(intdata<loopcnt){
+			for(int i=0;i<128;++i)
+				goFront(); //512 for 1loop
+			data = serial_signal(fd);
+			intdata=atoi(data);
+			printf("signal :: %s\n",data);
 		}
-		else insert_query(conn,0,loopcnt*50,remainfood);
+		end();
+		if (EMPTYCHECK()==1) {
+		insert_query(conn,1,loopcnt/3,remainfood);
+		}
+		else insert_query(conn,0,loopcnt/3,remainfood);
 		melody();
 		exit(1);
 	}

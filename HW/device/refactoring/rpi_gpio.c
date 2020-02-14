@@ -84,8 +84,7 @@ void setsteps(int w1, int w2, int w3, int w4)
 	digitalWrite(IN4, w4);
 }
 
-void goFront(int steps) {
-	for (int i = 0; i <= steps; ++i) {
+void goFront() {
 		setsteps(1, 1, 0, 0);
 		delay(5);
 		setsteps(0, 1, 1, 0);
@@ -94,7 +93,6 @@ void goFront(int steps) {
 		delay(5);
 		setsteps(1, 0, 0, 1);
 		delay(5);
-	}
 }
 
 void end() {
@@ -125,9 +123,9 @@ int EMPTYCHECK(){
 }
 
 void melody(){
-int scale[23] = { 659, 659, 0, 659, 0, 523, 659, 0, 784, 0,0,0, 392, 0,0,0, 523, 0,0, 392, 0,0,330 } ;
+int scale[4] = { 1568, 1245, 1568, 1245 } ;
   softToneCreate (SPEAKER) ;
-  for (int i = 0 ; i < 23 ; ++i){
+  for (int i = 0 ; i < 4 ; ++i){
       printf ("%3d\n", i) ;
       softToneWrite (SPEAKER, scale[i]) ;
       delay (200) ;

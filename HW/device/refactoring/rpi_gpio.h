@@ -5,9 +5,7 @@ void setdefault();
 char* serial_signal(int fd);
 
 void setsteps(int w1, int w2, int w3, int w4);
-void goFront(int steps);
-void goFront_one();
-void goBackward(int steps);
+void goFront();
 void end();
 void melody();
 
