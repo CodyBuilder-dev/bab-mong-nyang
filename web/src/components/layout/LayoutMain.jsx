@@ -1,20 +1,28 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import Header from "./Header";
 import { CssBaseline, Container, makeStyles } from "@material-ui/core";
+import { useStore } from "../custom-hooks/custom-hooks";
+import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   content: {
     margin: "0 auto"
   },
   container: {
-    marginTop: "100px",
+    marginTop: "30px",
     marginBottom: "30px"
+  },
+  page: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   }
 }));
 
 const Layout = props => {
   const classes = useStyles();
-  console.log(props);
   return (
     <Fragment>
       <CssBaseline />

@@ -1,150 +1,286 @@
-import React ,{useState} from "react";
-import MaterialTable from "material-table";
-import { makeStyles ,Switch } from "@material-ui/core";
-import Icons from "./TableIcons";
-import {useFetchData} from "../custom-hooks/custom-hooks";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import {
+  makeStyles,
+  Box,
+  Typography,
+  InputAdornment,
+  TextField,
+  Button,
+  ButtonGroup
+} from "@material-ui/core";
+import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import axios from "axios";
 import { useEffect } from "react";
+import AddSetting from "./AddSetting";
+import { hour, minute } from "./Time";
+import { s_AmountCheck } from "../../modules/regCheck";
+import AmountSetting from "./AmountSetting";
+import {useCookies} from "react-cookie"
+
+
 const useStyles = makeStyles(theme => ({
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
+  },
+  button: {
+    fontSize: "14px",
+    width: "20px"
   }
 }));
+
 const TimeTable = props => {
   const classes = useStyles();
-  const store = useSelector(state => state.store, []);
-  const {input, isLoading,setIsLoading,dataFetch} = useFetchData('/setting/','timetable');
-  useEffect(()=>{
-    dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
-  },[store])
+  const [cookies] = useCookies();
+  const {store,onChangeStore} = useStore();
+  const [editable, setEditable] = useState({});
+  const modifyClickEvent = async event => {
+    const index = event.currentTarget.value;
+    if (editable === {} || !editable[index]) {
+      setEditable({ ...editable, [index]: true });
+    } else {
+      if (s_AmountCheck(input.data[index].s_Amount)) {
+        await axios({
+          method: "PUT",
+          url: store.url + "/setting",
+          headers: store.headers,
+          data: input.data[index]
+        })
+          .then(res => {
+            if (res.data.validation) {
+              alert(res.data.message);
+              setEditable({ ...editable, [index]: false });
+              dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+            } else {
+              alert(res.data.message);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        alert("1~999사이의 값을 입력해주세요");
+      }
+    }
+  };
+
+  const delteClickEvent = async event => {
+    if (event.currentTarget.name === "삭제") {
+      const targetIndex = event.currentTarget.value;
+
+      await axios({
+        method: "DELETE",
+        url: store.url + "/setting/" + input.data[targetIndex].s_No,
+        headers: store.headers
+      })
+        .then(res => {
+          console.log(res);
+          if (res.data.validation) {
+            alert(res.data.message);
+            dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch(error => {
+          alert("통신에러가 발생!");
+        });
+    } else {
+      setEditable({ ...editable, [event.currentTarget.value]: false });
+      dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+    }
+  };
+
+  const { input, isLoading, setInput, dataFetch } = useFetchData(
+    "/setting/",
+    "timetable"
+  );
+
+  useEffect(() => {
+    
+    if (store.render) {
+      dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+      onChangeStore({ render: false });
+    }
+  }, [store]);
+  useEffect(()=> {
+    console.log(store.u_Last)
+    dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+  },[store.headers])
+
   return (
     <div className={classes.page}>
       {isLoading ? (
         <div> Loading.....</div>
-      ):(
-      <MaterialTable
-        icons={Icons}
-        title="배식설정"
-        columns={[
-          {
-            title: "시간",
-            field: "s_Time"
-          },
-          {
-            title: "제공량(g)",
-            field: "s_Amount"
-          },
-          {
-            title: "적용",
-            field: "s_Activate",
-            sorting : false,
-            
-            headerStyle : {
-              borderBottom : "0px"
-            },
-            editComponent: () => (
-              <p></p>
-            ),
-            render: rowData => <Switch
-            checked={rowData !== undefined && rowData.s_Activate === 1}
-            color = "primary"
-            onChange={async(event) => {
-              setIsLoading(true);
-              if(rowData === undefined){
-                console.log(rowData);
-                console.log(event.target);
-                rowData = {s_Activate : 1};
-                await setIsLoading(false);
-              }else{
-                console.log(rowData);
-                console.log(event.target);
-                rowData.s_Activate = event.target.checked ? 1 : 0;
-                const result = await axios.put(store.url+'/setting',rowData);
-                if(result.data){
-                  console.log(result.data)
-                setIsLoading(false);
+      ) : input.data === undefined ? (
+        <div>데이터가 없습니다.</div>
+      ) : (
+        <Box width="100%" maxWidth="500px">
+          <Box
+            width="100%"
+            maxWidth="500px"
+            display="flex"
+            justifyContent="space-between"
+          >
+            <AmountSetting></AmountSetting>
+
+            <AddSetting></AddSetting>
+          </Box>
+          {/* 반복내용 시작 */}
+          {input.data.map((inputData, index) => (
+            <Box
+              display="flex"
+              alignItems="center"
+              border={2}
+              borderRadius={16}
+              padding={2}
+              borderColor="primary.main"
+              width="100%"
+              marginTop={2}
+              justifyContent="space-between"
+              key={index}
+            >
+              <TextField
+                id="outlined-select-currency-native"
+                select={editable === {} ? false : editable[index]}
+                value={inputData.s_Time.slice(0, 2)}
+                onChange={event => {
+                  const value = event.target.value;
+                  let tmp = input.data;
+                  tmp[index].s_Time =
+                    value + ":" + tmp[index].s_Time.slice(3, 5);
+                  setInput({ data: tmp });
+                }}
+                variant="standard"
+                SelectProps={{
+                  native: true
+                }}
+                inputProps={{
+                  style: {
+                    padding: "6px 26px 7px 12px"
+                  }
+                }}
+                InputProps={{
+                  readOnly: editable === {} ? false : editable[index],
+                  style: {
+                    width: "58px",
+                    textAlignLast: "center"
+                  }
+                }}
+              >
+                {hour.map(data => (
+                  <option value={data}>{data}</option>
+                ))}
+              </TextField>
+              <Typography variant="body1">시</Typography>
+              <TextField
+                id="minute-text"
+                select={editable === {} ? false : editable[index]}
+                variant="standard"
+                SelectProps={{
+                  native: true
+                }}
+                value={inputData.s_Time.slice(3, 5)}
+                onChange={event => {
+                  const value = event.target.value;
+                  let tmp = input.data;
+                  tmp[index].s_Time =
+                    tmp[index].s_Time.slice(0, 2) + ":" + value;
+                  setInput({ data: tmp });
+                }}
+                inputProps={{
+                  style: {
+                    padding: "6px 26px 7px 12px"
+                  }
+                }}
+                InputProps={{
+                  readOnly: editable === {} ? false : editable[index],
+                  style: {
+                    width: "58px"
+                    //textAlignLast : "center"
+                  }
+                }}
+              >
+                {minute.map(data => (
+                  <option value={data}>{data}</option>
+                ))}
+              </TextField>
+              <Typography variant="body1">분</Typography>
+
+              <TextField
+                variant="standard"
+                value={
+                  Number(inputData.s_Amount) === NaN
+                    ? 0
+                    : Number(inputData.s_Amount)
                 }
-              }
-              
-            }}
-            inputProps={{ 'aria-label': 'checkbox with default color' }}/>
-          }
-        ]}
-        data={input}
-        options={{
-          search: false,
-          paging: false,
-          actionsColumnIndex: 2,
-          rowStyle: {
-            marginTop: "10px"
-          }
-        }}
-        localization={{
-          header: {
-            actions: "수정/제거"
-          }
-        }}
-        editable={{
-          onRowAdd: newData =>
-            new Promise(resolve => {
-              setTimeout(async() => {
-                console.log("add");
-                resolve();
-                setIsLoading(true);
-                newData = {
-                  ...newData,
-                  d_No : store.u_Last,
-                  s_Activate : 0
-                }
-                console.log(newData);
-                const result = await axios.post(store.url + '/setting/',newData);
-                if(result.data){
-                  dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
-                  setIsLoading(false);
-                } else{
-                  alert("중복된 시간이 이미 존재합니다.");
-                  setIsLoading(false);
-                }
-              }, 600);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise(resolve => {
-              setTimeout(async () => {
-                resolve();
-                setIsLoading(true);
-                console.log(newData);
-                const result = await axios.put(store.url + '/setting', newData);
-                if(result.data){
-                  setIsLoading(false);
-                  dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
-                }else{
-                  alert('실패');
-                  setIsLoading(false);
-                }
-              }, 600);
-            }),
-          onRowDelete: oldData =>
-            new Promise(resolve => {
-              setTimeout(async () => {
-                resolve();
-                setIsLoading(true);
-                const result = await axios.delete(store.url + '/setting/'+oldData.s_No);
-                if(result.data){
-                  setIsLoading(false);
-                  dataFetch(store.url + '/setting/'+store.u_Last,'timetable');
-                }else{
-                  alert("실패");
-                  setIsLoading(false);
-                }
-              }, 600);
-            })
-        }}
-      />
+                name="s_Amount"
+                onChange={event => {
+                  let value = event.target.value;
+                  let tmp = input.data;
+                  if (isNaN(value)) {
+                    value = 0;
+                  }
+                  if (Number(value) > 999) {
+                    value = 999;
+                  }
+                  tmp[index].s_Amount = value;
+                  setInput({ data: tmp });
+                }}
+                InputProps={{
+                  readOnly: editable === {} ? false : !editable[index],
+                  endAdornment: (
+                    <InputAdornment position="end">g</InputAdornment>
+                  ),
+                  style: {
+                    width: "75px",
+                    textAlignLast: "right"
+                  }
+                }}
+              />
+              <ButtonGroup
+                orientation="vertical"
+                style={{
+                  marginLeft: "20px"
+                }}
+                aria-label="vertical outlined primary button group"
+              >
+                <Button
+                  value={index}
+                  onClick={modifyClickEvent}
+                  className={classes.button}
+                  size="small"
+                  color="primary"
+                  style={{
+                    padding: "1px 1px 1px 1px"
+                  }}
+                >
+                  수정
+                </Button>
+                <Button
+                  value={index}
+                  name={
+                    editable[index] !== undefined && editable[index]
+                      ? "취소"
+                      : "삭제"
+                  }
+                  onClick={delteClickEvent}
+                  className={classes.button}
+                  size="small"
+                  color="secondary"
+                  style={{
+                    padding: "1px 1px 1px 1px"
+                  }}
+                >
+                  {editable[index] !== undefined && editable[index]
+                    ? "취소"
+                    : "삭제"}
+                </Button>
+              </ButtonGroup>
+            </Box>
+          ))}
+        </Box>
       )}
     </div>
   );
