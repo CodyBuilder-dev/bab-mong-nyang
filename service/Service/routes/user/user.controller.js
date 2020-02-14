@@ -49,6 +49,7 @@ const selectAll = function (req, res) {
 //U_No에 맞는 데이터 호출(동기)
 const selectOne = function (req, res) {
     if(checkToken(req.headers.authorization, req.params.no)) {
+        
         let query = mybatisMapper.getStatement('user', 'selectOne', user, format);
         connection.query(query, function(err, rows) {
             if(err) {      
@@ -127,9 +128,7 @@ const idCheck = function (req, res) {
             console.log('User idCheck fail: ' + user.u_Id);
             result.validation = false;
             result.message = '해당 ID는 이미 사용 중입니다.';
-            result.data = [];
-            res.json(result);
-            //res.send(false);            
+                    
         }
         else{
             console.log('User idCheck ok: ' + user.u_Id);
@@ -137,15 +136,15 @@ const idCheck = function (req, res) {
             result.message = '사용 가능한 ID입니다.';
             result.data = [];
             res.json(result);
-            //res.send(true);
-        }        
+        }
+        result.data = [];
+        res.json(result);    
     });
 };
 
 //회원가입
 const add = function (req, res) {
     user = {...user , ...req.body};
-    console.log(req.body);
     let query = mybatisMapper.getStatement('user', 'addUser', user, format);
     connection.query(query, function(err, rows) {
         if(err) {      
@@ -332,8 +331,7 @@ function checkMain(token) {
             result.data = [];
             tempToken = false;
         }
-        else {            
-            console.log('유효한 토큰입니다!');
+        else {
             user.u_No = decoded.u_No;
             tempToken = true;
         }

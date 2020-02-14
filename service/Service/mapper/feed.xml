@@ -15,4 +15,18 @@
     select f_No, f_Protein, f_Fat, f_Calcium, f_Phosphorus, f_Fiber, f_Ash, f_Moisture from Feed where f_No = #{f_No};
   </select>
 
+  <select id = "getData">
+    select d.d_Age, d.d_Weight, f.f_Protein, f.f_Fat, f.f_Calcium, f.f_Phosphorus, f.f_Fiber, f.f_Ash, f.f_Moisture 
+    from Device d, Feed f where d.d_No = #{d_No} and f.f_No = #{f_No};
+  </select>
+
+  <select id = "getDevice">
+    select d_Age, d_Weight from Device where d_No = #{d_No};
+  </select>
+
+  <select id = "getAnalysis">
+    select d.d_Species, d.d_Age, f.f_Protein, f.f_Fat, f.f_Calcium, f.f_Phosphorus, f.f_Fiber, f.f_Ash, f.f_Moisture
+    from Device d, Feed f where d.d_No = #{d_No} and f.f_No = #{f_No};
+  </select>
+
 </mapper>

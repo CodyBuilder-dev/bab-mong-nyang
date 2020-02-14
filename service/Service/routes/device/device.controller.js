@@ -201,6 +201,7 @@ const update = function (req, res) {
             result.validation = true;
             result.message = '기기 수정 성공';
             result.data = [];
+            res.json(result);
         });
     }
     else res.json(result);
