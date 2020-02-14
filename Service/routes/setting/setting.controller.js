@@ -8,165 +8,226 @@ const secretKey = require("../../config/jwt");
 // . : 현재 폴더 경로, .. : 상위 폴더
 const mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper(['./mapper/setting.xml']);
+mybatisMapper.createMapper(['./mapper/hw.xml']);
 let format = {language: 'sql', indent: ' '};
 
 var setting = {
     s_No: 0,
     d_No: 0,
     s_Time: 's_Time',
-    s_Amount: 's_Amount',
-    s_Activate: true
+    s_Amount: 's_Amount'
 };
 
+var result = {
+    validation: false,
+    message: '',
+    data: []
+}
+
 const selectAll = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         let query = mybatisMapper.getStatement('setting', 'selectAll', format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '전체 Setting 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
             console.log('Setting selectAll ok');
-            res.json(rows);
+            result.validation = true;
+            result.message = '전체 Setting 데이터 호출 성공';
+            result.data = rows;
+            res.json(result);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
 const selectOne = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         setting.d_No = req.params.no;
         let query = mybatisMapper.getStatement('setting', 'selectOne', setting, format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 기기의 Setting 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
             console.log('Setting selectOne ok: ' + setting.d_No);
-            res.json(rows);
+            result.validation = true;
+            result.message = '해당 기기의 Setting 데이터 호출 성공';
+            result.data = rows;            
+            res.json(result);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
 const add = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        setting = req.body;
+    if(checkToken(req.headers.authorization)) {        
+        setting = {...setting , ...req.body}; //d_No, s_Time, s_Amount
         let check_query = mybatisMapper.getStatement('setting', 'settingCheck', setting, format);
         connection.query(check_query, function(check_err, check_rows){
-            if(check_err) throw check_err;
+            if(check_err) {
+                console.log(check_err);
+                result.validation = false;
+                result.message = '해당 Setting 시간을 중복 확인하는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
             if(check_rows[0]){
                 console.log('Setting add fail: ' + setting.s_Time);
-                res.send(false);
+                result.validation = false;
+                result.message = '해당 Setting 시간이 이미 존재합니다';
+                result.data = [];
+                res.json(result);                
+                res.json(result);
             }
             else{
-                if(addCheck(req.body)){
-                    let query = mybatisMapper.getStatement('setting', 'addSetting', setting, format);
-                    connection.query(query, function(err, rows) {
-                        if(err) throw err;
-                        console.log('Setting add ok: ' + setting.s_Time);
-                        res.send(true);
-                    });
-                }
-                else{
-                    console.log('Setting add fail: Wrong Type');
-                    res.send(false);
-                }
+                let query = mybatisMapper.getStatement('setting', 'addSetting', setting, format);
+                connection.query(query, function(err, rows) {
+                    if(err) {
+                        console.log(err);
+                        result.validation = false;
+                        result.message = '해당 Setting 데이터를 등록하는 데 오류가 발생하였습니다';
+                        result.data = [];
+                        res.json(result);
+                        return;
+                    }
+                    console.log('Setting add ok: ' + setting.s_Time);
+                    res.validation = true;
+                    result.message = 'Setting 데이터 등록 성공';
+                    result.data = [];
+                    res.json(result);
+                    update_hw_setting(setting.d_No);
+                });                
             }
         });    
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
 const update = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        setting = req.body;
+    if(checkToken(req.headers.authorization)) {
+        setting = {...setting , ...req.body}; //s_No, s_Time, s_Amount
         let query = mybatisMapper.getStatement('setting', 'updateSetting', setting, format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
-            if(rows.changedRows>0){
-                console.log('Setting update ok: ' + setting.s_No);
-                res.send(true);
-                update_hw(setting.d_No);
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Setting 데이터를 수정하는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
             }
-            else{
-                console.log('Setting update fail: ' + setting.s_No);
-                res.send(false);
-            }        
+            console.log('Setting update ok: ' + setting.s_No);
+            result.validation = true;
+            result.message = 'Setting 데이터 수정 성공';
+            result.data = [];
+            res.json(result);
+            let get_query = mybatisMapper.getStatement('setting', 'getDeviceNo', setting, format);
+            connection.query(get_query, function(get_err, get_rows){
+                if(get_err) console.log(get_err);
+                update_hw_setting(get_rows[0].d_No);
+            });
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
 const del = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         setting.s_No = req.params.no;
+        let get_query = mybatisMapper.getStatement('setting', 'getDeviceNo', setting, format);
+        connection.query(get_query, function(get_err, get_rows){
+            if(get_err) console.log(get_err);
+            setting.d_No = get_rows[0].d_No;            
+        });
         let query = mybatisMapper.getStatement('setting', 'deleteSetting', setting, format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Setting 데이터를 삭제하는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }            
             if(rows.affectedRows>0){
                 console.log('Setting delete ok: ' + setting.s_No);
-                res.send(true);
+                result.validation = true;
+                result.message = 'Setting 데이터 삭제 성공';
+                result.data = [];
+                res.json(result);
+                update_hw_setting(setting.d_No);
             }
             else{
                 console.log('Setting delete fail: ' + setting.s_No);
-                res.send(false);
+                result.validation = false;
+                result.message = '삭제할 해당 Setting 데이터가 존재하지 않습니다';
+                result.data = [];
+                res.json(result);
             }
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
-const timeReg = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
-const amountReg= /^[0-9]+$/;
-
-function addCheck(body){
-    if(!timeReg.test(body.s_Time)){
-        console.log('Wrong Time');
-        return false;
-    }
-    if(!amountReg.test(body.s_Amount)||body.s_Amount.length<1||body.s_Amount.length>4){
-        console.log('Wrong Amount');
-        return false;
-    }
-    return true;
-}
-
-function update_hw(no) { //setting 정보 수정 시 hw에 전송
+function update_hw_setting(no) { //setting 정보 수정 시 hw에 전송, 삭제, 등록
     setting.d_No = no;
-    let query = mybatisMapper.getStatement('setting', 'updateHW', setting, format);
+    var hw_temp = {ip: ''};
+    //device IP 받기
+    let get_query = mybatisMapper.getStatement('hw', 'getIP', setting, format);
+    connection.query(get_query, function(get_err, get_rows){
+        if(get_err) console.log(get_err);
+        hw_temp.ip = get_rows[0].d_Ip;
+    });
+    //hw update 요청 보내기
+    let query = mybatisMapper.getStatement('hw', 'updateHWsetting', setting, format);
     connection.query(query, function(err, rows) {
-        if(err) throw err;        
+        if(err) console.log(err);
         console.log('Setting update_hw ok: ' + setting.d_No);
         const request = require('request');
-        const res= request.post({
-            headers: {'content-type': 'application/json'},                
-            url: 'http://70.12.247.120:3000/timeset/update', 
-            body: rows,
-            json: true
-            }, function(error, response, body){     
-            console.log(body);
+        const res= request.post(
+            {
+                headers: {'content-type': 'application/json'},
+                url: hw_temp.ip + '/timeset/update', 
+                body: rows,
+                json: true
+            }, 
+            function(error, response, body){
+                if(error) console.log(error);
+                console.log(body);
         });
         console.log("response success : " + {...res});      
-        console.log("gogo hw");
-        //console.log(rows);
+        console.log("Setting update_hw completed");
     });
 }
 
-function checkToken(token) {
-    var temp2 = false;
+function checkToken(token){
+    var tempToken = false;
     jwt.verify(token, secretKey.secret, (err, decoded) => {
         if(err) {
             console.log('토큰 에러 발생!');
             console.log(err);
-            temp2 = false;
+            result.validation = false;
+            result.message = '다시 로그인 해주세요!';
+            result.data = [];
+            tempToken = false;
         }
         else {
-            if(decoded) {
-                console.log('유효한 토큰입니다!');
-                temp2 = true;
-            }
-            else{
-                console.log('권한이 없습니다!');
-                temp2 = false;
-            }
+            console.log('유효한 토큰입니다!');
+            tempToken = true;
         }
     });
-    return temp2;
+    return tempToken;
 }
 
 module.exports = {

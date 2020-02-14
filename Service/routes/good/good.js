@@ -1,18 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const controller = require('./review.controller');
+const controller = require('./good.controller');
 
 
-router.get('/:no/:uno', controller.selectAll);
+router.get('/:no', controller.selectAll);
 
 
 router.get('/get/:no', controller.selectOne);
 
 
 router.post('/', controller.add);
-
-router.post('/good', controller.updateGood);
 
 
 router.put('/', controller.update);
