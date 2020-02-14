@@ -122,6 +122,7 @@ export const useFetchData = (requestURL, dataType) => {
         s_Time: input.hour + ":" + e.target.value
       });
     } else {
+      console.log(input);
       setInput({
         ...input,
         [e.target.name]: e.target.value,
