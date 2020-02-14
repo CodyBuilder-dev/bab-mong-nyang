@@ -18,9 +18,9 @@ const theme = createMuiTheme({
       contrastText: '#fff',
     },
     secondary: {
-      main: '#f5624a',
+      main: '#de586d',
       contrastText: '#fff',
-    }
+    },
   },
 });
 const store = createStore(rootReducer, composeWithDevTools());

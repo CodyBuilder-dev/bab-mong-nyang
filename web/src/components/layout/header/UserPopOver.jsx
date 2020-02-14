@@ -10,6 +10,7 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import { useHistory } from "react-router";
 import {useStore} from "../../custom-hooks/custom-hooks"
+import { useCookies } from "react-cookie";
 const useStyles = makeStyles(theme => ({
   noteList: {
     height: "100%"
@@ -24,14 +25,17 @@ const useStyles = makeStyles(theme => ({
 const UserPopOver = ({ setAnchorEl }) => {
   const classes = useStyles();
   const history = useHistory();
-  const {store, onChangeStore} = useStore(); 
+  const {store, onChangeStore} = useStore();
+  const [ cookies, setCookie, removeCookie ] = useCookies();
   const onClickLogout = () => {
     setAnchorEl(null);
+    removeCookie("Token", {path: '/'})
     onChangeStore("","restore","");
     history.replace("/login");
   };
   const onClickUserInfo = () => {
     setAnchorEl(null);
+    history.push("/info")
   };
   const items = [
     {
