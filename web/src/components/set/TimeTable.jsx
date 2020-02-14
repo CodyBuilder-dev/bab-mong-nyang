@@ -9,12 +9,14 @@ import {
   ButtonGroup
 } from "@material-ui/core";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { useEffect } from "react";
 import AddSetting from "./AddSetting";
 import { hour, minute } from "./Time";
 import { s_AmountCheck } from "../../modules/regCheck";
+import AmountSetting from "./AmountSetting";
+import {useCookies} from "react-cookie"
+
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -30,7 +32,8 @@ const useStyles = makeStyles(theme => ({
 
 const TimeTable = props => {
   const classes = useStyles();
-  const store = useSelector(state => state.store, []);
+  const [cookies] = useCookies();
+  const {store,onChangeStore} = useStore();
   const [editable, setEditable] = useState({});
   const modifyClickEvent = async event => {
     const index = event.currentTarget.value;
@@ -95,9 +98,16 @@ const TimeTable = props => {
   );
 
   useEffect(() => {
-    dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-    console.log(input);
+    
+    if (store.render) {
+      dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+      onChangeStore({ render: false });
+    }
   }, [store]);
+  useEffect(()=> {
+    console.log(store.u_Last)
+    dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+  },[store.headers])
 
   return (
     <div className={classes.page}>
@@ -111,8 +121,10 @@ const TimeTable = props => {
             width="100%"
             maxWidth="500px"
             display="flex"
-            justifyContent="flex-end"
+            justifyContent="space-between"
           >
+            <AmountSetting></AmountSetting>
+
             <AddSetting></AddSetting>
           </Box>
           {/* 반복내용 시작 */}
