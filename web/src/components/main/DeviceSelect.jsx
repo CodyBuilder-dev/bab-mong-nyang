@@ -138,6 +138,7 @@ const DeviceSelect = props => {
     }
     setSelectedValue(value);
     await onChangeStore(value, "select", "/Join/main");
+    onChangeStore({render:true})
     dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
   //console.log(input);
