@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Divider } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -15,7 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Add } from "@material-ui/icons";
 
@@ -57,6 +57,7 @@ const theme = createMuiTheme({
   }
 });
 function DeviceDialog(props) {
+  const history = useHistory();
   const classes = useStyles();
   const { onClose, open, devices, selectedValue } = props;
 
@@ -88,6 +89,10 @@ function DeviceDialog(props) {
             <ListItemText primary={`${device.d_Name}꺼`} />
           </ListItem>
         ))}
+        <Divider />
+        <ListItem button onClick={() => history.push("/regist")}>
+          <ListItemText primary={"새 기기 등록하기"} />
+        </ListItem>
       </List>
     </Dialog>
   );
@@ -102,66 +107,70 @@ DeviceDialog.propTypes = {
 const DeviceSelect = props => {
   const classes = useStyles();
   const { store, onChangeStore } = useStore();
-  const { input, isLoading, setInput } = useFetchData("/Join/main/", "devicelist");
+  const { input, isLoading, dataFetch } = useFetchData(
+    "/Join/main/",
+    "devicelist"
+  );
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
   useEffect(() => {
-    console.log(input.device)
-    if(input.u_Last !== undefined && input.u_Last !== 0){
+    if (input.u_Last !== undefined && input.u_Last !== 0) {
       setSelectedValue(
         input.device.filter(device => device.d_No === store.u_Last)[0]
       );
-    }else{
+    } else {
       setSelectedValue({});
     }
   }, [input]);
+  useEffect(() => {
+    setSelectedValue(store.u_Last);
+    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
+  }, [store]);
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = value => {
+  const handleClose = async value => {
     setOpen(false);
+    if (store.u_Last === 0) {
+    }
     setSelectedValue(value);
-    onChangeStore(value, "select", "/Join/main");
+    await onChangeStore(value, "select", "/Join/main");
+    onChangeStore({ render: true });
+    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
-  //console.log(input);
   return (
     <div className={classes.deviceSelectForm}>
       {isLoading ? (
         <div>Loading....</div>
       ) : (
         <>
-          {input.u_Last === 0 || input.u_Last ===undefined ? 
-            (
-              <div className={classes.deviceInfoBox}>
-                <Typography variant="subtitle1" display={"inline"}>
-                  기기를 추가해주세요.
-                </Typography>
-                <Link to = "/regist">
-                  <IconButton>
-                    <Add />
-                  </IconButton>
-                </Link>
-              </div>
-            ) :
-            (
-              <div className={classes.deviceInfoBox}>
-                <Typography variant="subtitle1" display={"inline"}>
-                  {selectedValue.d_Name}'s 밥그릇
-                </Typography>
-                <IconButton onClick={handleClickOpen}>
-                  <ArrowDropDown />
-                </IconButton>
-              </div>
-            )
-          }
-          
+          {input.u_Last === 0 || input.u_Last === undefined ? (
+            <div className={classes.deviceInfoBox}>
+              <Typography variant="subtitle1" display={"inline"}>
+                기기를 선택해주세요.
+              </Typography>
+              <IconButton onClick={handleClickOpen}>
+                <ArrowDropDown />
+              </IconButton>
+            </div>
+          ) : (
+            <div className={classes.deviceInfoBox}>
+              <Typography variant="subtitle1" display={"inline"}>
+                {selectedValue ? selectedValue.d_Name : undefined}'s 밥그릇
+              </Typography>
+              <IconButton onClick={handleClickOpen}>
+                <ArrowDropDown />
+              </IconButton>
+            </div>
+          )}
+
           <DeviceDialog
             selectedValue={selectedValue}
             open={open}
             onClose={handleClose}
-            devices={input.device===undefined ? [] : input.device}
+            devices={input.device === undefined ? [] : input.device}
           />
         </>
       )}

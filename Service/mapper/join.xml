@@ -12,4 +12,5 @@
   <update id = "changeLast">
     update User set u_Last = #{d_No} where u_No = #{u_No};
   </update>
+  
 </mapper>

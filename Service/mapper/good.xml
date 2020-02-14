@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="good">  
+  <select id = "selectAll">
+    select r.r_No, r.u_No, (select u_Name from User where u_No = r.u_No) as 'u_Name', r.r_Rank, LEFT(r.r_Date, 10) as 'r_Date', 
+    r.r_Positive, r.r_Negative from Good r where f_No = #{f_No};
+  </select>
+
+  <select id = "selectOne">
+    select r.r_No, (select u_Name from User where u_No = r.u_No) as 'u_Name', r.r_Rank, LEFT(r.r_Date, 10) as 'r_Date', 
+    r.r_Positive, r.r_Negative from Good r where r_No = #{r_No};
+  </select>
+
+  <insert id = "addGood">
+    insert into Good values(0, #{u_No}, #{f_No}, #{r_Rank}, curdate(), #{r_Positive}, #{r_Negative});
+  </insert>
+ 
+  <update id = "updateGood">
+    update Good set r_Rank = #{r_Rank}, r_Date = curdate(), r_Positive = #{r_Positive}, r_Negative = #{r_Negative} where r_No = #{r_No};
+  </update>
+
+  <delete id = "deleteGood">
+    delete from Good where r_No = #{r_No};
+  </delete>
+
+</mapper>

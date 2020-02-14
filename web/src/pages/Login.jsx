@@ -1,52 +1,76 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   TextField,
   FormControlLabel,
   Checkbox,
-  Button
+  Button,
+  Box
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
+import CatIcon from "../assets/icons/caticon.png";
+import DogIcon from "../assets/icons/dogicon.png";
+import { useCookies } from "react-cookie";
+
 const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(1, 0, 1)
   },
   page: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(15),
     marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
   },
-  border : {
-    borderColor : "#00b08b",
+  border: {
+    borderColor: "#00b08b",
     //border :"1px 1px 1px 1px"
-    backgroundColor : "#00b08b"
+    backgroundColor: "#00b08b"
+  },
+  icon: {
+    width: "40px",
+    height: "40px"
   }
 }));
 
 const Login = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit } = useFetchData("", "");
+  const { input, updateField, onSubmit, setInput } = useFetchData("", "");
+  const [remember, setRemember] = useState(
+    localStorage.getItem("item") ? true : false
+  );
   const { store, onChangeStore } = useStore();
-
-  const onClickEvent = async event => {
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  useEffect(() => {
+    setInput({})
+    if (localStorage.getItem("u_id")) {
+      setInput({ u_Id: localStorage.getItem("u_id") });
+    }
+  }, []);
+  const onLoginClick = async event => {
     let result = await onSubmit(store.url + "/user/login");
-    console.log(result);
-    if (result.u_No > 0) {
-      result = {
-        ...result,
-        headers: { authorization: result.Token }
-      };
-      onChangeStore(result, "", "");
+    setInput({...input,u_Pw:""})
+    if (result.validation) {
+      onChangeStore(
+        { ...result.data, headers: { authorization: result.data.Token } },
+        "",
+        ""
+      );
+      setCookie("Token", result.data.Token, "/");
+      if (remember) {
+        localStorage.setItem("u_id", input.u_Id);
+      } else {
+        localStorage.removeItem("u_id");
+      }
       props.history.replace("/main");
     } else {
       alert("로그인에 실패했습니다.");
@@ -54,7 +78,11 @@ const Login = props => {
   };
   return (
     <div className={classes.page}>
-      <h2>로그인</h2>
+      <Box display="flex" alignItems="center">
+        <img src={DogIcon} alt="dogicon" className={classes.icon} />
+        <h2>로그인</h2>
+        <img src={CatIcon} alt="caticon" className={classes.icon} />
+      </Box>
 
       <div className={classes.inputText}>
         <TextField
@@ -89,11 +117,19 @@ const Login = props => {
           //     },
           //   },
           //   color : classes.border,
-            
+
           // }}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={
+            <Checkbox
+              name="remember"
+              color="primary"
+              onChange={(e, c) => setRemember(c)}
+              checked={remember}
+              defaultChecked={false}
+            />
+          }
           label="아이디 저장"
           className={classes.label}
         />
@@ -102,20 +138,19 @@ const Login = props => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={onClickEvent}
+          onClick={onLoginClick}
         >
-          로그인
+          <strong>로 그 인</strong>
         </Button>
-        <Link to="/join" style={{ textDecoration: "none" }}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            회원가입
-          </Button>
-        </Link>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={e => props.history.push("/join")}
+        >
+          <strong>회원가입</strong>
+        </Button>
       </div>
     </div>
   );

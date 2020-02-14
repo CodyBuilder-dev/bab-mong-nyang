@@ -9,6 +9,9 @@ router.get('/:no', controller.selectAll);
 //d_No에 맞는 데이터 호출
 router.get('/get/:no', controller.selectOne);
 
+//Device SerialNo 중복 확인
+router.get('/check/:no', controller.checkSerial);
+
 //Device 등록
 router.post('/', controller.add);
 
@@ -17,7 +20,5 @@ router.put('/', controller.update);
 
 //Device 삭제
 router.delete('/:no', controller.del);
-
-router.get('/check/:no', controller.checkSerial);
 
 module.exports = router;

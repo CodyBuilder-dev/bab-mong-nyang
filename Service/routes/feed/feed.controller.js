@@ -24,106 +24,374 @@ var feed = {
     f_Moisture: 11.11
 };
 
+var result = {
+    validation: false,
+    message: '',
+    data: []
+};
+
 const selectAll = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         let query = mybatisMapper.getStatement('feed', 'selectAll', format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
-            console.log(rows);
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '전체 Feed 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }            
             console.log('Feed selectAll ok');
-            res.json(rows);
+            result.validation = true;
+            result.message = '전체 Feed 데이터 호출 성공';
+            result.data = rows;
+            res.json(result);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
-const selectOne = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+const basic = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
         feed.f_No = req.params.no;
-        let query = mybatisMapper.getStatement('feed', 'selectOne', feed, format);
-        connection.query(query, function(err, rows) {
-            if(err) throw err;
-            console.log('Feed selectOne ok: ' + feed.f_No);
-            res.json(rows);
-        });
-    }
-    else res.send('다시 로그인 해주세요!!!!!');
-};
-
-const add = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        feed = req.body;
-        let query = mybatisMapper.getStatement('feed', 'addFeed', feed, format);
+        let query = mybatisMapper.getStatement('feed', 'selectBasic', feed, format);
         connection.query(query, function(err, rows) {
             if(err) {
-                res.send(false);
-                throw err;
-            }
-            console.log('Feed add ok');
-            res.send(true);
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Feed의 Basic 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            } 
+            console.log('Feed selectBasic ok: ' + feed.f_No);
+            result.validation = true;
+            result.message = '해당 Feed의 Basic 데이터 호출 성공';
+            result.data = rows[0];
+            res.json(result);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
-const update = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        feed = req.body;
-        let query = mybatisMapper.getStatement('feed', 'updateFeed', feed, format);
-        connection.query(query, function(err, rows) {
-            if(err) {
-                res.send(false);
-                throw err;
-            }
-            console.log('Feed update ok');
-            res.send(true);
-        });
-    }
-    else res.send('다시 로그인 해주세요!!!!!');
-};
-
-const del = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+const nutrient = function (req, res) {
+    if(checkToken(req.headers.authorization)) {        
         feed.f_No = req.params.no;
-        let query = mybatisMapper.getStatement('feed', 'deleteFeed', feed, format);
+        let query = mybatisMapper.getStatement('feed', 'selectNutrient', feed, format);
         connection.query(query, function(err, rows) {
             if(err) {
-                res.send(false);
-                throw err;
-            }
-            console.log('Feed delete ok');
-            res.send(true);
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Feed의 Nutrient 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            } 
+            console.log('Feed selectNutrient ok: ' + feed.f_No);
+            result.validation = true;
+            result.message = '해당 Feed의 Nutrient 데이터 호출 성공';
+            result.data = rows[0];
+            res.json(result);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
-function checkToken(token) {
-    var temp2 = false;
+const analysis = function (req, res) {
+    if(checkToken(req.headers.authorization)) { 
+        var inputData = {
+            d_No: 0,
+            f_No: 0
+        };
+        inputData = {...inputData, ...req.body};
+        var getData = {
+            d_Age: '',
+            d_Species: '',
+            f_Protein: 11.11,
+            f_Fat: 11.11,
+            f_Calcium: 1.11,
+            f_Phosphorus: 1.11,
+            f_Fiber: 1.11,
+            f_Ash: 7.50,
+            f_Moisture: 10.00            
+        };
+        var returnData = {
+            f_Protein: 11.11,
+            f_Fat: 11.11,
+            f_Calcium: 1.11,
+            f_Phosphorus: 1.11,      
+            f_Ash: 7.50,            
+            re_Protein: '적당',
+            re_Fat: '적당',
+            re_Calcium: '적당',
+            re_Phosphorus: '적당',
+            re_Ash: '적당'
+        }        
+        let query = mybatisMapper.getStatement('feed', 'getAnalysis', inputData, format);
+        connection.query(query, function(err, rows) {
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Feed의 Analysis 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            } 
+            console.log('Feed getAnalysis ok: ' + feed.f_No);
+            getData = {...getData, ...rows[0]};
+
+            var temp = {value: 100.0};
+            temp.value -= getData.f_Moisture;
+
+            console.log(temp);
+
+            
+
+            returnData.f_Protein = Math.round(getData.f_Protein * 100.0 / temp.value * 100.0, 2);
+            returnData.f_Fat = Math.round(getData.f_Fat * 100.0 / temp.value * 100.0, 2);
+            returnData.f_Calcium = Math.round(getData.f_Calcium * 100.0 / temp.value * 100.0, 2);
+            returnData.f_Phosphorus = Math.round(getData.f_Phosphorus * 100.0 / temp.value * 100.0, 2);
+            returnData.f_Ash = Math.round(getData.f_Ash * 100.0 / temp.value * 100.0, 2);
+
+            console.log(returnData);
+
+            
+
+            if(returnData.f_Ash < 6.0) returnData.re_Ash = '부족';
+            else if(returnData.re_Ash > 10.0) returnData.re_Ash = '과다';
+            if(getData.d_Age == '유아기' || getData.d_Age == '성장기'){
+                if(getData.d_Species == '강아지'){
+                    if(returnData.f_Protein < 22.5) returnData.re_Protein = '부족';                    
+                    if(returnData.f_Fat < 8.5) returnData.re_Fat = '부족';
+                    if(returnData.f_Calcium < 1.2) returnData.re_Calcium = '부족';
+                    else if(returnData.f_Calcium > 2.5) returnData.re_Calcium = '과다'
+                    if(returnData.f_Phosphorus < 1.0) returnData.re_Phosphorus = '부족';
+                    else if(returnData.f_Phosphorus > 1.6) returnData.re_Phosphorus = '과다';
+                }
+                else if(getData.d_Species == '고양이'){
+                    if(returnData.f_Protein < 30.0) returnData.re_Protein = '부족';                    
+                    if(returnData.f_Fat < 9.0) returnData.re_Fat = '부족';
+                    if(returnData.f_Calcium < 1.0) returnData.re_Calcium = '부족';                    
+                    if(returnData.f_Phosphorus < 0.8) returnData.re_Phosphorus = '부족';                    
+                }
+            }
+            else if(getData.d_Age == '중년기' || getData.d_Age == '노년기'){
+                if(getData.d_Species == '강아지'){
+                    if(returnData.f_Protein < 18.0) returnData.re_Protein = '부족';                    
+                    if(returnData.f_Fat < 5.5) returnData.re_Fat = '부족';
+                    if(returnData.f_Calcium < 0.5) returnData.re_Calcium = '부족';
+                    else if(returnData.f_Calcium > 2.5) returnData.re_Calcium = '과다'
+                    if(returnData.f_Phosphorus < 0.4) returnData.re_Phosphorus = '부족';
+                    else if(returnData.f_Phosphorus > 1.6) returnData.re_Phosphorus = '과다';
+                }
+                else if(getData.d_Species == '고양이'){
+                    if(returnData.f_Protein < 26.0) returnData.re_Protein = '부족';                    
+                    if(returnData.f_Fat < 9.0) returnData.re_Fat = '부족';
+                    if(returnData.f_Calcium < 0.6) returnData.re_Calcium = '부족';                    
+                    if(returnData.f_Phosphorus < 0.5) returnData.re_Phosphorus = '부족';
+                }
+            }
+            result.validation = true;
+            result.message = '해당 Feed의 Analysis 데이터 호출 성공';
+            result.data = returnData;
+            res.json(result);
+        });
+    }
+    else res.json(result);
+};
+
+const calNum = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
+        var inputData = {
+            f_No: 0,
+            d_No: 0
+        };
+        var getData = {
+            d_Age: '',
+            d_Weight: 1.1,
+            f_Protein: 11.11,
+            f_Fat: 11.11,
+            f_Calcium: 1.11,
+            f_Phosphorus: 1.11,
+            f_Fiber: 1.11,
+            f_Ash: 7.50,
+            f_Moisture: 10.00
+        };
+        var returnData = {
+            dayCalory: 2,
+            dayAmount: 1
+        }
+        inputData = {...inputData , ...req.body}; 
+        let get_query = mybatisMapper.getStatement('feed', 'getData', inputData, format);
+        connection.query(get_query, function(err, rows) {
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Device와 Feed 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            } 
+            console.log('Device&Feed Data getData ok: ' + inputData.d_No);
+            //d_Age, d_Species, d_Weight, f_Protein, f_Fat, f_Calcium, f_Phosphorus, f_Fiber, f_Ash, f_Moisture
+            getData = {...getData , ...rows[0]}; 
+            var RER = { value: 1.1 };
+            if(getData.d_Weight<2.0) RER.value = 70 * Math.pow(getData.d_Weight, 0.75);                
+            else RER.value = (30 * getData.d_Weight) + 70;
+            var NFE = 100 - getData.f_Protein - getData.f_Fat - getData.f_Fiber - getData.f_Moisture - getData.f_Ash;
+            var ME = 10*((4.0*getData.f_Protein)+(9.0*getData.f_Fat)+(4*NFE));                
+            var MER = { value: 1.1 };
+            if(getData.d_Age == '유아기') MER.value = 2.75 * RER.value;
+            else if(getData.d_Age == '성장기') MER.value = 2.0 * RER.value;
+            else if(getData.d_Age == '중년기') MER.value = 1.4 * RER.value;
+            else if(getData.d_Age == '노년기') MER.value = 0.7 * RER.value;
+            returnData.dayCalory = Math.round(MER.value, 0);
+            returnData.dayAmount = Math.round(MER.value * 1000.0 / ME, 0);
+            result.validation = true;
+            result.message = '일일 권장량 계산 성공';
+            result.data = returnData;
+            res.json(result);
+        });
+    }
+    else res.json(result);
+};
+
+const calDirect = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
+        var inputData = {d_No: 0};
+        var getData = {
+            d_Age: '',
+            d_Weight: 1.1,
+            f_Protein: 11.11,
+            f_Fat: 11.11,
+            f_Calcium: 1.11,
+            f_Phosphorus: 1.11,
+            f_Fiber: 1.11,
+            f_Ash: 7.50,
+            f_Moisture: 10.00
+        };
+        var returnData = {
+            dayCalory: 2,
+            dayAmount: 1
+        }
+        //d_No / f_Protein, f_Fat, f_Calcium, f_Phosphorus, f_Fiber, f_Ash, f_Moisture
+        inputData = {...inputData, ...req.body};
+        getData = {...getData , ...req.body};
+        let get_query = mybatisMapper.getStatement('feed', 'getDevice', inputData, format);
+        connection.query(get_query, function(err, rows) {
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Device와 Feed 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            } 
+            console.log('Device&Feed Data getData ok: ' + inputData.d_No);
+            //d_Age, d_Weight, 
+            getData = {...getData , ...rows[0]};
+            var RER = { value: 1.1 };
+            if(getData.d_Weight<2.0) RER.value = 70 * Math.pow(getData.d_Weight, 0.75);                
+            else RER.value = (30 * getData.d_Weight) + 70;
+            var NFE = 100 - getData.f_Protein - getData.f_Fat - getData.f_Fiber - getData.f_Moisture - getData.f_Ash;
+            var ME = 10*((4.0*getData.f_Protein)+(9.0*getData.f_Fat)+(4*NFE));                
+            var MER = { value: 1.1 };
+            if(getData.d_Age == '유아기') MER.value = 2.75 * RER.value;
+            else if(getData.d_Age == '성장기') MER.value = 2.0 * RER.value;
+            else if(getData.d_Age == '중년기') MER.value = 1.4 * RER.value;
+            else if(getData.d_Age == '노년기') MER.value = 0.7 * RER.value;
+            returnData.dayCalory = Math.round(MER.value, 0);
+            returnData.dayAmount = Math.round(MER.value * 1000.0 / ME, 0);
+            result.validation = true;
+            result.message = '일일 권장량 계산 성공';
+            result.data = returnData;
+            res.json(result);
+        });
+    }
+    else res.json(result);
+};
+
+const calCalory = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
+        var inputData = {
+            d_No: 0,
+            ME: 1.1
+        };
+        var getData = {
+            d_Age: '',
+            d_Weight: 1.1,
+            f_Protein: 11.11,
+            f_Fat: 11.11,
+            f_Calcium: 1.11,
+            f_Phosphorus: 1.11,
+            f_Fiber: 1.11,
+            f_Ash: 7.50,
+            f_Moisture: 10.00
+        };
+        var returnData = {
+            dayCalory: 2,
+            dayAmount: 1
+        }
+        //d_No, ME
+        inputData = {...inputData, ...req.body};
+        let get_query = mybatisMapper.getStatement('feed', 'getDevice', inputData, format);
+        connection.query(get_query, function(err, rows) {
+            if(err) {
+                console.log(err);
+                result.validation = false;
+                result.message = '해당 Device와 Feed 데이터를 불러오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            } 
+            console.log('Device&Feed Data getData ok: ' + inputData.d_No);
+            //d_Age, d_Weight, 
+            getData = {...getData , ...rows[0]};
+            var RER = { value: 1.1 };
+            if(getData.d_Weight<2.0) RER.value = 70 * Math.pow(getData.d_Weight, 0.75);                
+            else RER.value = (30 * getData.d_Weight) + 70;
+            var MER = { value: 1.1 };
+            if(getData.d_Age == '유아기') MER.value = 2.75 * RER.value;
+            else if(getData.d_Age == '성장기') MER.value = 2.0 * RER.value;
+            else if(getData.d_Age == '중년기') MER.value = 1.4 * RER.value;
+            else if(getData.d_Age == '노년기') MER.value = 0.7 * RER.value;
+            returnData.dayCalory = Math.round(MER.value, 0);
+            returnData.dayAmount = Math.round(MER.value * 1000.0 / inputData.ME, 0);
+            result.validation = true;
+            result.message = '일일 권장량 계산 성공';
+            result.data = returnData;
+            res.json(result);
+        });
+    }
+    else res.json(result);
+};
+
+function checkToken(token){
+    var tempToken = false;
     jwt.verify(token, secretKey.secret, (err, decoded) => {
         if(err) {
             console.log('토큰 에러 발생!');
             console.log(err);
-            temp2 = false;
+            result.validation = false;
+            result.message = '다시 로그인 해주세요!';
+            result.data = [];
+            tempToken = false;
         }
         else {
-            if(decoded) {
-                console.log('유효한 토큰입니다!');
-                temp2 = true;
-            }
-            else{
-                console.log('권한이 없습니다!');
-                temp2 = false;
-            }
+            console.log('유효한 토큰입니다!');
+            tempToken = true;
         }
     });
-    return temp2;
+    return tempToken;
 }
 
 module.exports = {
     selectAll: selectAll,
-    selectOne: selectOne,
-    add: add,
-    update: update,
-    del: del
+    basic: basic,
+    nutrient: nutrient,
+    analysis: analysis,
+    calNum: calNum,
+    calDirect: calDirect,
+    calCalory: calCalory    
 };

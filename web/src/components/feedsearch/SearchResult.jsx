@@ -11,6 +11,9 @@ import {
   ListItemAvatar
 } from "@material-ui/core";
 import { useHistory, useRouteMatch } from "react-router";
+import { useStore } from "../custom-hooks/custom-hooks";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -24,30 +27,45 @@ const useStyles = makeStyles(theme => ({
     width: "100vw",
     maxWidth: "500px"
   },
-  media:{
-    width : "50px",
-    height : "70px"
+  media: {
+    width: "50px",
+    height: "70px"
   }
 }));
-
 
 const SearchResult = props => {
   const classes = useStyles();
   const history = useHistory();
+  const { store } = useStore();
   const goFeedInfo = f_id => {
-    history.push(`/feedinfo/${f_id}`)
-  }
+    history.push(`/feedinfo/${f_id}`);
+  };
   return (
     <Box className={classes.tab}>
       <List className={classes.root}>
-        {props.data.map(data => (
-          <ListItem key={`feedImage${data.id}`} button onClick={() => goFeedInfo(data.id)}>
-            <ListItemAvatar>
-              <CardMedia className = {classes.media} image={data.img} title="Feed Image" />
-            </ListItemAvatar>
-            <ListItemText primary={data.name} secondary={data.company} />
-          </ListItem>
-        ))}
+        {false ? (
+          <></>
+        ) : (
+          props.data.map(data => (
+            <ListItem
+              key={`feedImage${data.f_No}`}
+              button
+              onClick={() => goFeedInfo(data.f_No)}
+            >
+              <ListItemAvatar>
+                <CardMedia
+                  className={classes.media}
+                  image={null}
+                  title="Feed Image"
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={data.f_Name}
+                secondary={data.f_Manufacturer}
+              />
+            </ListItem>
+          ))
+        )}
       </List>
     </Box>
   );

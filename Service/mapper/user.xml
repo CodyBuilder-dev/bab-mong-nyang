@@ -13,6 +13,10 @@
     select u_Id from User where u_Id = #{u_Id};
   </select>
 
+  <select id = "userMain">
+    select u_No, u_Last from User where u_No = #{u_No};
+  </select>
+
   <insert id = "addUser">
     insert into User values(0, #{u_Id}, #{u_Pw}, #{u_Name}, #{u_Email}, 0);
   </insert>
@@ -22,7 +26,11 @@
   </select> 
 
   <update id = "updateUser">
-    update User set u_Pw = #{u_Pw}, u_Name = #{u_Name}, u_Email = #{u_Email} where u_No = #{u_No};
+    update User set u_Name = #{u_Name}, u_Email = #{u_Email} where u_No = #{u_No};
+  </update>
+
+  <update id = "updatePass">
+    update User set u_Pw = #{u_Pw} where u_No = #{u_No};
   </update>
 
   <delete id = "deleteUser">

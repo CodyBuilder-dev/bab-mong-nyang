@@ -5,12 +5,16 @@ const controller = require('./feed.controller');
 
 router.get('/', controller.selectAll);
 
-router.get('/:no', controller.selectOne);
+router.get('/basic/:no', controller.basic);
 
-router.post('/', controller.add);
+router.get('/nutrient/:no', controller.nutrient);
 
-router.put('/:no', controller.update);
+router.post('/analysis', controller.analysis);
 
-router.delete('/:no', controller.del);
+router.post('/cal/num', controller.calNum);
+
+router.post('/cal/direct', controller.calDirect);
+
+router.post('/cal/calory', controller.calCalory);
 
 module.exports = router;

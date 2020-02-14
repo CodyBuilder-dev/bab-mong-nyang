@@ -8,6 +8,7 @@ const secretKey = require("../../config/jwt");
 // . : 현재 폴더 경로, .. : 상위 폴더
 const mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper(['./mapper/logdata.xml']);
+mybatisMapper.createMapper(['./mapper/hw.xml']);
 let format = {language: 'sql', indent: ' '};
 
 var logdata = {
@@ -19,116 +20,45 @@ var logdata = {
     l_Amount: 0
 };
 
+var result = {
+    validation: false,
+    message: '',
+    data: []
+};
+
 const selectAll = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         logdata.d_No = req.params.no;
         let query = mybatisMapper.getStatement('logdata', 'selectAll', logdata, format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
+            if(err){
+                result.validation = false;
+                result.message = '전체 log 데이터를 호출하는데 에러가 발생했습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }            
             console.log('Logdata selectAll ok');
             res.json(rows);
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
-};
-
-const selectOne = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        logdata.l_No = req.params.no;
-        let query = mybatisMapper.getStatement('logdata', 'selectOne', logdata, format);
-        connection.query(query, function(err, rows) {
-            if(err) throw err;
-            console.log('Logdata selectOne ok: ' + logdata.l_No);
-            res.json(rows);
-        });
-    }
-    else res.send('다시 로그인 해주세요!!!!!');
-};
-
-const dataUpdate = function (req, res) {
-    if (checkToken(req.headers.authorization) == true) {
-        const request = require('request');
-        const res = request.get({
-            headers: {
-                'content-type': 'application/json'
-            },
-            url: 'http://70.12.247.120:3000/log',
-            body: rows,
-            json: true
-        }, function (error, response, body) {
-            console.log(response);
-            logdata.l_No = req.params.no;
-            let query = mybatisMapper.getStatement('logdata', 'selectOne', logdata, format);
-            connection.query(query, function (err, rows) {
-                if (err) throw err;
-                console.log('Logdata selectOne ok: ' + logdata.l_No);
-                res.json(rows);
-            });
-        });
-    } else 
-        res.send('다시 로그인 해주세요!!!!!');
-    }
-;
-
-const add = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        logdata = req.body;
-        let query = mybatisMapper.getStatement('logdata', 'addLogdata', logdata, format);
-        connection.query(query, function(err, rows) {
-            if(err) {
-                res.send(false);
-                throw err;
-            }
-            console.log('Logdata add ok');
-            res.send(true);
-        });
-    }
-    else res.send('다시 로그인 해주세요!!!!!');
-};
-
-const update = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        logdata = req.body;
-        let query = mybatisMapper.getStatement('logdata', 'updateLogdata', logdata, format);
-        connection.query(query, function(err, rows) {
-            if(err) {
-                res.send(false);
-                throw err;
-            }
-            console.log('Logdata update ok');
-            res.send(true);
-        });
-    }
-    else res.send('다시 로그인 해주세요!!!!!');
-};
-
-const del = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
-        logdata.l_No = req.params.no;
-        let query = mybatisMapper.getStatement('logdata', 'deleteLogdata', logdata, format);
-        connection.query(query, function(err, rows) {
-            if(err) {
-                res.send(false);
-                throw err;
-            }
-            console.log('Logdata delete ok');
-            res.send(true);
-        });
-    }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 };
 
 var bars = [];
 
 const selectChart = function (req, res) {
-    if(checkToken(req.headers.authorization)==true) {
+    if(checkToken(req.headers.authorization)) {
         let temp = {
             d_No: 0
         }
         temp.d_No = req.params.no;
         let query = mybatisMapper.getStatement('logdata', 'selectChart', temp, format);
         connection.query(query, function(err, rows) {
-            if(err) throw err;
+            if(err){
+                result.validation = false;
+                result.message = '';
+            }
             if(!rows[0]){
                 console.log("selectChart fail");
                 res.send(false);
@@ -152,37 +82,29 @@ const selectChart = function (req, res) {
             }        
         });
     }
-    else res.send('다시 로그인 해주세요!!!!!');
+    else res.json(result);
 }
 
-function checkToken(token) {
-    var temp2 = false;
+function checkToken(token){
+    var tempToken = false;
     jwt.verify(token, secretKey.secret, (err, decoded) => {
         if(err) {
             console.log('토큰 에러 발생!');
             console.log(err);
-            temp2 = false;
+            result.validation = false;
+            result.message = '다시 로그인 해주세요!';
+            result.data = [];
+            tempToken = false;
         }
         else {
-            if(decoded) {
-                console.log('유효한 토큰입니다!');
-                temp2 = true;
-            }
-            else{
-                console.log('권한이 없습니다!');
-                temp2 = false;
-            }
+            console.log('유효한 토큰입니다!');
+            tempToken = true;
         }
     });
-    return temp2;
+    return tempToken;
 }
 
 module.exports = {
     selectAll: selectAll,
-    selectOne: selectOne,
-    add: add,
-    update: update,
-    del: del,
-    selectChart: selectChart,
-    dataUpdate: dataUpdate
+    selectChart: selectChart
 };
