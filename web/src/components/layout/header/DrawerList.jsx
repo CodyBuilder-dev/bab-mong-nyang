@@ -72,9 +72,6 @@ const DrawerList = ({ setOpen, open }) => {
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            {console.log(
-              input.device !== undefined ? calcAge(input.device.d_Bday) : null
-            )}
             {input.device !== undefined ? (
               input.device.d_Species === "강아지" ? (
                 <img src={DogBlack} alt="dog" className={classes.icons} />
@@ -91,7 +88,7 @@ const DrawerList = ({ setOpen, open }) => {
         ) : (
           <ListItemText
             primary={input.device.d_Name}
-            secondary={calcAge(input.device.d_Bday)}
+            secondary={input.device.d_Bday? calcAge(input.device.d_Bday) : '-'}
           />
         )}
       </ListItem>
