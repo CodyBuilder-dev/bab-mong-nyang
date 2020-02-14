@@ -8,7 +8,8 @@ import {
   Typography,
   Grid
 } from "@material-ui/core";
-import { useFetchData } from "../custom-hooks/custom-hooks";
+import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
+import { useEffect } from "react";
 
 const StyledRating = withStyles({
   sizeSmall: {
@@ -46,94 +47,79 @@ const useStyles = makeStyles(theme => ({
     padding: "2px"
   }
 }));
-// ==== 사료 정보 요약 ====
-const testData = {
-  feedImg:
-    "https://m.pinyo.kr/web/product/big/201902/003ca6a1dc0a49d5149c8d110e5e5aaf.png",
-  feedName: "스몰배치 치킨 바이트 닭&강황",
-  feedScore: "4.3", // 사료에 대해 유저들이 평가한 점수 평균 5점만점
-  votedPeopleNum: "10", // 사료에 대해 평가한 유저들의 수 (리뷰 달린 수)
-  detail: [
-    { key: "급여대상", value: "강아지" },
-    { key: "제조사", value: "스몰배치" },
-    { key: "유기농 여부", value: "YES" },
-    { key: "제조국", value: "미국" },
-    { key: "사료종목", value: "건식(반건식)" },
-    { key: "급여연령", value: "전연령" }
-  ]
-};
-// ===================
 const FeedBasic = props => {
+  // const f_Image = 
   const classes = useStyles();
-  console.log(props.f_No);
-  const { input, isLoading } = useFetchData("/feed/" + props.f_No, "feedinfo");
-  const No = props.f_No;
-  const img = {
-    1: "http://banhae.pet/feed/1.jpg",
-    150: "http://banhae.pet/feed/150.jpg",
-    89: "http://banhae.pet/feed/89.jpg",
-    600: "http://banhae.pet/feed/600.jpg"
-  };
-
-  return (
-    <div className={classes.page}>
+  const { input, isLoading, dataFetch } = useFetchData(
+    "/feed/basic/" + props.f_No,
+    "feedinfo"
+    );
+    const { store } = useStore();
+    useEffect(() => {
+      dataFetch(store.url + "/feed/basic/" + props.f_No, "feedinfo");
+    }, [store]);
+    
+    return (
+      <div className={classes.page}>
       {isLoading ? (
-        <div>...loading</div>
+        <>
+          <Skeleton animation="wave" variant="rect" className={classes.media} />
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Skeleton width="50px" />
+            <Skeleton width="150px" />
+          </Box>
+        </>
       ) : (
         <>
-          {false ? (
-            <Skeleton
-              animation="wave"
-              variant="rect"
-              className={classes.media}
+          <CardMedia
+            className={classes.media}
+            image={`/images/${props.f_No}.jpg`}
+            title="Feed Image"
             />
-          ) : (
-            <CardMedia
-              className={classes.media}
-              //image={testData.feedImg}
-              image= {img[props.f_No]}
-              title="Feed Image"
-            />
-          )}
-          <Box>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Typography variant="caption">{input.f_Manufacturer}</Typography>
             <Typography variant="subtitle2" display="block">
-              <strong>{input.f_Manufacturer + " " + input.f_Name}</strong>
+              <strong>{input.f_Name}</strong>
             </Typography>
           </Box>
           <Box className={classes.score}>
             <StyledRating
               name="feed-score"
-              value={testData.feedScore}
+              value={input.f_Rank}
               size="small"
               precision={0.5}
               readOnly
             />
             <Typography variant="subtitle2" display="block">
-              {testData.feedScore}
+              {input.f_Rank}
             </Typography>
             <Typography variant="caption" display="block">
-              ({testData.votedPeopleNum})
+              ({input.f_Count})
             </Typography>
           </Box>
-          <Box marginTop={1} borderTop={1} paddingTop={1}>
+          <Box width="90vw" maxWidth="500px">
             <Grid
               container
               spacing={0}
               justify="flex-start"
               alignItems="center"
             >
-              {testData.detail.map(item => (
-                <>
-                  <Grid item xs={2} className={classes.grid}>
-                    <Typography className={classes.key}>{item.key}</Typography>
-                  </Grid>
-                  <Grid item xs={4} className={classes.grid}>
-                    <Typography className={classes.value}>
-                      {item.value}
-                    </Typography>
-                  </Grid>
-                </>
-              ))}
+              <Grid item xs={2} className={classes.grid}>
+                <Typography className={classes.key}>지급대상</Typography>
+              </Grid>
+              <Grid item xs={4} className={classes.grid}>
+                <Typography className={classes.value}>
+                  {input.f_Species==="개" ? "강아지" : input.f_Species}
+                </Typography>
+              </Grid>
+              <Grid item xs={2} className={classes.grid}>
+                <Typography className={classes.key}>제조사</Typography>
+              </Grid>
+              <Grid item xs={4} className={classes.grid}>
+                <Typography className={classes.value}>
+                  {input.f_Manufacturer}
+                </Typography>
+              </Grid>
             </Grid>
           </Box>
         </>

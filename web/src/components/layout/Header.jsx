@@ -20,9 +20,8 @@ import NotificationList from "./header/NotificationList";
 import UserPopOver from "./header/UserPopOver";
 import { useHistory, useLocation } from "react-router";
 const useStyles = makeStyles(theme => ({
-  appBar: {
-    // padding: `0 calc(10px + 2vw)`
-    color: "default",
+  toolBar: {
+    color: "#7dabd0",
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -35,10 +34,12 @@ const useStyles = makeStyles(theme => ({
 const pathNameMatch = {
   '/set': '설정',
   '/info': '내 정보',
-  '/device': '기기 목록',
+  '/device': '밥그릇 목록',
   '/record': '급식 기록',
   '/feedinfo': '사료 정보',
   '/feedsearch': '사료 검색', 
+  '/regist': '기기 등록',
+  '/devicemodify': '기기 수정'
 }
 // ========================================================================
 let noteItems = [
@@ -132,7 +133,7 @@ const Header = props => {
             variant="contained"
             onClick={handleClick}
           >
-            <Badge badgeContent={unRead(notes)} color="secondary">
+            <Badge badgeContent={unRead(notes)} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -204,8 +205,8 @@ const Header = props => {
       </Toolbar>
     );
   };
-  return (
-    <div style={{position: "sticky", top: "0px", backgroundColor:"#f5f5f5", zIndex: 100}}>
+  return ( // #23d5c4
+    <div style={{position: "sticky", top: "0px", background:"linear-gradient(45deg, #7dabd0 20%, #cfe7ea 100%)", zIndex: 100}}>
       {/* <AppBar position="sticky" color="default" className={classes.appBar}> */}
         {appBarEl()}
         <SwipeableDrawer

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   makeStyles,
   TextField,
@@ -6,14 +6,24 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
-  OutlinedInput
+  OutlinedInput,
+  Radio,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Box
 } from "@material-ui/core";
 import clsx from "clsx";
 import {
   useStore,
   useFetchData
 } from "../components/custom-hooks/custom-hooks";
-
+import CatIcon from "../assets/icons/caticon.png";
+import DogIcon from "../assets/icons/dogicon.png";
+import CatDisable from "../assets/icons/catDisable.png";
+import DogDisable from "../assets/icons/dogDisable.png";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -22,57 +32,141 @@ const useStyles = makeStyles(theme => ({
     fontSize: 16
   },
   page: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
   },
   inputText: {
-    width: "300px", // Fix IE 11 issue.
+    width: "90vw",
+    maxWidth: "500px",
     marginTop: theme.spacing(1)
+  },
+  halfInput: {
+    width: "43vw",
+    maxWidth: "240px"
+  },
+  icons: {
+    width: "100px",
+    height: "100px"
+  },
+  radioButtons: {
+    display: "flex",
+    justifyContent: "space-around"
   }
 }));
-
+const CatRadio = props => {
+  const classes = useStyles();
+  return (
+    <Radio
+      checkedIcon={
+        <img src={CatIcon} alt="cat-check" className={classes.icons} />
+      }
+      icon={
+        <img src={CatDisable} alt="cat-uncheck" className={classes.icons} />
+      }
+      {...props}
+    />
+  );
+};
+const DogRadio = props => {
+  const classes = useStyles();
+  return (
+    <Radio
+      checkedIcon={
+        <img src={DogIcon} alt="dog-check" className={classes.icons} />
+      }
+      icon={
+        <img src={DogDisable} alt="dog-uncheck" className={classes.icons} />
+      }
+      {...props}
+    />
+  );
+};
+const CheckRadio = props => {
+  const classes = useStyles();
+  return (
+    <Radio
+      checkedIcon={<CheckBoxIcon />}
+      icon={<CheckBoxOutlineBlankIcon />}
+      {...props}
+    />
+  );
+};
 const Regist = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit, setInput,onValidate } = useFetchData("", "");
-  const { store,onChangeStore } = useStore();
+  const { input, updateField, onSubmit, setInput, onValidate } = useFetchData(
+    "",
+    ""
+  );
+  const { store, onChangeStore } = useStore();
   let checked = false;
   useEffect(() => {
-    setInput({ ...input, u_No: store.u_No });
-  }, []);
+    setInput({ u_No: store.u_No, d_Bday: "" });
+  }, [store]);
   const onClickEvent = async event => {
-    if(checked){
+    console.log(input);
+    if (checked) {
       let result = await onSubmit(store.url + "/device");
       if (result !== false) {
-        onChangeStore({...store,u_Last : result})
+        onChangeStore({ ...store, u_Last: result });
         alert("기기등록에 성공했습니다.");
         props.history.goBack();
       } else {
         alert("기기등록에 실패했습니다.");
       }
-    }else{
+    } else {
       alert("일련번호 확인이 필요합니다.");
     }
   };
   const onCheckEvent = async event => {
-    if(input.SerialNo === undefined || input.SerialNo === ""){
+    if (input.SerialNo === undefined || input.SerialNo === "") {
       alert("일련번호를 입력해주세요!!");
-    }else{
-      const result = await onValidate(store.url + "/device/check/"+input.SerialNo);
-      if(result){
-        alert("올바른 일련번호입니다.")
+    } else {
+      const result = await onValidate(
+        store.url + "/device/check/" + input.SerialNo
+      );
+      if (result) {
+        alert("올바른 일련번호입니다.");
         checked = true;
-      }else{
-        alert("등록되지 않은 일련번호입니다.")
+      } else {
+        alert("등록되지 않은 일련번호입니다.");
       }
     }
-  }
+  };
   return (
     <div className={classes.page}>
-      <h3>반려동물의 정보를 입력해주세요</h3>
+      <h3>반려동물에 대해 알려주세요</h3>
       <div className={classes.inputText}>
+        <FormControl
+          component="fieldset"
+          fullWidth
+          className={classes.inputText}
+        >
+          <FormLabel component="legend" required>
+            종을 선택해주세요
+          </FormLabel>
+          <RadioGroup
+            aria-label="species"
+            name="d_Species"
+            value={input.d_Species ? input.d_Species : ""}
+            onChange={updateField}
+            row
+            className={classes.radioButtons}
+          >
+            <FormControlLabel
+              value="강아지"
+              control={<DogRadio />}
+              label="강아지"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="고양이"
+              control={<CatRadio />}
+              label="고양이"
+              labelPlacement="bottom"
+            />
+          </RadioGroup>
+        </FormControl>
         <TextField
           variant="outlined"
           margin="normal"
@@ -83,42 +177,87 @@ const Regist = props => {
           name="d_Name"
           autoFocus
           onChange={updateField}
-          value={input.d_Name}
+          value={input.d_Name ? input.d_Name : ""}
         />
-
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
+        <FormControl
+          component="fieldset"
           fullWidth
-          id="d_Age"
-          label="나이"
-          name="d_Age"
-          value={input.d_Age}
-          onChange={updateField}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="d_Species"
-          label="종"
-          name="d_Species"
-          value={input.d_Species}
-          onChange={updateField}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="d_Weight"
-          label="몸무게"
-          name="d_Weight"
-          value={input.d_Weight}
-          onChange={updateField}
-        />
+          className={classes.inputText}
+        >
+          <FormLabel component="legend" required>
+            생애상태를 알려주세요
+          </FormLabel>
+          <RadioGroup
+            aria-label="lifeState"
+            name="d_Age"
+            value={input.d_Age ? input.d_Age : ""}
+            onChange={updateField}
+            row
+            className={classes.radioButtons}
+          >
+            <FormControlLabel
+              value="유아기"
+              control={<CheckRadio />}
+              label="유아기"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="성장기"
+              control={<CheckRadio />}
+              label="성장기"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="중년기"
+              control={<CheckRadio />}
+              label="중년기"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="노년기"
+              control={<CheckRadio />}
+              label="노년기"
+              labelPlacement="bottom"
+            />
+          </RadioGroup>
+        </FormControl>
+        <Box display="flex" justifyContent="space-between">
+          <TextField
+            variant="outlined"
+            margin="normal"
+            className={classes.halfInput}
+            type="number"
+            inputProps={{
+              step: 0.1,
+              min: 0,
+              max: 100
+            }}
+            required
+            id="d_Weight"
+            label="몸무게 (kg)"
+            name="d_Weight"
+            value={input.d_Weight ? input.d_Weight : ""}
+            onChange={updateField}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            className={classes.halfInput}
+            type="date"
+            id="d_Bday"
+            label="생일 (선택)"
+            inputProps={{
+              min: "1900-01-01",
+              max: "2100-12-31"
+            }}
+            name="d_Bday"
+            value={input.d_Bday ? input.d_Bday : ""}
+            onChange={updateField}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </Box>
 
         <FormControl
           className={clsx(classes.margin, classes.textField)}
@@ -131,13 +270,13 @@ const Regist = props => {
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            value={input.SerialNo}
+            value={input.SerialNo ? input.SerialNo : ""}
             onChange={updateField} //나중에 혹시 시간이 되면 바꿀 것
             name="SerialNo"
-            required = {true}
+            required={true}
             endAdornment={
               <InputAdornment position="end">
-                <Button onClick = {onCheckEvent}>확인</Button>
+                <Button onClick={onCheckEvent}>확인</Button>
               </InputAdornment>
             }
             labelWidth={104}
@@ -151,7 +290,7 @@ const Regist = props => {
           className={classes.submit}
           onClick={onClickEvent}
         >
-          기기 등록
+          등록 하기
         </Button>
       </div>
     </div>

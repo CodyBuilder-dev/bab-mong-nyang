@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, Box, Typography } from "@material-ui/core";
-import { useFetchData } from "../custom-hooks/custom-hooks";
+import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -21,8 +22,13 @@ const useStyles = makeStyles(theme => ({
 }));
 const CurrentTimeTable = ({ props }) => {
   const classes = useStyles();
-  const { input, isLoading } = useFetchData("/logdata/", "maintable");
-
+  const { input, isLoading ,dataFetch} = useFetchData("/logdata/", "maintable");
+  const { store } = useStore();
+  useEffect(()=>{
+    if(store.u_Last !== undefined || store.u_Last !== ""){
+      dataFetch(store.url + "/logdata/"+store.u_Last,"maintable");
+    }
+  },[store])
   return (
     <div className={classes.page}>
       {isLoading ? (
