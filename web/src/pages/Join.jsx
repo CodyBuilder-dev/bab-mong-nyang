@@ -51,7 +51,6 @@ const Join = props => {
       (input.pwValidated === undefined || input.pwValidated)
     ) {
       let result = await onSubmit(store.url + "/user");
-      console.log(result);
       if (result.validation === true) {
         alert("환영합니다. " + input.u_Name + "님");
         props.history.replace("/login");
@@ -59,10 +58,6 @@ const Join = props => {
         alert("회원가입에 실패했습니다.");
       }
     } else {
-      console.log("id : " + u_IdCheck(input.u_Id) + "" + input.idValidated);
-      console.log("pw : " + u_PwCheck(input.u_Pw) + "" + input.pwValidated);
-      console.log("name : " + u_NameCheck(input.u_Name) );
-      console.log("email : " + u_EmailCheck(input.u_Email) );
       alert("올바른 입력을 해주세요");
     }
   };
@@ -73,7 +68,6 @@ const Join = props => {
       const result = await onValidate(
         store.url + "/user/idCheck/" + event.target.value
       );
-      console.log(result);
       setInput({ ...input, idValidated: result.validation });
     }
   };

@@ -16,12 +16,10 @@ import {
 } from "@material-ui/core";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import { s_AmountCheck } from "../../modules/regCheck";
 import Calculator from "../../assets/icons/calculator.png";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import example from "../../assets/icons/example_cal.jpg";
 import Ingredient from "./amountsetting/IngredientCalculate";
 import DirectCalculate from "./amountsetting/DirectCalculate";
 
@@ -56,7 +54,7 @@ function a11yProps(index) {
 }
 
 const AmountSetting = props => {
-  const { input, setInput } = useFetchData("", "");
+  const { setInput } = useFetchData("", "");
   const [open, setOpen] = useState(false);
   const { store, onChangeStore } = useStore();
   useEffect(()=>{

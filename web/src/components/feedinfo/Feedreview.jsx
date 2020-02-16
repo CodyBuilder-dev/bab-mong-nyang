@@ -9,13 +9,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   ListItemAvatar,
   Paper,
   Typography,
   ListItemSecondaryAction
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
@@ -67,18 +65,12 @@ const Feedreview = props => {
     "/review/" + props.f_No,
     "review"
   );
-  const [like, setLike] = useState({});
 
   const { store } = useStore();
   useEffect(() => {
     dataFetch(store.url + "/review/" + props.f_No + "/"+store.u_No, "review");
   }, [store]);
-  const openComments = event => {
-    setOpen({
-      ...open,
-      [event.currentTarget.value]: !open[event.currentTarget.value]
-    });
-  };
+  
   return (
     <div className={classes.page}>
       {isLoading ? (
@@ -100,7 +92,6 @@ const Feedreview = props => {
                     : "#000000"
                 }}
               >
-                {console.log(input)}
                 {input.validation ? input.data.rank.r_Rank : "0"}
                 {/* {4.3} */}
               </Paper>

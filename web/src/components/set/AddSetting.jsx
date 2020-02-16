@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { hour, minute } from "./Time";
-import axios from "axios";
 import { useEffect } from "react";
 import { s_AmountCheck } from "../../modules/regCheck";
 

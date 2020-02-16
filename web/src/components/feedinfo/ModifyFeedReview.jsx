@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -9,13 +9,12 @@ import {
   Button,
   Box,
   Typography,
-  InputAdornment
+  
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import EditIcon from "@material-ui/icons/Edit";
 import { useStore } from "../custom-hooks/custom-hooks";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
 const ModifyFeedReview = props => {
   const [input, setInput] = useState(props.init);

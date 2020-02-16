@@ -1,19 +1,15 @@
 import React from "react";
 import {
   makeStyles,
-  Typography,
   Box,
-  Grid,
   CardMedia,
   List,
   ListItem,
   ListItemText,
   ListItemAvatar
 } from "@material-ui/core";
-import { useHistory, useRouteMatch } from "react-router";
+import { useHistory } from "react-router";
 import { useStore } from "../custom-hooks/custom-hooks";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -43,7 +39,6 @@ const SearchResult = props => {
   return (
     <Box className={classes.tab}>
       <List className={classes.root}>
-        {console.log(store.options)}
         {false ? <></> : props.data.map(data => (
           <ListItem
             key={`feedImage${data.f_No}`}

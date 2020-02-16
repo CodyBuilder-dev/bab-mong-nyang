@@ -1,7 +1,7 @@
 import React from "react";
 import Join from "./pages/Join";
 import Regist from "./pages/Regist";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route  } from "react-router-dom";
 import Layout from "./components/layout/LayoutMain";
 import Home from "./pages/Home";
 import Setting from "./pages/Setting";
@@ -25,7 +25,7 @@ const App = () => {
         <Layout>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
-          <Route path="/join" component={Join} />
+          <Route path="/join" component={Join} />   
           <Route path="/regist" component={Regist} />
           <Route path="/set" component={Setting} />
           <Route path="/record" component={Record} />

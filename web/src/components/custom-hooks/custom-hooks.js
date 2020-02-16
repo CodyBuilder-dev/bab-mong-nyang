@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import store, { changeStore, restoreStore } from "../../modules/store";
-import { TrendingUpOutlined, RepeatOneSharp } from "@material-ui/icons";
+import { changeStore, restoreStore } from "../../modules/store";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 
@@ -64,11 +63,10 @@ export const useFetchData = (requestURL, dataType) => {
   const [isLoading, setIsLoading] = useState(false);
   const { store, onChangeStore } = useStore();
   const history = useHistory();
-  const [cookies, setCookie, removeCookie] = useCookies(["Token"]);
+  const [cookies, setCookie, removeCookie]= useCookies(["token"]);
   const onSubmit = useCallback(async url => {
     //console.log(input);
     const result = await axios.post(url, input, { headers: store.headers });
-    console.log(result);
     return result.data;
   });
 
@@ -122,7 +120,6 @@ export const useFetchData = (requestURL, dataType) => {
         s_Time: input.hour + ":" + e.target.value
       });
     } else {
-      console.log(input);
       setInput({
         ...input,
         [e.target.name]: e.target.value,
@@ -142,7 +139,6 @@ export const useFetchData = (requestURL, dataType) => {
       .then(result => {
         switch (type) {
           case "device":
-            console.log(result, url, type)
           case "devicelist":
             if (store.d_No === undefined) {
               setInput(result.data.data);
@@ -152,7 +148,6 @@ export const useFetchData = (requestURL, dataType) => {
             break;
           case "device_select":
             if (result.data.data.length === 0) {
-              console.log("data없음");
               setInput({ ...input, device: [] });
             } else {
               setInput({
@@ -174,7 +169,6 @@ export const useFetchData = (requestURL, dataType) => {
             setInput(result.data.data);
             break;
           case "review":
-            console.log(result);
             setInput(result.data);
             break;
           default:
@@ -182,7 +176,6 @@ export const useFetchData = (requestURL, dataType) => {
             break;
         }
         setIsLoading(false);
-        console.log(result);
       })
       .catch(error => {
         console.log(error);
@@ -200,11 +193,10 @@ export const useFetchData = (requestURL, dataType) => {
   };
 
   const getPrevState = async (requestURL, dataType) => {
-    let url = store.url + requestURL;
+    //let url = store.url + requestURL;
     await axios
       .get(store.url + "/user/main/" + cookies.Token)
       .then(async response => {
-        console.log(response);
         if (response.data.validation) {
           onChangeStore({
             ...response.data.data,
@@ -227,13 +219,10 @@ export const useFetchData = (requestURL, dataType) => {
   };
 
   useEffect(() => {
-    console.log("mount");
-    console.log(isLoggedIn());
     if (!isLoggedIn()) {
       getPrevState(requestURL, dataType);
     } else {
       //console.log(result);
-      console.log(store);
       let url = store.url + requestURL;
       let flag = true;
       switch (dataType) {
@@ -259,7 +248,6 @@ export const useFetchData = (requestURL, dataType) => {
           flag = false;
           break;
       }
-      console.log(flag);
       if (flag) {
         dataFetch(url, dataType);
       }

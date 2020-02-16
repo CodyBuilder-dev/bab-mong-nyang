@@ -26,7 +26,6 @@ const DirectCalculate = props => {
       data: input
     })
       .then(res => {
-        console.log(res);
         if (res.data.validation) {
           onChangeStore({ ...res.data.data });
           setInput({...input,ME:""});
