@@ -8,7 +8,6 @@ import {
   Tab,
   Typography,
   Box,
-  AppBar
 } from "@material-ui/core";
 // import zIndex from "@material-ui/core/styles/zIndex";
 import {useParams} from "react-router"

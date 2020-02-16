@@ -49,13 +49,13 @@ const Login = props => {
     localStorage.getItem("item") ? true : false
   );
   const { store, onChangeStore } = useStore();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie]= useCookies(["token"]);
   useEffect(() => {
     setInput({})
     if (localStorage.getItem("u_id")) {
       setInput({ u_Id: localStorage.getItem("u_id") });
     }
-  }, []);
+  }, [setInput]);
   const onLoginClick = async event => {
     let result = await onSubmit(store.url + "/user/login");
     setInput({...input,u_Pw:""})
@@ -65,7 +65,7 @@ const Login = props => {
         "",
         ""
       );
-      setCookie("Token", result.data.Token, "/");
+      setCookie("Token", result.data.Token);
       if (remember) {
         localStorage.setItem("u_id", input.u_Id);
       } else {

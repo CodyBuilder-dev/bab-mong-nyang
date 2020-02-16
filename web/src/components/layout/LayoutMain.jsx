@@ -1,10 +1,6 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment  } from "react";
 import Header from "./Header";
 import { CssBaseline, Container, makeStyles } from "@material-ui/core";
-import { useStore } from "../custom-hooks/custom-hooks";
-import { useHistory } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   content: {

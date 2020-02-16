@@ -24,9 +24,7 @@ const Ingredient = props => {
   const [input,setInput] = useState({d_No:props.d_No});
   const { store, onChangeStore } = useStore();
   const changeEvent = event => {
-    console.log(input)
     const {name, value} = event.target
-    console.log(name +" " + value)
     setInput({...input,[name] : value})
   }
   const resetEvent = event =>{
@@ -36,7 +34,6 @@ const Ingredient = props => {
   const computeEvent = async() => {
     await axios({method : "POST" , url : store.url+"/feed/cal/direct" ,headers : store.headers, data : input})
     .then(res => {
-      console.log(res);
       if(res.data.validation){
         onChangeStore({...res.data.data});
         //alert(res.data.message);

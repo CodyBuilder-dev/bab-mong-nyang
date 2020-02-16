@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -9,13 +9,10 @@ import {
   Button,
   Box,
   Typography,
-  InputAdornment
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-import { s_AmountCheck } from "../../modules/regCheck";
 
 const AddFeedReview = props => {
   const { input, onSubmit, updateField, setInput } = useFetchData("", "");
@@ -41,7 +38,6 @@ const AddFeedReview = props => {
       setInput({});
       setOpen(false);
     } else {
-      console.log(input);
       if (input.r_Positive === "" || input.r_Negative === "") {
         alert("정확한 리뷰를 위해 장, 단점 모두 작성해주시기 바랍니다");
       } else {

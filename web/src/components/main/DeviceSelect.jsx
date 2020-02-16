@@ -15,9 +15,8 @@ import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { Add } from "@material-ui/icons";
+import {  useHistory } from "react-router-dom";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -114,7 +113,6 @@ const DeviceSelect = props => {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
   useEffect(() => {
-    console.log(input.device);
     if (input.u_Last !== undefined && input.u_Last !== 0) {
       setSelectedValue(
         input.device.filter(device => device.d_No === store.u_Last)[0]
@@ -141,7 +139,6 @@ const DeviceSelect = props => {
     onChangeStore({render:true})
     dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
-  //console.log(input);
   return (
     <div className={classes.deviceSelectForm}>
       {isLoading ? (

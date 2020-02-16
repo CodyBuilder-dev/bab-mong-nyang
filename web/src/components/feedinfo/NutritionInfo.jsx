@@ -1,34 +1,31 @@
 import React from "react";
 import {
-  makeStyles,
   Box,
-  CardMedia,
-  withStyles,
   Typography,
   Divider,
   Grid
 } from "@material-ui/core";
 import { useFetchData } from "../custom-hooks/custom-hooks";
-import { keyframes } from "styled-components";
 
-const useStyles = makeStyles(theme => ({
-  page: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  media: {
-    width: 150,
-    height: 170
-  },
-  score: {
-    height: "100%",
-    width: 150,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-around"
-  }
-}));
+
+// const useStyles = makeStyles(theme => ({
+//   page: {
+//     display: "flex",
+//     flexDirection: "column",
+//     alignItems: "center"
+//   },
+//   media: {
+//     width: 150,
+//     height: 170
+//   },
+//   score: {
+//     height: "100%",
+//     width: 150,
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "space-around"
+//   }
+// }));
 // ==== 사료 영양 정보 ==================
 const nutMatch = {
   f_Protein: "조단백",
@@ -41,7 +38,6 @@ const nutMatch = {
 };
 // ======================================
 const NutritionInfo = props => {
-  const classes = useStyles();
   const { input } = useFetchData("/feed/nutrient/" + props.f_No, "feedinfo");
   return (
     <>

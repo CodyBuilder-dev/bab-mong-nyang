@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const InfoModify = props => {
   const classes = useStyles();
-  const { input, setInput, isLoading, updateField, dataFetch } = useFetchData(
+  const { input, isLoading, updateField, dataFetch } = useFetchData(
     "/user/",
     "user"
   );

@@ -15,8 +15,6 @@ import AddSetting from "./AddSetting";
 import { hour, minute } from "./Time";
 import { s_AmountCheck } from "../../modules/regCheck";
 import AmountSetting from "./AmountSetting";
-import {useCookies} from "react-cookie"
-
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -32,8 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 const TimeTable = props => {
   const classes = useStyles();
-  const [cookies] = useCookies();
-  const {store,onChangeStore} = useStore();
+  const { store, onChangeStore } = useStore();
   const [editable, setEditable] = useState({});
   const modifyClickEvent = async event => {
     const index = event.currentTarget.value;
@@ -75,7 +72,6 @@ const TimeTable = props => {
         headers: store.headers
       })
         .then(res => {
-          console.log(res);
           if (res.data.validation) {
             alert(res.data.message);
             dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
@@ -98,16 +94,14 @@ const TimeTable = props => {
   );
 
   useEffect(() => {
-    
     if (store.render) {
       dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
       onChangeStore({ render: false });
     }
   }, [store]);
-  useEffect(()=> {
-    console.log(store.u_Last)
+  useEffect(() => {
     dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-  },[store.headers])
+  }, [store.headers]);
 
   return (
     <div className={classes.page}>
@@ -211,9 +205,7 @@ const TimeTable = props => {
               <TextField
                 variant="standard"
                 value={
-                  Number(inputData.s_Amount) === NaN
-                    ? 0
-                    : Number(inputData.s_Amount)
+                  isNaN(inputData.s_Amount) ? 0 : Number(inputData.s_Amount)
                 }
                 name="s_Amount"
                 onChange={event => {

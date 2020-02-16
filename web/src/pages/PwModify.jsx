@@ -8,11 +8,7 @@ import {
   useStore,
   useFetchData
 } from "../components/custom-hooks/custom-hooks";
-import { useEffect } from "react";
 import {
-  u_IdCheck,
-  u_EmailCheck,
-  u_NameCheck,
   u_PwCheck
 } from "../modules/regCheck";
 
@@ -43,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 const Join = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit, onValidate, setInput } = useFetchData(
+  const { input, updateField, onSubmit } = useFetchData(
     "",
     ""
   );
@@ -55,8 +51,7 @@ const Join = props => {
       input.pwValidated
     ) {
       let result = await onSubmit(store.url + "/user");
-
-      if (result == true) {
+      if (result === true) {
         alert("환영합니다. " + input.u_Name + "님");
         props.history.replace("/login");
       } else {
@@ -66,17 +61,8 @@ const Join = props => {
       alert("올바른 입력을 해주세요");
     }
   };
-  const onBlurEvent = async event => {
-    if (event.target.value === undefined || event.target.value === "") {
-      setInput({ ...input, idValidated: true });
-    } else {
-      const result = await onValidate(
-        store.url + "/user/idCheck/" + event.target.value
-      );
-      setInput({ ...input, idValidated: result });
-    }
-  };
-  useEffect(() => {}, [updateField]);
+  
+  
 
   return (
     <div className={classes.page}>

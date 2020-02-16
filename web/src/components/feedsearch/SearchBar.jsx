@@ -4,7 +4,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
 import { useHistory } from "react-router";
-import { useStore, useFetchData } from "../custom-hooks/custom-hooks";
+import { useStore } from "../custom-hooks/custom-hooks";
 
 const useStyles = makeStyles(theme => ({
   searchBarRoot: {
@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
 const SearchBar = props => {
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
-  const { input } = useFetchData("", "");
   const classes = useStyles();
   const history = useHistory();
   const { store, onChangeStore } = useStore();
