@@ -21,19 +21,24 @@ int main(int argc, char *argv[])
 	static char *pass = "1234";
 	static char *dbname = "feed";
 
-	MYSQL *conn = connectsql(host,user,pass,dbname);
 	fd = connectpi(fd, baud, device);
 	setdefault();
 	char* data = serial_signal(fd);
-	int remainfood = atoi(data);
+	int remainfood = atoi(data)/3;
+
+	MYSQL *conn = connectsql(host,user,pass,dbname);
 	MYSQL_ROW row = get_field(conn);
+	int getprev= get_last_eaten(conn);
 	int loopcnt=0;
 	if (argc > 1) loopcnt=atoi(argv[1])*3;
 	else if (row) loopcnt=atoi(row[1])*3;
 	int intdata= atoi(data);
 	// food distribute
+	conn = connectsql(host,user,pass,dbname);
 	if(loopcnt){
-		while(intdata<loopcnt){
+		int putamount = 0;
+		while(intdata<loopcnt && putamount<(loopcnt/3)){
+			putamount+=10;
 			for(int i=0;i<128;++i)
 				goFront(); //512 for 1loop
 			data = serial_signal(fd);
@@ -42,9 +47,9 @@ int main(int argc, char *argv[])
 		}
 		end();
 		if (EMPTYCHECK()==1) {
-		insert_query(conn,1,loopcnt/3,remainfood);
+		insert_query(conn,1,putamount,remainfood,(getprev==0?getprev:getprev-remainfood));
 		}
-		else insert_query(conn,0,loopcnt/3,remainfood);
+		else insert_query(conn,0,putamount,remainfood,(getprev==0?getprev:getprev-remainfood));
 		melody();
 		exit(1);
 	}

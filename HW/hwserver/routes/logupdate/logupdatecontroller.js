@@ -15,7 +15,8 @@ var datas = {
     l_Time : '000000000000',
     l_Empty : 0,
     l_Amount : 0,
-    l_Remain : 0
+    l_Remain : 0,
+    l_Eat : 0
 };
 
 const selectAll = function (req, res) {
@@ -55,6 +56,7 @@ function updatevar(rows){
         datas.l_Empty =  rows[i].empty;
         datas.l_Amount = rows[i].amount;
         datas.l_Remain = rows[i].remain;
+        datas.l_Eat = rows[i].eaten;
         let iquery = backendmapper.getStatement('LogData', 'logUpdate', datas, format );
         backendcon.query(iquery, function(err, vars){
            if(err) throw err;
