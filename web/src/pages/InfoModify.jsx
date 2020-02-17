@@ -41,7 +41,7 @@ const InfoModify = props => {
   }, [store]);
   const onClickEvent = async event => {
     if (u_NameCheck(input.u_Name) && u_EmailCheck(input.u_Email)) {
-      const result = await axios.put(store.url + "/user", input, {
+      const result = await axios.put(store.url + "/user", {...input,u_No : store.u_No}, {
         headers: store.headers
       });
       if (result.data) {

@@ -65,8 +65,13 @@ const AmountSetting = props => {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [value, setValue] = React.useState(0);
   const handleClickOpen = () => {
-    setValue(0);
-    setOpen(true);
+    if(store.u_Last !== 0){
+      setValue(0);
+      setOpen(true);
+    }
+    else{
+      alert("기기를 등록 후 사용해주세요")
+    }
   };
 
   const handleClose = async event => {

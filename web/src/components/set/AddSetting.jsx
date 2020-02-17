@@ -102,8 +102,8 @@ const AddSetting = props => {
                 }
               }}
             >
-              {hour.map(data => (
-                <option value={data}>{data}</option>
+              {hour.map((data,index) => (
+                <option value={data} key = {index} >{data}</option>
               ))}
             </TextField>
 
@@ -130,8 +130,8 @@ const AddSetting = props => {
                 }
               }}
             >
-              {minute.map(data => (
-                <option value={data}>{data}</option>
+              {minute.map((data,index) => (
+                <option value={data} key = {index}>{data}</option>
               ))}
             </TextField>
             <Typography variant="body1">분</Typography>

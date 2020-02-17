@@ -62,15 +62,20 @@ const Feedreview = props => {
   const classes = useStyles();
   const [open, setOpen] = useState({});
   const { input, dataFetch, isLoading } = useFetchData(
-    "/review/" + props.f_No,
+    "/review/" + props.f_No+"/",
     "review"
   );
 
   const { store } = useStore();
-  useEffect(() => {
-    dataFetch(store.url + "/review/" + props.f_No + "/"+store.u_No, "review");
-  }, [store]);
+  // useEffect(() => {
+  //   dataFetch(store.url + "/review/" + props.f_No + "/"+store.u_No, "review");
+  // }, [store]);
   
+  React.useMemo(()=>{
+    if(store.render !== undefined && store.render){
+      dataFetch(store.url + "/review/" + props.f_No + "/"+store.u_No, "review");
+    }
+  },[store])
   return (
     <div className={classes.page}>
       {isLoading ? (
