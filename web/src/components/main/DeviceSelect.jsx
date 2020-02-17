@@ -121,12 +121,12 @@ const DeviceSelect = props => {
       setSelectedValue({});
     }
   },[input])
-  React.useMemo(()=>{
-    if(store.u_No !== undefined && store.u_No !== "" && input.device == 0){
+  React.useMemo( ()=>{
+    if((store.u_No !== undefined && store.u_No !== "" ) && input == 0){
       setSelectedValue(store.u_Last)
       dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
     }
-  },[store.u_Last])
+  },[store.u_No])
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
@@ -168,7 +168,7 @@ const DeviceSelect = props => {
           )}
 
           <DeviceDialog
-            selectedValue={selectedValue}
+            selectedValue={typeof(selectedValue) === String ? selectedValue : ""}
             open={open}
             onClose={handleClose}
             devices={input.device === undefined ? [] : input.device}

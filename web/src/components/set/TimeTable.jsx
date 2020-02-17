@@ -169,8 +169,8 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {hour.map(data => (
-                  <option value={data}>{data}</option>
+                {hour.map((data,key) => (
+                  <option value={data} key ={key}>{data}</option>
                 ))}
               </TextField>
               <Typography variant="body1">시</Typography>
@@ -202,8 +202,8 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {minute.map(data => (
-                  <option value={data}>{data}</option>
+                {minute.map((data,key) => (
+                  <option value={data} key = {key}>{data}</option>
                 ))}
               </TextField>
               <Typography variant="body1">분</Typography>

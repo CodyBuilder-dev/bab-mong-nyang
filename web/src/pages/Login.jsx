@@ -94,7 +94,7 @@ const Login = props => {
           label="아이디"
           name="u_Id"
           autoFocus
-          value={input.u_Id}
+          value={input.u_Id ? input.u_Id : ""}
           onChange={updateField}
         />
         <TextField
@@ -107,7 +107,7 @@ const Login = props => {
           type="password"
           id="u_Pw"
           autoComplete="current-password"
-          value={input.u_Pw}
+          value={input.u_Pw ? input.u_Pw : ""}
           onChange={updateField}
           // InputLabelProps={{
           //   classes: {
@@ -126,8 +126,8 @@ const Login = props => {
               name="remember"
               color="primary"
               onChange={(e, c) => setRemember(c)}
-              checked={remember}
-              defaultChecked={false}
+              checked={remember? remember : false}
+              
             />
           }
           label="아이디 저장"

@@ -40,7 +40,7 @@ const CurrentTimeTable = ({ props }) => {
                     <Typography variant="h5" >시간</Typography>
                   </Box>
                   <Box  display="flex" justifyContent = "center" width="50%">
-                    <Typography display="flex" variant="h5" >상태</Typography>
+                    <Typography variant="h5" >상태</Typography>
                   </Box>
                 </Box>
           {input.data === undefined
@@ -51,7 +51,7 @@ const CurrentTimeTable = ({ props }) => {
                     <Typography variant="body1" >{data.l_Time.slice(11,19)}</Typography>
                   </Box>
                   <Box  display="flex" justifyContent = "center" width="50%">
-                    <Typography display="flex" variant="body1" className = {data.l_Remain === 0 ? classes.empty : classes.remain}>
+                    <Typography  variant="body1" className = {data.l_Remain === 0 ? classes.empty : classes.remain}>
                       {data.l_Remain === 0 ? "다 먹음" : "남김"}
                     </Typography>
                   </Box>
