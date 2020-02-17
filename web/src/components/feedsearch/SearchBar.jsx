@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
 const SearchBar = props => {
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
-  const { input } = useFetchData("", "");
   const classes = useStyles();
   const history = useHistory();
   const { store, onChangeStore } = useStore();

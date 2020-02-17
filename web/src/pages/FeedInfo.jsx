@@ -14,6 +14,7 @@ import { useParams } from "react-router";
 import FeedBasic from "../components/feedinfo/FeedBasic";
 import NutritionInfo from "../components/feedinfo/NutritionInfo";
 import Feedreview from "../components/feedinfo/Feedreview";
+import IngredientInfo from "../components/feedinfo/IngredientInfo";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -95,8 +96,8 @@ const FeedInfo = props => {
         }}
       >
         <Tab label="기본 정보" {...a11yProps(0)} />
-        <Tab label="영양 정보" {...a11yProps(1)} />
-        <Tab label="리뷰" {...a11yProps(2)} />
+        {/* <Tab label="영양 정보" {...a11yProps(1)} /> */}
+        <Tab label="리뷰" {...a11yProps(1)} />
       </Tabs>
       <div className={classes.tab}>
         {/* </AppBar> */}
@@ -107,11 +108,13 @@ const FeedInfo = props => {
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
             <FeedBasic f_No={f_No} />
-          </TabPanel>
-          <TabPanel value={value} index={1} dir={theme.direction}>
             <NutritionInfo f_No={f_No} />
+            <IngredientInfo f_No={f_No} />
           </TabPanel>
-          <TabPanel value={value} index={2} dir={theme.direction}>
+          {/* <TabPanel value={value} index={1} dir={theme.direction}>
+            <NutritionInfo f_No={f_No} />
+          </TabPanel> */}
+          <TabPanel value={value} index={1} dir={theme.direction}>
             <Feedreview f_No={f_No} />
           </TabPanel>
         </SwipeableViews>

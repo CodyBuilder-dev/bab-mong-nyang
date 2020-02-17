@@ -113,6 +113,7 @@ const DrawerList = ({ setOpen, open }) => {
             history.push("/info");
           }}
         >
+          {console.log(input)}
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

@@ -55,7 +55,7 @@ const SearchResult = props => {
               <ListItemAvatar>
                 <CardMedia
                   className={classes.media}
-                  image={null}
+                  image={`/images/${data.f_No}.jpg`}
                   title="Feed Image"
                 />
               </ListItemAvatar>
