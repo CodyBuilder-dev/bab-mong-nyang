@@ -54,7 +54,7 @@ const TimeTable = props => {
             }
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
       } else {
         alert("1~999사이의 값을 입력해주세요");
@@ -65,7 +65,6 @@ const TimeTable = props => {
   const delteClickEvent = async event => {
     if (event.currentTarget.name === "삭제") {
       const targetIndex = event.currentTarget.value;
-
       await axios({
         method: "DELETE",
         url: store.url + "/setting/" + input.data[targetIndex].s_No,

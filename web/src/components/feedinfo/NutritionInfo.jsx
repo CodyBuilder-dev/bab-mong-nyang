@@ -5,7 +5,9 @@ import {
   Divider,
   Grid
 } from "@material-ui/core";
-import { useFetchData } from "../custom-hooks/custom-hooks";
+import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
+import { keyframes } from "styled-components";
+import { useEffect } from "react";
 
 
 // const useStyles = makeStyles(theme => ({
@@ -38,10 +40,18 @@ const nutMatch = {
 };
 // ======================================
 const NutritionInfo = props => {
-  const { input } = useFetchData("/feed/nutrient/" + props.f_No, "feedinfo");
+  const classes = useStyles();
+  const { input, dataFetch } = useFetchData(
+    "/feed/nutrient/" + props.f_No,
+    "feedinfo"
+  );
+  const { store } = useStore();
+  useEffect(() => {
+    dataFetch(store.url + "/feed/nutrient/" + props.f_No, "feedinfo");
+  }, [store]);
   return (
     <>
-      <Box width="99%" maxWidth="500px" height="100vh">
+      <Box width="99%" maxWidth="500px">
         <Typography variant="h6" gutterBottom>
           영양 성분
         </Typography>

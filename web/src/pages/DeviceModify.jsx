@@ -124,7 +124,7 @@ const DeviceModify = props => {
         }
       })
       .catch(error => {
-        console.log("심각한 통신 장애");
+        console.error(error);
       });
   };
 

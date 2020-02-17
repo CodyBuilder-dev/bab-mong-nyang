@@ -90,9 +90,9 @@ const Join = props => {
             // input.u_Id가 비었으면 error false
             // idvalidate false 면 error true
             //u_Idcheck가 false 면 error true
-            !(input.u_Id ===undefined || input.u_Id === "") &&(
-            ( input.idValidated !==undefined && !input.idValidated)
-            || (input.u_Id !== undefined && !u_IdCheck(input.u_Id)))
+            !(input.u_Id === undefined || input.u_Id === "") &&
+            ((input.idValidated !== undefined && !input.idValidated) ||
+              (input.u_Id !== undefined && !u_IdCheck(input.u_Id)))
           }
           onChange={updateField}
           onBlur={onBlurEvent}

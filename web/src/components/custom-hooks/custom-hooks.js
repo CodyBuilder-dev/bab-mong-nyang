@@ -65,7 +65,6 @@ export const useFetchData = (requestURL, dataType) => {
   const history = useHistory();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const onSubmit = useCallback(async url => {
-    //console.log(input);
     const result = await axios.post(url, input, { headers: store.headers });
     return result.data;
   });
@@ -130,8 +129,6 @@ export const useFetchData = (requestURL, dataType) => {
 
   const dataFetch = async (url, type) => {
     setIsLoading(true);
-    //console.log(store.Token);
-    console.log(url+" " + type);
     await axios({
       method: "GET",
       url: url,
@@ -179,10 +176,7 @@ export const useFetchData = (requestURL, dataType) => {
         }
         setIsLoading(false);
       })
-      .catch(error => {
-        console.log(error);
-      });
-    //console.log(result);
+      .catch(error => {});
   };
 
   const isLoggedIn = () => {
@@ -228,7 +222,6 @@ export const useFetchData = (requestURL, dataType) => {
     if (!isLoggedIn()) {
       getPrevState(requestURL, dataType);
     } else {
-      //console.log(result);
       let url = store.url + requestURL;
       let flag = true;
       switch (dataType) {

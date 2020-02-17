@@ -97,7 +97,7 @@ const FeedBasic = props => {
               ({input.f_Count})
             </Typography>
           </Box>
-          <Box width="90vw" maxWidth="500px">
+          <Box width="90%" maxWidth="500px">
             <Grid
               container
               spacing={0}

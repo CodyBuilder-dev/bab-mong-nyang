@@ -68,7 +68,6 @@ const DrawerList = ({ setOpen }) => {
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            
             {input.device !== undefined ? (
               input.device.d_Species === "강아지" ? (
                 <img src={DogBlack} alt="dog" className={classes.icons} />
@@ -111,6 +110,7 @@ const DrawerList = ({ setOpen }) => {
             history.push("/info");
           }}
         >
+          {console.log(input)}
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

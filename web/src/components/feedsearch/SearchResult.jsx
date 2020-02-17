@@ -39,25 +39,29 @@ const SearchResult = props => {
   return (
     <Box className={classes.tab}>
       <List className={classes.root}>
-        {false ? <></> : props.data.map(data => (
-          <ListItem
-            key={`feedImage${data.f_No}`}
-            button
-            onClick={() => goFeedInfo(data.f_No)}
-          >
-            <ListItemAvatar>
-              <CardMedia
-                className={classes.media}
-                image={null}
-                title="Feed Image"
+        {false ? (
+          <></>
+        ) : (
+          props.data.map(data => (
+            <ListItem
+              key={`feedImage${data.f_No}`}
+              button
+              onClick={() => goFeedInfo(data.f_No)}
+            >
+              <ListItemAvatar>
+                <CardMedia
+                  className={classes.media}
+                  image={`/images/${data.f_No}.jpg`}
+                  title="Feed Image"
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={data.f_Name}
+                secondary={data.f_Manufacturer}
               />
-            </ListItemAvatar>
-            <ListItemText
-              primary={data.f_Name}
-              secondary={data.f_Manufacturer}
-            />
-          </ListItem>
-        ))}
+            </ListItem>
+          ))
+        )}
       </List>
     </Box>
   );

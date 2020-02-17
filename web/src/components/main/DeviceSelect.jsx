@@ -138,7 +138,7 @@ const DeviceSelect = props => {
     }
     setSelectedValue(value);
     await onChangeStore(value, "select", "/Join/main");
-    onChangeStore({render:true})
+    onChangeStore({ render: true });
     dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
   return (
@@ -159,7 +159,7 @@ const DeviceSelect = props => {
           ) : (
             <div className={classes.deviceInfoBox}>
               <Typography variant="subtitle1" display={"inline"}>
-                {selectedValue? selectedValue.d_Name: undefined}'s 밥그릇
+                {selectedValue ? selectedValue.d_Name : undefined}'s 밥그릇
               </Typography>
               <IconButton onClick={handleClickOpen}>
                 <ArrowDropDown />
