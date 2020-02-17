@@ -24,11 +24,11 @@ const CurrentTimeTable = ({ props }) => {
   const classes = useStyles();
   const { input, isLoading ,dataFetch} = useFetchData("/logdata/", "maintable");
   const { store } = useStore();
-  useEffect(()=>{
-    if(store.u_Last !== undefined || store.u_Last !== ""){
+  React.useMemo(()=>{
+    if(store.u_Last !== undefined && store.u_Last !== "" && input.data !== undefined){
       dataFetch(store.url + "/logdata/"+store.u_Last,"maintable");
     }
-  },[store])
+  },[store.u_Last])
   return (
     <div className={classes.page}>
       {isLoading ? (
@@ -40,18 +40,18 @@ const CurrentTimeTable = ({ props }) => {
                     <Typography variant="h5" >시간</Typography>
                   </Box>
                   <Box  display="flex" justifyContent = "center" width="50%">
-                    <Typography display="flex" variant="h5" >상태</Typography>
+                    <Typography variant="h5" >상태</Typography>
                   </Box>
                 </Box>
-          {input.map === undefined
-            ? "...loading"
-            : input.map(data => (
-                <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px">
+          {input.data === undefined
+            ? ""
+            : input.data.map((data,index) => (
+                <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px" key = {index}>
                   <Box display="flex" width = "50%" justifyContent = "center">
                     <Typography variant="body1" >{data.l_Time.slice(11,19)}</Typography>
                   </Box>
                   <Box  display="flex" justifyContent = "center" width="50%">
-                    <Typography display="flex" variant="body1" className = {data.l_Remain === 0 ? classes.empty : classes.remain}>
+                    <Typography  variant="body1" className = {data.l_Remain === 0 ? classes.empty : classes.remain}>
                       {data.l_Remain === 0 ? "다 먹음" : "남김"}
                     </Typography>
                   </Box>

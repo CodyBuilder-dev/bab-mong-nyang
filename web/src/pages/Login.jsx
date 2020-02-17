@@ -49,13 +49,13 @@ const Login = props => {
     localStorage.getItem("item") ? true : false
   );
   const { store, onChangeStore } = useStore();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie]= useCookies(["token"]);
   useEffect(() => {
     setInput({})
     if (localStorage.getItem("u_id")) {
       setInput({ u_Id: localStorage.getItem("u_id") });
     }
-  }, []);
+  }, [setInput]);
   const onLoginClick = async event => {
     let result = await onSubmit(store.url + "/user/login");
     setInput({...input,u_Pw:""})
@@ -65,7 +65,7 @@ const Login = props => {
         "",
         ""
       );
-      setCookie("Token", result.data.Token, "/");
+      setCookie("Token", result.data.Token);
       if (remember) {
         localStorage.setItem("u_id", input.u_Id);
       } else {
@@ -94,7 +94,7 @@ const Login = props => {
           label="아이디"
           name="u_Id"
           autoFocus
-          value={input.u_Id}
+          value={input.u_Id ? input.u_Id : ""}
           onChange={updateField}
         />
         <TextField
@@ -107,7 +107,7 @@ const Login = props => {
           type="password"
           id="u_Pw"
           autoComplete="current-password"
-          value={input.u_Pw}
+          value={input.u_Pw ? input.u_Pw : ""}
           onChange={updateField}
           // InputLabelProps={{
           //   classes: {
@@ -126,8 +126,8 @@ const Login = props => {
               name="remember"
               color="primary"
               onChange={(e, c) => setRemember(c)}
-              checked={remember}
-              defaultChecked={false}
+              checked={remember? remember : false}
+              
             />
           }
           label="아이디 저장"

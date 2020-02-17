@@ -8,7 +8,6 @@ import {
   Tab,
   Typography,
   Box,
-  AppBar
 } from "@material-ui/core";
 import { useParams } from "react-router";
 import FeedBasic from "../components/feedinfo/FeedBasic";

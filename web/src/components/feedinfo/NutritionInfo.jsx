@@ -1,9 +1,6 @@
 import React from "react";
 import {
-  makeStyles,
   Box,
-  CardMedia,
-  withStyles,
   Typography,
   Divider,
   Grid
@@ -12,24 +9,25 @@ import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { keyframes } from "styled-components";
 import { useEffect } from "react";
 
-const useStyles = makeStyles(theme => ({
-  page: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  media: {
-    width: 150,
-    height: 170
-  },
-  score: {
-    height: "100%",
-    width: 150,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-around"
-  }
-}));
+
+// const useStyles = makeStyles(theme => ({
+//   page: {
+//     display: "flex",
+//     flexDirection: "column",
+//     alignItems: "center"
+//   },
+//   media: {
+//     width: 150,
+//     height: 170
+//   },
+//   score: {
+//     height: "100%",
+//     width: 150,
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "space-around"
+//   }
+// }));
 // ==== 사료 영양 정보 ==================
 const nutMatch = {
   f_Protein: "조단백",
@@ -59,14 +57,14 @@ const NutritionInfo = props => {
         </Typography>
         <Divider />
         <Grid container spacing={0} alignItems="center" justify="flex-start">
-          {Object.entries(input).map(nutrition =>
+          {Object.entries(input).map((nutrition,index) =>
             nutMatch === undefined ? (
               <></>
             ) : nutMatch[nutrition[0]] === undefined ? (
               <></>
             ) : (
               <>
-                <Grid item xs={3} key={`nutrition`}>
+                <Grid item xs={3} key={index}>
                   <Typography variant="body2">
                     {nutMatch[nutrition[0]]}
                   </Typography>

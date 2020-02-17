@@ -8,13 +8,10 @@ import {
   useStore,
   useFetchData
 } from "../components/custom-hooks/custom-hooks";
-import { useEffect } from "react";
 import {
-  u_IdCheck,
-  u_EmailCheck,
-  u_NameCheck,
   u_PwCheck
 } from "../modules/regCheck";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -41,9 +38,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Join = props => {
+const PwModify = props => {
   const classes = useStyles();
-  const { input, updateField, onSubmit, onValidate, setInput } = useFetchData(
+  const { input, updateField, onSubmit } = useFetchData(
     "",
     ""
   );
@@ -54,29 +51,21 @@ const Join = props => {
       u_PwCheck(input.u_Pw) &&
       input.pwValidated
     ) {
-      let result = await onSubmit(store.url + "/user");
-
-      if (result == true) {
-        alert("환영합니다. " + input.u_Name + "님");
-        props.history.replace("/login");
+      let result = await axios.put(store.url + "/user/pass", {...input,u_No : store.u_No}, {
+        headers: store.headers
+      });
+      if (result.data.validation) {
+        alert("비밀번호가 수정되었습니다.");
+        props.history.replace("/info");
       } else {
-        alert("회원가입에 실패했습니다.");
+        alert(result.data.message);
       }
     } else {
       alert("올바른 입력을 해주세요");
     }
   };
-  const onBlurEvent = async event => {
-    if (event.target.value === undefined || event.target.value === "") {
-      setInput({ ...input, idValidated: true });
-    } else {
-      const result = await onValidate(
-        store.url + "/user/idCheck/" + event.target.value
-      );
-      setInput({ ...input, idValidated: result });
-    }
-  };
-  useEffect(() => {}, [updateField]);
+  
+  
 
   return (
     <div className={classes.page}>
@@ -140,4 +129,4 @@ const Join = props => {
   );
 };
 
-export default Join;
+export default PwModify;

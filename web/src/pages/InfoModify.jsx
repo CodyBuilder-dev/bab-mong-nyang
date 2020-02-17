@@ -31,17 +31,19 @@ const useStyles = makeStyles(theme => ({
 }));
 const InfoModify = props => {
   const classes = useStyles();
-  const { input, setInput, isLoading, updateField, dataFetch } = useFetchData(
+  const { input, isLoading, updateField, dataFetch } = useFetchData(
     "/user/",
     "user"
   );
   const { store } = useStore();
   useEffect(() => {
-    dataFetch(store.url + "/user/" + store.u_No, "user");
+    if(input===undefined){
+      dataFetch(store.url + "/user/" + store.u_No, "user");
+    }
   }, [store]);
   const onClickEvent = async event => {
     if (u_NameCheck(input.u_Name) && u_EmailCheck(input.u_Email)) {
-      const result = await axios.put(store.url + "/user", input, {
+      const result = await axios.put(store.url + "/user", {...input,u_No : store.u_No}, {
         headers: store.headers
       });
       if (result.data) {
