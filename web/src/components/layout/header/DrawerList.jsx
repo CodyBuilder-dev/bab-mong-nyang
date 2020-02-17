@@ -85,7 +85,7 @@ const DrawerList = ({ setOpen }) => {
         ) : (
           <ListItemText
             primary={input.device.d_Name}
-            secondary={calcAge(input.device.d_Bday)}
+            secondary={input.device.d_Bday? calcAge(input.device.d_Bday) : '-'}
           />
         )}
       </ListItem>

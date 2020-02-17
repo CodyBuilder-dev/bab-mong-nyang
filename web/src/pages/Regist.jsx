@@ -106,12 +106,12 @@ const Regist = props => {
   const onClickEvent = async event => {
     if (checked) {
       let result = await onSubmit(store.url + "/device");
-      if (result !== false) {
-        onChangeStore({ ...store, u_Last: result });
+      if (result.validation) {
+        onChangeStore({ ...store, u_Last: result.data.d_No });
         alert("기기등록에 성공했습니다.");
         props.history.goBack();
       } else {
-        alert("기기등록에 실패했습니다.");
+        alert(result.message);
       }
     } else {
       alert("일련번호 확인이 필요합니다.");

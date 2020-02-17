@@ -24,11 +24,11 @@ const CurrentTimeTable = ({ props }) => {
   const classes = useStyles();
   const { input, isLoading ,dataFetch} = useFetchData("/logdata/", "maintable");
   const { store } = useStore();
-  useEffect(()=>{
-    if(store.u_Last !== undefined || store.u_Last !== ""){
+  React.useMemo(()=>{
+    if(store.u_Last !== undefined && store.u_Last !== "" && input.data !== undefined){
       dataFetch(store.url + "/logdata/"+store.u_Last,"maintable");
     }
-  },[store])
+  },[store.u_Last])
   return (
     <div className={classes.page}>
       {isLoading ? (
@@ -43,10 +43,10 @@ const CurrentTimeTable = ({ props }) => {
                     <Typography display="flex" variant="h5" >상태</Typography>
                   </Box>
                 </Box>
-          {input.map === undefined
-            ? "...loading"
-            : input.map(data => (
-                <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px">
+          {input.data === undefined
+            ? ""
+            : input.data.map((data,index) => (
+                <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px" key = {index}>
                   <Box display="flex" width = "50%" justifyContent = "center">
                     <Typography variant="body1" >{data.l_Time.slice(11,19)}</Typography>
                   </Box>

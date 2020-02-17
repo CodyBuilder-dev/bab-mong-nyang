@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -20,12 +20,16 @@ const ModifyFeedReview = props => {
   const [input, setInput] = useState(props.init);
   const [open, setOpen] = useState(false);
   const { store, onChangeStore } = useStore();
-
+  
   const handleClickOpen = () => {
     setInput(props.init)
     setOpen(true);
   };
-
+  useEffect(()=>{
+    if(store.render === undefined || store.render){
+      onChangeStore({render : false});
+    }
+  },[])
   const handleClose = async event => {
     if (event.currentTarget.name !== "add") {
       setInput({});

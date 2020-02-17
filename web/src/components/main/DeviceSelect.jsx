@@ -112,7 +112,7 @@ const DeviceSelect = props => {
   );
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
-  useEffect(() => {
+  React.useMemo(()=>{
     if (input.u_Last !== undefined && input.u_Last !== 0) {
       setSelectedValue(
         input.device.filter(device => device.d_No === store.u_Last)[0]
@@ -120,11 +120,13 @@ const DeviceSelect = props => {
     } else {
       setSelectedValue({});
     }
-  }, [input]);
-  useEffect(() => {
-    setSelectedValue(store.u_Last)
-    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
-  }, [store]);
+  },[input])
+  React.useMemo(()=>{
+    if(store.u_No !== undefined && store.u_No !== "" && input.device == 0){
+      setSelectedValue(store.u_Last)
+      dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
+    }
+  },[store.u_Last])
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);

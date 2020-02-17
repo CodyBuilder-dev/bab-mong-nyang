@@ -93,15 +93,21 @@ const TimeTable = props => {
     "timetable"
   );
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (store.render) {
+  //     dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+  //     onChangeStore({ render: false });
+  //   }
+  // }, [store]);
+  React.useMemo(()=>{
     if (store.render) {
       dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
       onChangeStore({ render: false });
     }
-  }, [store]);
-  useEffect(() => {
-    dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-  }, [store.headers]);
+  },[store])
+  // useEffect(() => {
+  //   dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+  // }, [store.headers]);
 
   return (
     <div className={classes.page}>

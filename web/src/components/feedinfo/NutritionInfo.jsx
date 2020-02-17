@@ -47,14 +47,14 @@ const NutritionInfo = props => {
         </Typography>
         <Divider />
         <Grid container spacing={0} alignItems="center" justify="flex-start">
-          {Object.entries(input).map(nutrition =>
+          {Object.entries(input).map((nutrition,index) =>
             nutMatch === undefined ? (
               <></>
             ) : nutMatch[nutrition[0]] === undefined ? (
               <></>
             ) : (
               <>
-                <Grid item xs={3} key={`nutrition`}>
+                <Grid item xs={3} key={index}>
                   <Typography variant="body2">
                     {nutMatch[nutrition[0]]}
                   </Typography>
