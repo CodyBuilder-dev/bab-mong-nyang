@@ -15,7 +15,6 @@ import AddSetting from "./AddSetting";
 import { hour, minute } from "./Time";
 import { s_AmountCheck } from "../../modules/regCheck";
 import AmountSetting from "./AmountSetting";
-import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -31,7 +30,6 @@ const useStyles = makeStyles(theme => ({
 
 const TimeTable = props => {
   const classes = useStyles();
-  const [cookies] = useCookies();
   const { store, onChangeStore } = useStore();
   const [editable, setEditable] = useState({});
   const modifyClickEvent = async event => {
@@ -94,15 +92,21 @@ const TimeTable = props => {
     "timetable"
   );
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (store.render) {
+  //     dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+  //     onChangeStore({ render: false });
+  //   }
+  // }, [store]);
+  React.useMemo(()=>{
     if (store.render) {
       dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
       onChangeStore({ render: false });
     }
-  }, [store]);
-  useEffect(() => {
-    dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-  }, [store.headers]);
+  },[store])
+  // useEffect(() => {
+  //   dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+  // }, [store.headers]);
 
   return (
     <div className={classes.page}>
@@ -164,8 +168,8 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {hour.map(data => (
-                  <option value={data}>{data}</option>
+                {hour.map((data,key) => (
+                  <option value={data} key ={key}>{data}</option>
                 ))}
               </TextField>
               <Typography variant="body1">시</Typography>
@@ -197,8 +201,8 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {minute.map(data => (
-                  <option value={data}>{data}</option>
+                {minute.map((data,key) => (
+                  <option value={data} key = {key}>{data}</option>
                 ))}
               </TextField>
               <Typography variant="body1">분</Typography>
@@ -206,9 +210,7 @@ const TimeTable = props => {
               <TextField
                 variant="standard"
                 value={
-                  Number(inputData.s_Amount) === NaN
-                    ? 0
-                    : Number(inputData.s_Amount)
+                  isNaN(inputData.s_Amount) ? 0 : Number(inputData.s_Amount)
                 }
                 name="s_Amount"
                 onChange={event => {

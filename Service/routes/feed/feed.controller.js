@@ -8,9 +8,10 @@ const secretKey = require("../../config/jwt");
 // . : 현재 폴더 경로, .. : 상위 폴더
 const mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper(['./mapper/feed.xml']);
+mybatisMapper.createMapper(['./mapper/ingredient.xml']);
 let format = {language: 'sql', indent: ' '};
 
-var feed = {
+var ini_feed = {
     f_No: 0,
     f_Name: 'f_Name',
     f_Species: 'f_Species',
@@ -54,6 +55,7 @@ const selectAll = function (req, res) {
 
 const basic = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        feed = ini_feed;
         feed.f_No = req.params.no;
         let query = mybatisMapper.getStatement('feed', 'selectBasic', feed, format);
         connection.query(query, function(err, rows) {
@@ -76,7 +78,8 @@ const basic = function (req, res) {
 };
 
 const nutrient = function (req, res) {
-    if(checkToken(req.headers.authorization)) {        
+    if(checkToken(req.headers.authorization)) {
+        feed = ini_feed;
         feed.f_No = req.params.no;
         let query = mybatisMapper.getStatement('feed', 'selectNutrient', feed, format);
         connection.query(query, function(err, rows) {
@@ -93,6 +96,78 @@ const nutrient = function (req, res) {
             result.message = '해당 Feed의 Nutrient 데이터 호출 성공';
             result.data = rows[0];
             res.json(result);
+        });
+    }
+    else res.json(result);
+};
+
+const ingredient = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
+        inputData = {f_No: 0};        
+        inputData.f_No = req.params.no;
+        returnData = {
+            doubt: {
+                count: 0,
+                data: []
+            },
+            warning: {
+                count: 0,
+                data: []
+            },
+            basic: {
+                count: 0,
+                data: []
+            }
+        };
+        let query1 = mybatisMapper.getStatement('ingredient', 'selectDoubt', inputData, format);
+        connection.query(query1, function(err1, rows1){
+            if(err1){
+                console.log(err1);
+                result.validation = false;
+                result.message = '해당 사료의 의심 성분을 가져오는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
+            if(rows1[0]){
+                returnData.doubt.count = rows1.length;
+                returnData.doubt.data = rows1;
+            }
+            let query2 = mybatisMapper.getStatement('ingredient', 'selectWarning', inputData, format);
+            connection.query(query2, function(err2, rows2){
+                if(err2){
+                    console.log(err2);
+                    result.validation = false;
+                    result.message = '해당 사료의 위험 성분을 가져오는 데 오류가 발생하였습니다';
+                    result.data = [];
+                    res.json(result);
+                    return;
+                }
+                if(rows2[0]){
+                    returnData.warning.count = rows2.length;
+                    returnData.warning.data = rows2;
+                }
+                let query3 = mybatisMapper.getStatement('ingredient', 'selectBasic', inputData, format);
+                connection.query(query3, function(err3, rows3){
+                    if(err3){
+                        console.log(err3);
+                        result.validation = false;
+                        result.message = '해당 사료의 기본 성분을 가져오는 데 오류가 발생하였습니다';
+                        result.data = [];
+                        res.json(result);
+                        return;
+                    }
+                    if(rows3[0]){
+                        returnData.basic.count = rows3.length;
+                        returnData.basic.data = rows3;
+                    }
+                    console.log('Ingredient select OK');
+                    result.validation = true;
+                    result.message = '사료 재료 성분 데이터 호출 성공';
+                    result.data = returnData;
+                    res.json(result);
+                });
+            });
         });
     }
     else res.json(result);
@@ -138,26 +213,14 @@ const analysis = function (req, res) {
                 res.json(result);
                 return;
             } 
-            console.log('Feed getAnalysis ok: ' + feed.f_No);
+            console.log('Feed getAnalysis ok ');
             getData = {...getData, ...rows[0]};
-
-            var temp = {value: 100.0};
-            temp.value -= getData.f_Moisture;
-
-            console.log(temp);
-
-            
-
-            returnData.f_Protein = Math.round(getData.f_Protein * 100.0 / temp.value * 100.0, 2);
-            returnData.f_Fat = Math.round(getData.f_Fat * 100.0 / temp.value * 100.0, 2);
-            returnData.f_Calcium = Math.round(getData.f_Calcium * 100.0 / temp.value * 100.0, 2);
-            returnData.f_Phosphorus = Math.round(getData.f_Phosphorus * 100.0 / temp.value * 100.0, 2);
-            returnData.f_Ash = Math.round(getData.f_Ash * 100.0 / temp.value * 100.0, 2);
-
-            console.log(returnData);
-
-            
-
+            var temp = {value: 100.0 - getData.f_Moisture};
+            returnData.f_Protein = (getData.f_Protein / temp.value * 100.0).toFixed(2);
+            returnData.f_Fat = (getData.f_Fat / temp.value * 100.0).toFixed(2);
+            returnData.f_Calcium = (getData.f_Calcium / temp.value * 100.0).toFixed(2);
+            returnData.f_Phosphorus = (getData.f_Phosphorus / temp.value * 100.0).toFixed(2);
+            returnData.f_Ash = (getData.f_Ash / temp.value * 100.0).toFixed(2);
             if(returnData.f_Ash < 6.0) returnData.re_Ash = '부족';
             else if(returnData.re_Ash > 10.0) returnData.re_Ash = '과다';
             if(getData.d_Age == '유아기' || getData.d_Age == '성장기'){
@@ -379,7 +442,6 @@ function checkToken(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
             tempToken = true;
         }
     });
@@ -390,8 +452,9 @@ module.exports = {
     selectAll: selectAll,
     basic: basic,
     nutrient: nutrient,
+    ingredient: ingredient,
     analysis: analysis,
     calNum: calNum,
     calDirect: calDirect,
-    calCalory: calCalory    
+    calCalory: calCalory
 };

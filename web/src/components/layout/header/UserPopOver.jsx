@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import {
   makeStyles,
   List,
@@ -25,8 +25,8 @@ const useStyles = makeStyles(theme => ({
 const UserPopOver = ({ setAnchorEl }) => {
   const classes = useStyles();
   const history = useHistory();
-  const {store, onChangeStore} = useStore();
-  const [ cookies, setCookie, removeCookie ] = useCookies();
+  const { onChangeStore} = useStore();
+  const [cookies, setCookie, removeCookie]= useCookies(["token"]);
   const onClickLogout = () => {
     setAnchorEl(null);
     removeCookie("Token", {path: '/'})

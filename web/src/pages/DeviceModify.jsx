@@ -7,7 +7,6 @@ import {
   makeStyles,
   TextField,
   FormControlLabel,
-  Checkbox,
   Button,
   FormControl,
   FormLabel,
@@ -17,7 +16,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Typography
 } from "@material-ui/core";
@@ -102,8 +100,8 @@ const CheckRadio = props => {
 
 const DeviceModify = props => {
   const classes = useStyles();
-  const { store } = useStore();
-  const [ cookies ] = useCookies('d_CurNo');
+  const { store,onChangeStore } = useStore();
+  const [cookies, setCookie, removeCookie] = useCookies(['d_CurNo']);
   const { input, isLoading, updateField, dataFetch } = useFetchData(
     "/device/get/",
     "device"
@@ -141,8 +139,9 @@ const DeviceModify = props => {
     const result = await axios.delete(store.url + "/device/" + input.d_No, {
       headers: store.headers
     });
-    if (result.data) {
+    if (result.data.validation) {
       alert("삭제했습니다.");
+      onChangeStore({...store, u_Last : result.data.data.u_Last});
       props.history.replace("/device");
     } else {
       alert("삭제에 실패했습니다.");

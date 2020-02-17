@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   makeStyles,
-  Button,
   Typography,
   Avatar,
   Input
@@ -88,7 +87,6 @@ const FeedComments = ({ r_No }) => {
               <Box
                 m={1}
                 display="flex"
-                display={data.u_Name === "바나맘" ? "none" : "flex"}
                 alignItems="center"
               >
                 <Typography color="secondary" variant="caption">

@@ -24,19 +24,24 @@ const Ingredient = props => {
   const [input, setInput] = useState({ d_No: props.d_No });
   const { store, onChangeStore } = useStore();
   const changeEvent = event => {
-    const { name, value } = event.target;
-    setInput({ ...input, [name]: value });
-  };
-  const resetEvent = event => {
-    setInput({ ...initialState, d_No: props.d_No });
-  };
-
-  const computeEvent = async () => {
-    await axios({
-      method: "POST",
-      url: store.url + "/feed/cal/direct",
-      headers: store.headers,
-      data: input
+    const {name, value} = event.target
+    setInput({...input,[name] : value})
+  }
+  const resetEvent = event =>{
+    setInput({...initialState,d_No : props.d_No});
+  }
+  
+  const computeEvent = async() => {
+    await axios({method : "POST" , url : store.url+"/feed/cal/direct" ,headers : store.headers, data : input})
+    .then(res => {
+      if(res.data.validation){
+        onChangeStore({...res.data.data});
+        //alert(res.data.message);
+      }else{
+        alert(res.data.message)
+      }
+    }).catch(error => {
+      alert("심각한 통신 장애")
     })
       .then(res => {
         if (res.data.validation) {
