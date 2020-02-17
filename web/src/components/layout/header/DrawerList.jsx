@@ -10,19 +10,16 @@ import {
   Divider,
   Container,
   SvgIcon,
-  Icon
 } from "@material-ui/core";
 import { useHistory } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
 import HomeIcon from "@material-ui/icons/Home";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import StorageIcon from "@material-ui/icons/Storage";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import { useFetchData, useStore } from "../../custom-hooks/custom-hooks";
+import { useFetchData } from "../../custom-hooks/custom-hooks";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import DogBlack from "../../../assets/icons/dogBlack.png";
 import CatBlack from "../../../assets/icons/catBlack.png";
-import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   drawerList: {
@@ -37,10 +34,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DrawerList = ({ setOpen, open }) => {
+const DrawerList = ({ setOpen }) => {
   const classes = useStyles();
   const history = useHistory();
-  const { input, isLoading, setIsLoading } = useFetchData(
+  const { input, isLoading } = useFetchData(
     "/device/",
     "device_select"
   );
@@ -113,6 +110,7 @@ const DrawerList = ({ setOpen, open }) => {
             history.push("/info");
           }}
         >
+          {console.log(input)}
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

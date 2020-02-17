@@ -1,7 +1,6 @@
 import React from "react";
 import {
   makeStyles,
-  Button,
   Grid,
   Paper,
   Typography,
@@ -17,7 +16,7 @@ import Dogicon from "../../assets/icons/dogicon.png";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import { Cookies, useCookies } from "react-cookie";
+import {  useCookies } from "react-cookie";
 const useStyles = makeStyles(theme => ({
   page: {
     display: "flex",
@@ -40,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 const DeviceListTable = ({ props }) => {
   const classes = useStyles();
   const { onChangeStore, store } = useStore();
-  const [cookies, setCookies, removeCookies] = useCookies(["d_CurNo"]);
+  const [ cookies,setCookies, removeCookies] = useCookies(["d_CurNo"]);
   const { input, isLoading, dataFetch } = useFetchData(
     "/device/",
     "devicelist"

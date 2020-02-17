@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { hour, minute } from "./Time";
-import axios from "axios";
 import { useEffect } from "react";
 import { s_AmountCheck } from "../../modules/regCheck";
 
@@ -103,8 +102,8 @@ const AddSetting = props => {
                 }
               }}
             >
-              {hour.map(data => (
-                <option value={data}>{data}</option>
+              {hour.map((data,index) => (
+                <option value={data} key = {index} >{data}</option>
               ))}
             </TextField>
 
@@ -131,8 +130,8 @@ const AddSetting = props => {
                 }
               }}
             >
-              {minute.map(data => (
-                <option value={data}>{data}</option>
+              {minute.map((data,index) => (
+                <option value={data} key = {index}>{data}</option>
               ))}
             </TextField>
             <Typography variant="body1">분</Typography>

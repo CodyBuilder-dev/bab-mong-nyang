@@ -8,6 +8,7 @@ import rootReducer from "./modules";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
+
 const theme = createMuiTheme({
   typography: {
     fontFamily: "SCDream"
@@ -21,6 +22,10 @@ const theme = createMuiTheme({
       main: '#de586d',
       contrastText: '#fff',
     },
+    warning: {
+      main: "#ecdb54",
+      contrastText: '#fff',
+    }
   },
 });
 const store = createStore(rootReducer, composeWithDevTools());

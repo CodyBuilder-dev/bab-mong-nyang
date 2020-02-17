@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import store, { changeStore, restoreStore } from "../../modules/store";
-import { TrendingUpOutlined, RepeatOneSharp } from "@material-ui/icons";
+import { changeStore, restoreStore } from "../../modules/store";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 
@@ -64,10 +63,9 @@ export const useFetchData = (requestURL, dataType) => {
   const [isLoading, setIsLoading] = useState(false);
   const { store, onChangeStore } = useStore();
   const history = useHistory();
-  const [cookies, setCookie, removeCookie] = useCookies(["Token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const onSubmit = useCallback(async url => {
     const result = await axios.post(url, input, { headers: store.headers });
-
     return result.data;
   });
 
@@ -137,6 +135,7 @@ export const useFetchData = (requestURL, dataType) => {
       headers: { authorization: cookies.Token }
     })
       .then(result => {
+        // console.log(result);
         switch (type) {
           case "device":
           case "devicelist":
@@ -190,7 +189,7 @@ export const useFetchData = (requestURL, dataType) => {
   };
 
   const getPrevState = async (requestURL, dataType) => {
-    let url = store.url + requestURL;
+    // let url = store.url + requestURL;
     await axios
       .get(store.url + "/user/main/" + cookies.Token)
       .then(async response => {
@@ -199,18 +198,23 @@ export const useFetchData = (requestURL, dataType) => {
             ...response.data.data,
             headers: { authorization: cookies.Token }
           });
-          // if (dataType === "maintable") {
-          // dataFetch(url + response.data.data.u_Last, dataType);
-          // }
-          // history.replace("/main");
+          if (dataType === "maintable") {
+          dataFetch(store.url +"/logdata/"+ response.data.data.u_Last, dataType);
+          }
+          history.replace("/main");
         } else {
-          alert(response.data.message);
-          history.replace("/login");
+          if(dataType !=="maintable"){
+            alert(response.data.message);
+            history.replace("/login");
+          }
         }
       })
       .catch(error => {
-        alert("로그인해주세요");
-        history.replace("/login");
+        console.log(error);
+        if(dataType !=="maintable"){
+          alert("로그인해주세요");
+          history.replace("/login");
+        }
       });
   };
 
@@ -224,9 +228,15 @@ export const useFetchData = (requestURL, dataType) => {
         case "timetable":
         case "chart":
         case "maintable":
-          url += store.u_Last;
+          if(store.u_Last === undefined|| store.u_Last === ""){
+            flag = false
+          }
+            url += store.u_Last;
           break;
         case "device":
+          if(store.currentDeviceNo === undefined){
+            flag = false
+          }
           url += store.currentDeviceNo;
           break;
         case "device_select":
@@ -234,6 +244,10 @@ export const useFetchData = (requestURL, dataType) => {
         case "user":
         case "devicelist":
         case "review":
+          if(store.u_No === undefined ||store.u_No ===""){
+            flag = false
+            break;
+          }
           url += store.u_No;
           break;
         case "feedinfo":
@@ -248,6 +262,7 @@ export const useFetchData = (requestURL, dataType) => {
       }
     }
   }, []);
+  
   return {
     input,
     isLoading,

@@ -15,9 +15,8 @@ import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { Add } from "@material-ui/icons";
+import {  useHistory } from "react-router-dom";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -113,7 +112,7 @@ const DeviceSelect = props => {
   );
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
-  useEffect(() => {
+  React.useMemo(()=>{
     if (input.u_Last !== undefined && input.u_Last !== 0) {
       setSelectedValue(
         input.device.filter(device => device.d_No === store.u_Last)[0]
@@ -121,11 +120,13 @@ const DeviceSelect = props => {
     } else {
       setSelectedValue({});
     }
-  }, [input]);
-  useEffect(() => {
-    setSelectedValue(store.u_Last);
-    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
-  }, [store]);
+  },[input])
+  React.useMemo( ()=>{
+    if((store.u_No !== undefined && store.u_No !== "" ) && input == 0){
+      setSelectedValue(store.u_Last)
+      dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
+    }
+  },[store.u_No])
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
@@ -167,7 +168,7 @@ const DeviceSelect = props => {
           )}
 
           <DeviceDialog
-            selectedValue={selectedValue}
+            selectedValue={typeof(selectedValue) === String ? selectedValue : ""}
             open={open}
             onClose={handleClose}
             devices={input.device === undefined ? [] : input.device}
