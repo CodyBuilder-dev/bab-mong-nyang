@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	if(loopcnt){
 		int putamount = 0;
 		while(intdata<loopcnt && putamount<(loopcnt/3)){
-			putamount+=10;
+			putamount+=5;
 			for(int i=0;i<128;++i)
 				goFront(); //512 for 1loop
 			data = serial_signal(fd);
@@ -47,9 +47,9 @@ int main(int argc, char *argv[])
 		}
 		end();
 		if (EMPTYCHECK()==1) {
-		insert_query(conn,1,putamount,remainfood,(getprev==0?getprev:getprev-remainfood));
+		insert_query(conn,1,intdata/3-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
 		}
-		else insert_query(conn,0,putamount,remainfood,(getprev==0?getprev:getprev-remainfood));
+		else insert_query(conn,0,intdata/3-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
 		melody();
 		exit(1);
 	}
