@@ -11,18 +11,18 @@ mybatisMapper.createMapper(['./mapper/setting.xml']);
 mybatisMapper.createMapper(['./mapper/hw.xml']);
 let format = {language: 'sql', indent: ' '};
 
-var setting = {
+var ini_setting = {
     s_No: 0,
     d_No: 0,
     s_Time: 's_Time',
-    s_Amount: 's_Amount'
+    s_Amount: 0
 };
 
 var result = {
     validation: false,
     message: '',
     data: []
-}
+};
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)) {
@@ -48,6 +48,7 @@ const selectAll = function (req, res) {
 
 const selectOne = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        setting = ini_setting;
         setting.d_No = req.params.no;
         let query = mybatisMapper.getStatement('setting', 'selectOne', setting, format);
         connection.query(query, function(err, rows) {
@@ -70,7 +71,8 @@ const selectOne = function (req, res) {
 };
 
 const add = function (req, res) {
-    if(checkToken(req.headers.authorization)) {        
+    if(checkToken(req.headers.authorization)) {
+        setting = ini_setting;
         setting = {...setting , ...req.body}; //d_No, s_Time, s_Amount
         let check_query = mybatisMapper.getStatement('setting', 'settingCheck', setting, format);
         connection.query(check_query, function(check_err, check_rows){
@@ -87,7 +89,6 @@ const add = function (req, res) {
                 result.validation = false;
                 result.message = '해당 Setting 시간이 이미 존재합니다';
                 result.data = [];
-                res.json(result);                
                 res.json(result);
             }
             else{
@@ -116,6 +117,7 @@ const add = function (req, res) {
 
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        setting = ini_setting;
         setting = {...setting , ...req.body}; //s_No, s_Time, s_Amount
         let query = mybatisMapper.getStatement('setting', 'updateSetting', setting, format);
         connection.query(query, function(err, rows) {
@@ -144,10 +146,18 @@ const update = function (req, res) {
 
 const del = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        setting = ini_setting;
         setting.s_No = req.params.no;
         let get_query = mybatisMapper.getStatement('setting', 'getDeviceNo', setting, format);
         connection.query(get_query, function(get_err, get_rows){
-            if(get_err) console.log(get_err);
+            if(get_err) {
+                console.log(get_err);
+                result.validation = false;
+                result.message = '해당 Setting 데이터의 Device 번호를 호출하는 데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
             setting.d_No = get_rows[0].d_No;            
         });
         let query = mybatisMapper.getStatement('setting', 'deleteSetting', setting, format);
@@ -181,6 +191,7 @@ const del = function (req, res) {
 };
 
 function update_hw_setting(no) { //setting 정보 수정 시 hw에 전송, 삭제, 등록
+    setting = ini_setting;
     setting.d_No = no;
     var hw_temp = {ip: ''};
     //device IP 받기
@@ -223,7 +234,6 @@ function checkToken(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
             tempToken = true;
         }
     });

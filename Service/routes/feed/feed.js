@@ -9,6 +9,8 @@ router.get('/basic/:no', controller.basic);
 
 router.get('/nutrient/:no', controller.nutrient);
 
+router.get('/ingredient/:no', controller.ingredient);
+
 router.post('/analysis', controller.analysis);
 
 router.post('/cal/num', controller.calNum);
