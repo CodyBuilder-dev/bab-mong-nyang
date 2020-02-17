@@ -37,7 +37,9 @@ const InfoModify = props => {
   );
   const { store } = useStore();
   useEffect(() => {
-    dataFetch(store.url + "/user/" + store.u_No, "user");
+    if(input===undefined){
+      dataFetch(store.url + "/user/" + store.u_No, "user");
+    }
   }, [store]);
   const onClickEvent = async event => {
     if (u_NameCheck(input.u_Name) && u_EmailCheck(input.u_Email)) {
