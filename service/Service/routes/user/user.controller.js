@@ -10,7 +10,7 @@ const mybatisMapper = require('mybatis-mapper'); //mybatis-mapper 사용
 mybatisMapper.createMapper(['./mapper/user.xml']); //createMapper: 작성된 Mapper Load
 let format = {language: 'sql', indent: ' '};
 
-var user = {
+var ini_user = {
     u_No: 0,
     u_Id: 'u_Id',
     u_Pw: 'u_Pw',
@@ -19,13 +19,15 @@ var user = {
     u_Last: 0
 };
 
+var refresh = {no: 0};
+
 var result = {
     validation: false,
     message: '',
     data: []
 };
 
-//전체 User 데이터 호출(비동기)
+//전체 User 데이터 호출
 const selectAll = function (req, res) {
     //getStatement('Namespace 이름', 'Sql ID', 'Prameters', 'format')
     let query = mybatisMapper.getStatement('user', 'selectAll', format);
@@ -46,10 +48,11 @@ const selectAll = function (req, res) {
     });    
 };
 
-//U_No에 맞는 데이터 호출(동기)
+//U_No에 맞는 데이터 호출
 const selectOne = function (req, res) {
     if(checkToken(req.headers.authorization, req.params.no)) {
-        
+        user = ini_user;
+        user.u_No = req.params.no;
         let query = mybatisMapper.getStatement('user', 'selectOne', user, format);
         connection.query(query, function(err, rows) {
             if(err) {      
@@ -82,6 +85,8 @@ const selectOne = function (req, res) {
 //새로고침 후 u_No, u_Last 호출
 const userMain = function (req, res) {
     if(checkMain(req.params.token)) {
+        user = ini_user;
+        user.u_No = refresh.no;
         let query = mybatisMapper.getStatement('user', 'userMain', user, format);
         connection.query(query, function(err, rows) {
             if(err) {      
@@ -98,6 +103,7 @@ const userMain = function (req, res) {
                 result.message = '새로고침 후 User 데이터 호출 성공';
                 result.data = rows[0];
                 res.json(result);
+                refresh.no = 0;
             }
             else{
                 console.log('User selectOne fail: ' + user.u_No);
@@ -113,6 +119,7 @@ const userMain = function (req, res) {
 
 //id 중복 확인
 const idCheck = function (req, res) {
+    user = ini_user;
     user.u_Id = req.params.id;
     let query = mybatisMapper.getStatement('user', 'idCheck', user, format);
     connection.query(query, function(err, rows) {
@@ -128,7 +135,6 @@ const idCheck = function (req, res) {
             console.log('User idCheck fail: ' + user.u_Id);
             result.validation = false;
             result.message = '해당 ID는 이미 사용 중입니다.';
-                    
         }
         else{
             console.log('User idCheck ok: ' + user.u_Id);
@@ -144,6 +150,7 @@ const idCheck = function (req, res) {
 
 //회원가입
 const add = function (req, res) {
+    user = ini_user;
     user = {...user , ...req.body};
     let query = mybatisMapper.getStatement('user', 'addUser', user, format);
     connection.query(query, function(err, rows) {
@@ -162,8 +169,9 @@ const add = function (req, res) {
     });
 };
 
-//로그인 - 초기화가 안되있어서 로그인이 됨
+//로그인
 const login = function (req, res) {
+    user = ini_user;
     user = {...user , ...req.body}; //u_Id, u_Pw
     let query = mybatisMapper.getStatement('user', 'loginUser', user, format);
     connection.query(query, function(err, rows) {
@@ -214,7 +222,8 @@ const login = function (req, res) {
 //회원 정보 수정
 const update = function (req, res) {
     if(checkToken(req.headers.authorization, req.body.u_No)) {
-        user = {...user , ...req.body}; //u_No, u_Name, u_Email
+        user = ini_user;
+        user = {...user, ...req.body}; //u_No, u_Name, u_Email
         let query = mybatisMapper.getStatement('user', 'updateUser', user, format);
         connection.query(query, function(err, rows) {
             if(err) {      
@@ -238,7 +247,8 @@ const update = function (req, res) {
 //비밀번호 수정
 const updatePass = function (req, res) {
     if(checkToken(req.headers.authorization, req.body.u_No)) {
-        user.u_Pw = req.body.u_Pw;
+        user = ini_user;
+        user = {...user, ...req.body};
         let query = mybatisMapper.getStatement('user', 'updatePass', user, format);
         connection.query(query, function(err, rows) {
             if(err) {      
@@ -253,8 +263,8 @@ const updatePass = function (req, res) {
             result.validation = true;
             result.message = '비밀번호 변경 성공';
             result.data = [];
-            result.json(result);
-        });        
+            res.json(result);
+        });
     }
     else res.json(result);
 };
@@ -262,6 +272,8 @@ const updatePass = function (req, res) {
 //회원 정보 삭제
 const del = function (req, res) {
     if(checkToken(req.headers.authorization, req.params.no)) {
+        user = ini_user;
+        user.u_No = req.params.no;
         let query = mybatisMapper.getStatement('user', 'deleteUser', user, format);
         connection.query(query, function(err, rows) {
             if(err) {      
@@ -304,8 +316,6 @@ function checkToken(token, no) {
         }
         else {
             if(decoded.u_No == no) {
-                console.log('유효한 토큰입니다!');
-                user.u_No = no;
                 tempToken = true;
             }
             else{
@@ -332,7 +342,7 @@ function checkMain(token) {
             tempToken = false;
         }
         else {
-            user.u_No = decoded.u_No;
+            refresh.no = decoded.u_No;
             tempToken = true;
         }
     });

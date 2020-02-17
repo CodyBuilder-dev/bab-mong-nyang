@@ -10,7 +10,7 @@ const mybatisMapper = require('mybatis-mapper'); //mybatis-mapper 사용
 mybatisMapper.createMapper(['./mapper/join.xml']); //createMapper: 작성된 Mapper Load
 let format = {language: 'sql', indent: ' '};
 
-var Main_data = {
+var ini_Main_data = {
     u_No: 0,
     u_Name: 'u_Name',
     u_Last: 0,
@@ -25,6 +25,7 @@ var result = {
 
 const selectMain = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        Main_data = ini_Main_data;
         Main_data.u_No = req.params.no;
         let query = mybatisMapper.getStatement('join', 'selectUser', Main_data, format);
         connection.query(query, function(err, rows) {            
@@ -114,7 +115,6 @@ function checkToken(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
             tempToken = true;
         }
     });

@@ -11,13 +11,14 @@ mybatisMapper.createMapper(['./mapper/logdata.xml']);
 mybatisMapper.createMapper(['./mapper/hw.xml']);
 let format = {language: 'sql', indent: ' '};
 
-var logdata = {
+var ini_logdata = {
     l_No: 0,
     d_No: 0,
     l_Time: 'l_Time',
     l_Remain: 0,
     l_Empty: false,
-    l_Amount: 0
+    l_Amount: 0,
+    l_Eat: 0
 };
 
 var result = {
@@ -28,6 +29,7 @@ var result = {
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        logdata = ini_logdata;
         logdata.d_No = req.params.no;
         let query = mybatisMapper.getStatement('logdata', 'selectAll', logdata, format);
         connection.query(query, function(err, rows) {
@@ -39,7 +41,10 @@ const selectAll = function (req, res) {
                 return;
             }            
             console.log('Logdata selectAll ok');
-            res.json(rows);
+            result.validation = true;
+            result.message = '해당 디바이스의 전체 log 데이터 호출 성공';
+            result.data = rows;
+            res.json(result);
         });
     }
     else res.json(result);
@@ -49,19 +54,22 @@ var bars = [];
 
 const selectChart = function (req, res) {
     if(checkToken(req.headers.authorization)) {
-        let temp = {
-            d_No: 0
-        }
+        let temp = {d_No: 0};
         temp.d_No = req.params.no;
         let query = mybatisMapper.getStatement('logdata', 'selectChart', temp, format);
         connection.query(query, function(err, rows) {
             if(err){
                 result.validation = false;
-                result.message = '';
+                result.message = '로그 데이터를 호출하는데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
             }
             if(!rows[0]){
                 console.log("selectChart fail");
-                res.send(false);
+                result.validation = false;
+                result.message = '로그 데이터가 존재하지 않습니다';
+                result.data = [];
+                res.json(result);
             }
             else{
                 for(var i = 0; i<rows.length; i++){
@@ -77,7 +85,10 @@ const selectChart = function (req, res) {
                     bars_type.items[0].value = rows[i].l_Remain;
                     bars.push(bars_type);
                 }
-                res.send(bars);
+                result.validation = true;
+                result.message = '해당 기기의 로그 데이터 호출 성공';
+                result.data = bars;
+                res.json(result);
                 bars = [];
             }        
         });
@@ -97,7 +108,6 @@ function checkToken(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
             tempToken = true;
         }
     });
