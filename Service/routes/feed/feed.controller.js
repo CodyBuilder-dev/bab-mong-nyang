@@ -114,10 +114,6 @@ const ingredient = function (req, res) {
                 count: 0,
                 data: []
             },
-            allergy: {
-                count: 0,
-                data: []
-            },
             basic: {
                 count: 0,
                 data: []
@@ -151,40 +147,25 @@ const ingredient = function (req, res) {
                     returnData.warning.count = rows2.length;
                     returnData.warning.data = rows2;
                 }
-                let query3 = mybatisMapper.getStatement('ingredient', 'selectAllergy', inputData, format);
+                let query3 = mybatisMapper.getStatement('ingredient', 'selectBasic', inputData, format);
                 connection.query(query3, function(err3, rows3){
                     if(err3){
                         console.log(err3);
                         result.validation = false;
-                        result.message = '해당 사료의 알러지 성분을 가져오는 데 오류가 발생하였습니다';
+                        result.message = '해당 사료의 기본 성분을 가져오는 데 오류가 발생하였습니다';
                         result.data = [];
                         res.json(result);
                         return;
                     }
                     if(rows3[0]){
-                        returnData.allergy.count = rows3.length;
-                        returnData.allergy.data = rows3;
+                        returnData.basic.count = rows3.length;
+                        returnData.basic.data = rows3;
                     }
-                    let query4 = mybatisMapper.getStatement('ingredient', 'selectBasic', inputData, format);
-                    connection.query(query4, function(err4, rows4){
-                        if(err4){
-                            console.log(err4);
-                            result.validation = false;
-                            result.message = '해당 사료의 기본 성분을 가져오는 데 오류가 발생하였습니다';
-                            result.data = [];
-                            res.json(result);
-                            return;
-                        }
-                        if(rows4[0]){
-                            returnData.basic.count = rows4.length;
-                            returnData.basic.data = rows4;
-                        }
-                        console.log('Ingredient select OK');
-                        result.validation = true;
-                        result.message = '사료 재료 성분 데이터 호출 성공';
-                        result.data = returnData;
-                        res.json(result);                        
-                    });
+                    console.log('Ingredient select OK');
+                    result.validation = true;
+                    result.message = '사료 재료 성분 데이터 호출 성공';
+                    result.data = returnData;
+                    res.json(result);
                 });
             });
         });

@@ -35,15 +35,6 @@ const selectAll = function (req, res) {
             rank: 1.1,
             list: []
         };
-        
-        var myData = {
-            validation: false,
-            message: '',
-            data: {
-                rank: 1.1,
-                list: []
-            }
-        }
         let get_query = mybatisMapper.getStatement('review', 'getRank', review, format);
         connection.query(get_query, function(get_err, get_rows){
             if(get_err){
@@ -66,8 +57,8 @@ const selectAll = function (req, res) {
                 console.log('review selectAll ok: ' + review.f_No);
                 result.validation = true;
                 result.message = '해당 사료의 모든 리뷰 호출 성공';
-                myData.list = rows;
-                result.data = myData;
+                getData.list = rows;
+                result.data = getData;
                 res.json(result);
             });
         });        
@@ -185,7 +176,7 @@ const updateGood = function (req, res) {
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
         review = ini_review;
-        review = {...review, ...req,body}; //r_Rank, r_Positive, r_Negative, r_No
+        review = {...review, ...req.body}; //r_Rank, r_Positive, r_Negative, r_No
         let query = mybatisMapper.getStatement('review', 'updateReview', review, format);
         connection.query(query, function(err, rows) {
             if(err){
@@ -196,7 +187,7 @@ const update = function (req, res) {
                 res.json(result);
                 return;
             }
-            console.log('review update ok: ' + review.d_No);
+            console.log('review update ok: ' + review.r_No);
             result.validation = true;
             result.message = '해당 리뷰 수정 성공';
             result.data = [];
