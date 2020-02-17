@@ -151,7 +151,7 @@ const idCheck = function (req, res) {
 //회원가입
 const add = function (req, res) {
     user = ini_user;
-    user = {...user , ...req.body};
+    user = {...user , ...req.body}; //u_Id, u_Pw, u_Name, u_Email
     let query = mybatisMapper.getStatement('user', 'addUser', user, format);
     connection.query(query, function(err, rows) {
         if(err) {      
