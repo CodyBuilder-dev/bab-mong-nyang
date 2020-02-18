@@ -40,7 +40,7 @@ const nutMatch = {
 };
 // ======================================
 const NutritionInfo = props => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { input, dataFetch } = useFetchData(
     "/feed/nutrient/" + props.f_No,
     "feedinfo"
