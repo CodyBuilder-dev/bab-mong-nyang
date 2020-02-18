@@ -8,6 +8,7 @@ const secretKey = require("../../config/jwt");
 // . : 현재 폴더 경로, .. : 상위 폴더
 const mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper(['./mapper/device.xml']);
+mybatisMapper.createMapper(['./mapper/logdata.xml']);
 let format = {language: 'sql', indent: ' '};
 
 var ini_device = {
@@ -170,6 +171,7 @@ const add = function (req, res) {
                                 result.message = '기기 등록 후 유저의 최신 기기 번호 갱신 성공'
                                 result.data = {d_No: device.d_No};
                                 res.json(result);
+                                ini_logdata_add(d_No);
                             }
                             else {
                                 result.validation = false;
@@ -280,6 +282,18 @@ const del = function (req, res) {
     }
     else res.json(result);
 };
+
+function ini_logdata_add(no){
+    log_temp = {d_No: no};
+    let query = mybatisMapper.getStatement('logdata', 'deviceAdd', log_temp, format);
+    connection.query(query, function(err, rows) {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        console.log('logdata deviceAdd ok: ' + no);
+    });
+}
 
 function checkToken(token){
     var tempToken = false;

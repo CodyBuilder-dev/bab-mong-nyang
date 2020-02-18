@@ -193,7 +193,7 @@ const del = function (req, res) {
 function update_hw_setting(no) { //setting 정보 수정 시 hw에 전송, 삭제, 등록
     setting = ini_setting;
     setting.d_No = no;
-    var hw_temp = {ip: ''};
+    hw_temp = {ip: ''};
     //device IP 받기
     let get_query = mybatisMapper.getStatement('hw', 'getIP', setting, format);
     connection.query(get_query, function(get_err, get_rows){

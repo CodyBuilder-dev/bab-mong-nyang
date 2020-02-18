@@ -176,10 +176,9 @@ const ingredient = function (req, res) {
 const analysis = function (req, res) {
     if(checkToken(req.headers.authorization)) { 
         var inputData = {
-            d_No: 0,
-            f_No: 0
+            d_No: req.params.dno,
+            f_No: req.params.fno
         };
-        inputData = {...inputData, ...req.body};
         var getData = {
             d_Age: '',
             d_Species: '',
@@ -337,7 +336,7 @@ const calDirect = function (req, res) {
         var returnData = {
             dayCalory: 2,
             dayAmount: 1
-        }
+        };
         //d_No / f_Protein, f_Fat, f_Calcium, f_Phosphorus, f_Fiber, f_Ash, f_Moisture
         inputData = {...inputData, ...req.body};
         getData = {...getData , ...req.body};

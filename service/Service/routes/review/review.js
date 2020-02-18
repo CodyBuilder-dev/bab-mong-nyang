@@ -3,7 +3,11 @@ const router = express.Router();
 
 const controller = require('./review.controller');
 
-router.get('/:no/:uno', controller.selectAll);
+router.get('/basic/:no/:uno', controller.selectBasic);
+
+router.get('/best/:no/:uno', controller.selectBest);
+
+router.get('/new/:no/:uno', controller.selectNew);
 
 router.get('/get/:no', controller.selectOne);
 
