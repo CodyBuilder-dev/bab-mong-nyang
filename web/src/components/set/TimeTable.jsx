@@ -54,12 +54,12 @@ const TimeTable = props => {
           })
             .then(res => {
               if (res.data.validation) {
-                //alert(res.data.message);
+                alert(res.data.message);
                 setEditable({ ...editable, [index]: false });
                 dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
                 setClick([false, -1]);
               } else {
-                // alert(res.data.message);
+                 alert(res.data.message);
               }
             })
             .catch(error => {
