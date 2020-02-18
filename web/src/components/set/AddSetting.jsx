@@ -28,14 +28,13 @@ const AddSetting = props => {
       hour: "00",
       minute: "00"
     });
-  }, []);
+  }, [open]);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = async event => {
     if (event.currentTarget.name !== "add") {
-      setInput({});
       setOpen(false);
     } else {
       if (s_AmountCheck(input.s_Amount)) {
@@ -43,9 +42,8 @@ const AddSetting = props => {
           .then(res => {
             if (res.validation) {
               alert(res.message);
-              setInput({});
-              setOpen(false);
               onChangeStore({ render: true });
+              setOpen(false);
             } else {
               alert(res.message);
             }
