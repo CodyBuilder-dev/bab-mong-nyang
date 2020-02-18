@@ -124,7 +124,7 @@ const Feedreview = props => {
                 variant="text"
                 aria-label="text primary button group"
               >
-                <Button onClick = {onSortBest}>베스트순</Button>
+                <Button onClick = {onSortBest}>추천순</Button>
                 <Button onClick = {onSortRecent}>최신순</Button>
               </ButtonGroup>
             </Box>

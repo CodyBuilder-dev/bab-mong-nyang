@@ -16,7 +16,8 @@ import Dogicon from "../../assets/icons/dogicon.png";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import {  useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router";
 const useStyles = makeStyles(theme => ({
   page: {
     display: "flex",
@@ -31,18 +32,19 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   media: {
-    height: "100px",
+    height: "100px"
   }
 }));
 
 const DeviceListTable = ({ props }) => {
   const classes = useStyles();
   const { onChangeStore, store } = useStore();
-  const [ cookies,setCookies, removeCookies] = useCookies(["d_CurNo"]);
+  const [cookies, setCookies, removeCookies] = useCookies(["d_CurNo"]);
   const { input, isLoading, dataFetch } = useFetchData(
     "/device/",
     "devicelist"
   );
+  const history = useHistory()
   const calcAge = birth => {
     let date = new Date();
     let year = date.getFullYear();
@@ -69,46 +71,40 @@ const DeviceListTable = ({ props }) => {
   }, [store]);
   return (
     <div className={classes.page}>
-      {isLoading ? (
-        <div> Loading.....</div>
-      ) : (
-        <div className={classes.gridContainer}>
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <Typography variant="h6">밥그릇</Typography>
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-            paddingBottom="10px"
+      <div className={classes.gridContainer}>
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <Typography variant="h6">밥그릇</Typography>
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          paddingBottom="10px"
+        >
+          <IconButton
+            style={{ padding: "0px" }}
+            aria-label="add"
+            color="primary"
+            onClick={e => history.push("regist")}
           >
-            <IconButton
-              style={{ padding: "0px" }}
-              aria-label="add"
-              color="primary"
-              onClick={e => props.history.push("regist")}
-            >
-              <AddCircleOutlineIcon />
-              <Typography>기기 등록</Typography>
-            </IconButton>
-          </Box>
-          <Grid container spacing={2} alignItems="center" justify="flex-start">
-            {input.map(device =>
+            <AddCircleOutlineIcon />
+            <Typography>기기 등록</Typography>
+          </IconButton>
+        </Box>
+        <Grid container spacing={2} alignItems="center" justify="flex-start">
+          {isLoading ? (
+            <></>
+          ) : (
+            input.map(device =>
               device === undefined ? (
                 <></>
               ) : (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  key={`d_${device.d_No}`}
-                  
-                >
+                <Grid item xs={6} sm={4} key={`d_${device.d_No}`}>
                   <Card
                     onClick={e => {
                       setCookies("d_CurNo", device.d_No, { path: "/" });
                       onChangeStore({ currentDeviceNo: device.d_No }, "", "");
-                      props.history.push("/devicemodify");
+                      history.push("/devicemodify");
                     }}
                   >
                     <CardActionArea>
@@ -141,10 +137,10 @@ const DeviceListTable = ({ props }) => {
                   </Card>
                 </Grid>
               )
-            )}
-          </Grid>
-        </div>
-      )}
+            )
+          )}
+        </Grid>
+      </div>
     </div>
   );
 };

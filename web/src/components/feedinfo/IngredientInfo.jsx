@@ -3,10 +3,8 @@ import { Rating, Skeleton } from "@material-ui/lab";
 import {
   makeStyles,
   Box,
-  CardMedia,
   withStyles,
   Typography,
-  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -90,7 +88,11 @@ const Ingredient = props => {
   return (
     <>
       <Box width="99%" maxWidth="500px">
-        <Box display="flex" justifyContent="space-between" alignItems="flex-end">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-end"
+        >
           <Typography component="span" variant="h6" gutterBottom>
             재료 성분
           </Typography>
@@ -115,7 +117,6 @@ const Ingredient = props => {
             {input.warning ? (
               input.warning.count ? (
                 input.warning.data.map((warnIng, idx) => (
-                  // console.log(warnIng.i_Name)
                   <ListItem
                     button
                     key={`warning_${idx}`}
@@ -152,7 +153,6 @@ const Ingredient = props => {
             {input.doubt ? (
               input.doubt.count ? (
                 input.doubt.data.map((doubtIng, idx) => (
-                  // console.log(doubtIng.i_Name)
                   <ListItem
                     button
                     key={`doubt_${idx}`}
@@ -195,7 +195,6 @@ const Ingredient = props => {
             {input.basic ? (
               input.basic.count ? (
                 input.basic.data.map((basicIng, idx) => (
-                  // console.log(basicIng.i_Name)
                   <ListItem
                     button
                     key={`basic_${idx}`}
