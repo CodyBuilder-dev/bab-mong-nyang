@@ -9,7 +9,7 @@ import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
-import { useEffect } from "react";
+import CheckPw from "../components/info/CheckPw";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -48,9 +48,6 @@ const Info = props => {
         <div>Loading....</div>
       ) : (
         <div className={classes.inputText}>
-          {/* <Typography>{input.u_Id}</Typography>
-          <Typography>{input.u_Name}</Typography>
-          <Typography>{input.u_Email}</Typography> */}
           <TextField
             id="outlined-read-only-input"
             label="아이디"
@@ -94,15 +91,7 @@ const Info = props => {
             >
               회원정보수정
             </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={e => props.history.push("/pwmodify")}
-            >
-              비밀번호수정
-            </Button>
+            <CheckPw classes = {classes} history = {props.history} u_Id = {input.u_Id}></CheckPw>
           </Box>
         </div>
       )}

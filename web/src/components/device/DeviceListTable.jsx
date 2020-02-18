@@ -102,7 +102,7 @@ const DeviceListTable = ({ props }) => {
                   xs={6}
                   sm={4}
                   key={`d_${device.d_No}`}
-                  alignItems="center"
+                  
                 >
                   <Card
                     onClick={e => {
