@@ -32,7 +32,6 @@ MYSQL_ROW get_field(MYSQL *conn){
 	sprintf(tbuf, "%d:%d:00", localtime(&restime)->tm_hour, localtime(&restime)->tm_min);
 	mysql_query(conn, "select * from local_timetable");
 	MYSQL_RES *result = mysql_store_result(conn);
-	if (result == NULL) error(conn);
 	MYSQL_ROW row;
 	while((row = mysql_fetch_row(result))){
 		if(strcmp(row[0],tbuf)==0) return row;

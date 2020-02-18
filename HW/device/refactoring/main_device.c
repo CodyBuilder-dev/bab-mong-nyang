@@ -24,20 +24,20 @@ int main(int argc, char *argv[])
 	fd = connectpi(fd, baud, device);
 	setdefault();
 	char* data = serial_signal(fd);
-	int remainfood = atoi(data)/3;
+	int remainfood = atoi(data);
 
 	MYSQL *conn = connectsql(host,user,pass,dbname);
 	MYSQL_ROW row = get_field(conn);
 	int getprev= get_last_eaten(conn);
 	int loopcnt=0;
-	if (argc > 1) loopcnt=atoi(argv[1])*3;
-	else if (row) loopcnt=atoi(row[1])*3;
+	if (argc > 1) loopcnt=atoi(argv[1]);
+	else if (row) loopcnt=atoi(row[1]);
 	int intdata= atoi(data);
 	// food distribute
 	conn = connectsql(host,user,pass,dbname);
 	if(loopcnt){
 		int putamount = 0;
-		while(intdata<loopcnt && putamount<(loopcnt/3)){
+		while(intdata<loopcnt && putamount<loopcnt){
 			putamount+=5;
 			for(int i=0;i<128;++i)
 				goFront(); //512 for 1loop
@@ -47,9 +47,9 @@ int main(int argc, char *argv[])
 		}
 		end();
 		if (EMPTYCHECK()==1) {
-		insert_query(conn,1,intdata/3-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
+		insert_query(conn,1,intdata-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
 		}
-		else insert_query(conn,0,intdata/3-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
+		else insert_query(conn,0,intdata-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
 		melody();
 		exit(1);
 	}
