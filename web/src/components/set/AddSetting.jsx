@@ -26,7 +26,8 @@ const AddSetting = props => {
       d_No: store.u_Last,
       s_Time: "00:00",
       hour: "00",
-      minute: "00"
+      minute: "00",
+      s_Amount:""
     });
   }, [open]);
   const handleClickOpen = () => {
