@@ -41,18 +41,9 @@ const Ingredient = props => {
         alert(res.data.message)
       }
     }).catch(error => {
+      console.log(error);
       alert("심각한 통신 장애")
     })
-      .then(res => {
-        if (res.data.validation) {
-          onChangeStore({ ...res.data.data });
-        } else {
-          alert(res.data.message);
-        }
-      })
-      .catch(error => {
-        alert("심각한 통신 장애");
-      });
   };
   return (
     <Box minHeight="250px" display="block" justifyContent="center">
