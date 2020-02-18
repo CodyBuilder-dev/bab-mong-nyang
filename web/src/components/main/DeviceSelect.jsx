@@ -61,10 +61,12 @@ function DeviceDialog(props) {
   const { onClose, open, devices, selectedValue } = props;
 
   const handleClose = () => {
+    console.log(selectedValue)
     onClose(selectedValue);
   };
 
   const handleListItemClick = value => {
+    console.log(value);
     onClose(value);
   };
 
@@ -134,12 +136,12 @@ const DeviceSelect = props => {
 
   const handleClose = async value => {
     setOpen(false);
-    if (store.u_Last === 0) {
+    if (store.u_Last !== 0 && value !== "") {
+      setSelectedValue(value);
+      await onChangeStore(value, "select", "/Join/main");
+      onChangeStore({ render: true });
+      dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
     }
-    setSelectedValue(value);
-    await onChangeStore(value, "select", "/Join/main");
-    onChangeStore({ render: true });
-    dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
   };
   return (
     <div className={classes.deviceSelectForm}>

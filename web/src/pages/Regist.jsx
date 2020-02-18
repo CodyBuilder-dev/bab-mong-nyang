@@ -83,7 +83,6 @@ const DogRadio = props => {
   );
 };
 const CheckRadio = props => {
-  const classes = useStyles();
   return (
     <Radio
       checkedIcon={<CheckBoxIcon />}
@@ -124,11 +123,11 @@ const Regist = props => {
       const result = await onValidate(
         store.url + "/device/check/" + input.SerialNo
       );
-      if (result) {
-        alert("올바른 일련번호입니다.");
+      if (result.validation) {
+        alert(result.message);
         checked = true;
       } else {
-        alert("등록되지 않은 일련번호입니다.");
+        alert(result.message);
       }
     }
   };
