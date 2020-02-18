@@ -61,7 +61,6 @@ const Chart = props => {
     setcenterBarIndex(input.length - 1);
   }, [input]);
   useEffect(() => {
-    console.log(store.u_Last)
     dataFetch(store.url + "/logdata/chart/" + store.u_Last, "chart");
   }, [store.u_Last])
   

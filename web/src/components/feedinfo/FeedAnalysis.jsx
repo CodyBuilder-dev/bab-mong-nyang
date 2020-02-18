@@ -94,7 +94,7 @@ const FeedAnalysis = props => {
             <div></div>
           ) : input ? (
             <>
-              {console.log(input)}
+              {/* {console.log(input)} */}
               <Grid item xs={4}>
                 <Typography variant="body2">조단백</Typography>
               </Grid>

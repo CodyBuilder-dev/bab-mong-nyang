@@ -135,7 +135,7 @@ export const useFetchData = (requestURL, dataType) => {
       headers: { authorization: cookies.Token }
     })
       .then(result => {
-        console.log(result);
+        // console.log(result);
         switch (type) {
           case "device":
           case "devicelist":

@@ -55,8 +55,6 @@ const TimeTable = props => {
   }
 
   const modifyClickEvent = async event => {
-    console.log(click);
-    console.log(event.currentTarget.value);
     if (click[0] && click[1] !== event.currentTarget.value) {
       alert("수정을 완료한 후 시도해주세요");
     } else {
