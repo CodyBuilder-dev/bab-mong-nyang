@@ -119,27 +119,47 @@ const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
         setting = ini_setting;
         setting = {...setting , ...req.body}; //s_No, s_Time, s_Amount
-        let query = mybatisMapper.getStatement('setting', 'updateSetting', setting, format);
-        connection.query(query, function(err, rows) {
-            if(err) {
-                console.log(err);
+        let check_query = mybatisMapper.getStatement('setting', 'settingCheck2', setting, format);
+        connection.query(check_query, function(check_err, check_rows){
+            if(check_err) {
+                console.log(check_err);
                 result.validation = false;
-                result.message = '해당 Setting 데이터를 수정하는 데 오류가 발생하였습니다';
+                result.message = '해당 Setting 시간을 중복 확인하는 데 오류가 발생하였습니다';
                 result.data = [];
                 res.json(result);
                 return;
             }
-            console.log('Setting update ok: ' + setting.s_No);
-            result.validation = true;
-            result.message = 'Setting 데이터 수정 성공';
-            result.data = [];
-            res.json(result);
-            let get_query = mybatisMapper.getStatement('setting', 'getDeviceNo', setting, format);
-            connection.query(get_query, function(get_err, get_rows){
-                if(get_err) console.log(get_err);
-                update_hw_setting(get_rows[0].d_No);
-            });
-        });
+            if(check_rows[0]){
+                console.log('Setting add fail: ' + setting.s_Time);
+                result.validation = false;
+                result.message = '해당 Setting 시간이 이미 존재합니다';
+                result.data = [];
+                res.json(result);
+            }
+            else{
+                let query = mybatisMapper.getStatement('setting', 'updateSetting', setting, format);
+                connection.query(query, function(err, rows) {
+                    if(err) {
+                        console.log(err);
+                        result.validation = false;
+                        result.message = '해당 Setting 데이터를 수정하는 데 오류가 발생하였습니다';
+                        result.data = [];
+                        res.json(result);
+                        return;
+                    }
+                    console.log('Setting update ok: ' + setting.s_No);
+                    result.validation = true;
+                    result.message = 'Setting 데이터 수정 성공';
+                    result.data = [];
+                    res.json(result);
+                    let get_query = mybatisMapper.getStatement('setting', 'getDeviceNo', setting, format);
+                    connection.query(get_query, function(get_err, get_rows){
+                        if(get_err) console.log(get_err);
+                        update_hw_setting(get_rows[0].d_No);
+                    });
+                });
+            }
+        });        
     }
     else res.json(result);
 };
