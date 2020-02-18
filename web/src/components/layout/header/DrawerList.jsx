@@ -9,7 +9,7 @@ import {
   Avatar,
   Divider,
   Container,
-  SvgIcon,
+  SvgIcon
 } from "@material-ui/core";
 import { useHistory } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
@@ -37,10 +37,7 @@ const useStyles = makeStyles(theme => ({
 const DrawerList = ({ setOpen }) => {
   const classes = useStyles();
   const history = useHistory();
-  const { input, isLoading } = useFetchData(
-    "/device/",
-    "device_select"
-  );
+  const { input, isLoading } = useFetchData("/device/", "device_select");
   const calcAge = birth => {
     let date = new Date();
     let year = date.getFullYear();
@@ -53,22 +50,22 @@ const DrawerList = ({ setOpen }) => {
     let birthdayy = birth.substr(0, 4);
     let birthdaymd = birth.substr(4, 4);
     let age = monthDay < birthdaymd ? year - birthdayy - 1 : year - birthdayy;
-    if(age < 1) {
-      let monthAge = monthDay.substr(0, 2) - birthdaymd.substr(0, 2)
-      return monthAge === 0 ? "1개월 미만" : (monthAge < 0? (12 + monthAge): monthAge)+ "개월"
+    if (age < 1) {
+      let monthAge = monthDay.substr(0, 2) - birthdaymd.substr(0, 2);
+      return monthAge === 0
+        ? "1개월 미만"
+        : (monthAge < 0 ? 12 + monthAge : monthAge) + "개월";
     }
     return age + "살";
-  }
-
-  if (isLoading) {
-    return <div>.....Loading</div>;
-  }
+  };
   return (
     <List className={classes.drawerList}>
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            {input.device !== undefined ? (
+            {isLoading ? (
+              <ErrorOutlineIcon />
+            ) : input.device !== undefined ? (
               input.device.d_Species === "강아지" ? (
                 <img src={DogBlack} alt="dog" className={classes.icons} />
               ) : (
@@ -79,12 +76,17 @@ const DrawerList = ({ setOpen }) => {
             )}
           </Avatar>
         </ListItemAvatar>
-        {input.device === undefined ? (
+        {isLoading ? (
           <ListItemText primary="기기를 등록해주세요" />
+        ) : input.device === undefined ? (
+          <ListItemText primary="기기를 등록해주세요" onClick={()=>{
+            history.push('/regist')
+            setOpen(false)
+          }} />
         ) : (
           <ListItemText
             primary={input.device.d_Name}
-            secondary={input.device.d_Bday? calcAge(input.device.d_Bday) : '-'}
+            secondary={input.device.d_Bday ? calcAge(input.device.d_Bday) : "-"}
           />
         )}
       </ListItem>
@@ -110,7 +112,7 @@ const DrawerList = ({ setOpen }) => {
             history.push("/info");
           }}
         >
-          {console.log(input)}
+          {/* {console.log(input)} */}
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

@@ -28,7 +28,7 @@ const AddFeedReview = props => {
       r_Positive: "",
       r_Negative: ""
     });
-  }, []);
+  }, [open]);
   const handleClickOpen = () => {
     setOpen(true);
   };

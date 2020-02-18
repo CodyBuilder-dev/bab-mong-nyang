@@ -17,7 +17,6 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
-import FeedComments from "./FeedComments";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import AddFeedReview from "./AddFeedReview";
 import ModifyFeedReview from "./ModifyFeedReview";
@@ -60,9 +59,9 @@ const useStyles = makeStyles(theme => ({
 
 const Feedreview = props => {
   const classes = useStyles();
-  const [open, setOpen] = useState({});
+  // const [open, setOpen] = useState({});
   const { input, dataFetch, isLoading } = useFetchData(
-    "/review/" + props.f_No+"/",
+    "/review/basic/" + props.f_No+"/",
     "review"
   );
 
@@ -73,9 +72,15 @@ const Feedreview = props => {
   
   React.useMemo(()=>{
     if(store.render !== undefined && store.render){
-      dataFetch(store.url + "/review/" + props.f_No + "/"+store.u_No, "review");
+      dataFetch(store.url + "/review/basic/" + props.f_No + "/"+store.u_No, "review");
     }
   },[store])
+  const onSortBest = event => {
+      dataFetch(store.url+"/review/best/" + props.f_No + "/"+store.u_No, "review");
+  }
+  const onSortRecent = event=>{
+    dataFetch(store.url+"/review/new/" + props.f_No + "/"+store.u_No, "review");
+  }
   return (
     <div className={classes.page}>
       {isLoading ? (
@@ -93,15 +98,16 @@ const Feedreview = props => {
                       ? "#00ab84"
                       : input.data.rank.r_Rank >= 2.5
                       ? "#ecdb54"
-                      : "#b93c3c"
+                      : input.data.rank.r_Rank === 0 ?
+                      "#808080": "#b93c3c"
                     : "#000000"
                 }}
               >
-                {input.validation ? input.data.rank.r_Rank : "0"}
+                {input.validation ? Number.parseFloat(input.data.rank.r_Rank).toFixed(1) : "0.0"}
               </Paper>
               <Rating
                 name="readonly"
-                value={input.validation ? input.data.rank.r_Rank : "0"}
+                value={input.validation ? Number.parseFloat(input.data.rank.r_Rank) : 0}
                 readOnly
                 precision={0.5}
               />
@@ -118,8 +124,8 @@ const Feedreview = props => {
                 variant="text"
                 aria-label="text primary button group"
               >
-                <Button>베스트순</Button>
-                <Button>최신순</Button>
+                <Button onClick = {onSortBest}>추천순</Button>
+                <Button onClick = {onSortRecent}>최신순</Button>
               </ButtonGroup>
             </Box>
             <Box>
@@ -128,7 +134,13 @@ const Feedreview = props => {
           </Box>
           {input.data === undefined ? (
             <div>...loading</div>
-          ) : (
+          ) : 
+            input.data.list == 0 ? (
+              <Box marginTop = {12} >
+              <Typography>등록된 리뷰가 없습니다</Typography>
+              </Box>
+            ):
+          (
             input.data.list.map((data, i) => {
               return (
                 <Box
@@ -137,6 +149,7 @@ const Feedreview = props => {
                   marginTop={1}
                   width="100%"
                   maxWidth="500px"
+                  key = {i}
                 >
                   <Box>
                     <List dense>
@@ -179,7 +192,7 @@ const Feedreview = props => {
                                     if (res.data.validation) {
                                       dataFetch(
                                         store.url +
-                                          "/review/" +
+                                          "/review/basic/" +
                                           props.f_No +
                                           "/" +
                                           store.u_No,
@@ -259,7 +272,7 @@ const Feedreview = props => {
                             if (res.data.validation) {
                               dataFetch(
                                 store.url +
-                                  "/review/" +
+                                  "/review/basic/" +
                                   props.f_No +
                                   "/" +
                                   store.u_No,
@@ -272,7 +285,7 @@ const Feedreview = props => {
                         }}
                       />
                       <Typography
-                        color={data.r_Good === 1 ? "primary" : "action"}
+                        color={data.r_Good === 1 ? "primary" : "initial"}
                       >
                         추천 {data.r_Count}
                       </Typography>
@@ -280,7 +293,6 @@ const Feedreview = props => {
                     {/* <Typography variant="caption" color="textSecondary">
                     {data.r_Recommend}명이 도움 받았습니다
                   </Typography> */}
-                    <Button color="secondary">신고</Button>
                   </Box>
                   {/* <Box className={classes.buttonBox}>
                   
@@ -295,9 +307,9 @@ const Feedreview = props => {
                     댓글
                   </Button>
                 </Box> */}
-                  <Box display={open[data.r_No] ? "flex" : "none"}>
+                  {/* <Box display={open[data.r_No] ? "flex" : "none"}>
                     <FeedComments r_No={data.r_No} fullWidth />
-                  </Box>
+                  </Box> */}
                 </Box>
               );
             })

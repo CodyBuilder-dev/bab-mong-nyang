@@ -6,7 +6,11 @@ import {
   InputAdornment,
   TextField,
   Button,
-  ButtonGroup
+  ButtonGroup,
+  DialogActions,
+  DialogContent,
+  Dialog,
+  DialogTitle
 } from "@material-ui/core";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import axios from "axios";
@@ -32,48 +36,74 @@ const TimeTable = props => {
   const classes = useStyles();
   const { store, onChangeStore } = useStore();
   const [editable, setEditable] = useState({});
+  const [click, setClick] = useState([false, -1]);
+  const [open,setOpen] = useState(false);
+
+  const handleOpen = event => {
+    if(event.currentTarget.name ==="취소"){
+      setEditable({ ...editable, [event.currentTarget.value]: false });
+      setClick([false,-1])
+      dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+    }else{
+      onChangeStore({target : input.data[event.currentTarget.value].s_No})
+      setOpen(true);
+    }
+  }
+  const handleClose = event => {
+    setOpen(false);
+    onChangeStore({target : ""})
+  }
+
   const modifyClickEvent = async event => {
-    const index = event.currentTarget.value;
-    if (editable === {} || !editable[index]) {
-      setEditable({ ...editable, [index]: true });
+    if (click[0] && click[1] !== event.currentTarget.value) {
+      alert("수정을 완료한 후 시도해주세요");
     } else {
-      if (s_AmountCheck(input.data[index].s_Amount)) {
-        await axios({
-          method: "PUT",
-          url: store.url + "/setting",
-          headers: store.headers,
-          data: input.data[index]
-        })
-          .then(res => {
-            if (res.data.validation) {
-              alert(res.data.message);
-              setEditable({ ...editable, [index]: false });
-              dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-            } else {
-              alert(res.data.message);
-            }
-          })
-          .catch(error => {
-            console.error(error);
-          });
+      setClick([true, event.currentTarget.value]);
+      const index = event.currentTarget.value;
+      if (editable === {} || !editable[index]) {
+        setEditable({ ...editable, [index]: true });
       } else {
-        alert("1~999사이의 값을 입력해주세요");
+        if (s_AmountCheck(input.data[index].s_Amount)) {
+          await axios({
+            method: "PUT",
+            url: store.url + "/setting",
+            headers: store.headers,
+            data: input.data[index]
+          })
+            .then(res => {
+              if (res.data.validation) {
+                alert(res.data.message);
+                setEditable({ ...editable, [index]: false });
+                dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+                setClick([false, -1]);
+              } else {
+                alert(res.data.message);
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        } else {
+          alert("1~999사이의 값을 입력해주세요");
+        }
       }
     }
   };
 
   const delteClickEvent = async event => {
-    if (event.currentTarget.name === "삭제") {
-      const targetIndex = event.currentTarget.value;
+    
+      // const targetIndex = event.currentTarget.value;
       await axios({
         method: "DELETE",
-        url: store.url + "/setting/" + input.data[targetIndex].s_No,
+        url: store.url + "/setting/" +store.target,
         headers: store.headers
       })
         .then(res => {
           if (res.data.validation) {
-            alert(res.data.message);
+            // alert(res.data.message);
             dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+            onChangeStore({target : ""});
+            setOpen(false);
           } else {
             alert(res.data.message);
           }
@@ -81,10 +111,7 @@ const TimeTable = props => {
         .catch(error => {
           alert("통신에러가 발생!");
         });
-    } else {
-      setEditable({ ...editable, [event.currentTarget.value]: false });
-      dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-    }
+    
   };
 
   const { input, isLoading, setInput, dataFetch } = useFetchData(
@@ -92,49 +119,40 @@ const TimeTable = props => {
     "timetable"
   );
 
-  // useEffect(() => {
-  //   if (store.render) {
-  //     dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-  //     onChangeStore({ render: false });
-  //   }
-  // }, [store]);
-  React.useMemo(()=>{
+  React.useMemo(() => {
     if (store.render) {
       dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
       onChangeStore({ render: false });
     }
-  },[store])
-  // useEffect(() => {
-  //   dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-  // }, [store.headers]);
+  }, [store]);
 
   return (
     <div className={classes.page}>
-      {isLoading ? (
-        <div> Loading.....</div>
-      ) : input.data === undefined ? (
-        <div>데이터가 없습니다.</div>
-      ) : (
-        <Box width="100%" maxWidth="500px">
-          <Box
-            width="100%"
-            maxWidth="500px"
-            display="flex"
-            justifyContent="space-between"
-          >
-            <AmountSetting></AmountSetting>
+      <Box width="100%" maxWidth="500px">
+        <Box
+          width="100%"
+          maxWidth="500px"
+          display="flex"
+          justifyContent="space-between"
+        >
+          <AmountSetting></AmountSetting>
 
-            <AddSetting></AddSetting>
-          </Box>
-          {/* 반복내용 시작 */}
-          {input.data.map((inputData, index) => (
+          <AddSetting></AddSetting>
+        </Box>
+        {/* 반복내용 시작 */}
+        {isLoading ? (
+          <></>
+        ) : input.data === undefined ? (
+          <></>
+        ) : (
+          input.data.map((inputData, index) => (
             <Box
               display="flex"
               alignItems="center"
               border={2}
               borderRadius={16}
               padding={2}
-              borderColor="primary.main"
+              borderColor={editable[index] ? "warning.main" : "primary.main"}
               width="100%"
               marginTop={2}
               justifyContent="space-between"
@@ -168,8 +186,10 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {hour.map((data,key) => (
-                  <option value={data} key ={key}>{data}</option>
+                {hour.map((data, key) => (
+                  <option value={data} key={key}>
+                    {data}
+                  </option>
                 ))}
               </TextField>
               <Typography variant="body1">시</Typography>
@@ -201,8 +221,10 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {minute.map((data,key) => (
-                  <option value={data} key = {key}>{data}</option>
+                {minute.map((data, key) => (
+                  <option value={data} key={key}>
+                    {data}
+                  </option>
                 ))}
               </TextField>
               <Typography variant="body1">분</Typography>
@@ -252,6 +274,7 @@ const TimeTable = props => {
                   style={{
                     padding: "1px 1px 1px 1px"
                   }}
+                  key={index}
                 >
                   수정
                 </Button>
@@ -262,7 +285,7 @@ const TimeTable = props => {
                       ? "취소"
                       : "삭제"
                   }
-                  onClick={delteClickEvent}
+                  onClick={handleOpen}
                   className={classes.button}
                   size="small"
                   color="secondary"
@@ -275,10 +298,32 @@ const TimeTable = props => {
                     : "삭제"}
                 </Button>
               </ButtonGroup>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"정말로 삭제하시겠어요?"}
+                </DialogTitle>
+                <DialogContent>
+                  <Typography gutterBottom>
+                    삭제 후 데이터 복구는 불가능합니다!
+                  </Typography>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={delteClickEvent} color="secondary">
+                    확인
+                  </Button>
+                  <Button onClick={handleClose} color="primary" autoFocus>
+                    취소
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Box>
-          ))}
-        </Box>
-      )}
+          ))
+        )}
+      </Box>
     </div>
   );
 };

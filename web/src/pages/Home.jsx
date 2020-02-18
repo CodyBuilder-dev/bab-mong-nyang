@@ -32,7 +32,7 @@ const Home = props => {
         <img src={CatIcon} alt="caticon" className={classes.icon} />
       </Box>
       <Typography variant="h5" gutterBottom>
-        밥 먹 냥
+        밥 멍 냥
       </Typography>
       <Typography variant="body1">반려동물 스마트 자동급식기</Typography>
       <Button color="primary" onClick={e => props.history.replace("/login")}>

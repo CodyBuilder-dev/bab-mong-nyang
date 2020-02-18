@@ -157,18 +157,10 @@ export const useFetchData = (requestURL, dataType) => {
             }
             break;
           case "user":
-            //result.data.u_Pw = "";
-            //result.data["u_No"] = store.u_No;
-            setInput(result.data.data);
-            break;
           case "feedinfo":
-            setInput(result.data.data);
-            break;
+          case "chart":
           case "feed_all":
             setInput(result.data.data);
-            break;
-          case "review":
-            setInput(result.data);
             break;
           default:
             setInput(result.data);
