@@ -80,7 +80,12 @@ const FeedBasic = props => {
         <>
           <Grid container alignItems="baseline">
             <Grid item xs={3}>
-              <Box display="flex" justifyContent="flex-end">
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="baseline"
+              >
+                <Typography variant="subtitle2">For. </Typography>
                 <img
                   src={input.f_Species === "고양이" ? CatBlack : DogBlack}
                   alt="feedTarget"
