@@ -171,7 +171,7 @@ const add = function (req, res) {
                                 result.message = '기기 등록 후 유저의 최신 기기 번호 갱신 성공'
                                 result.data = {d_No: device.d_No};
                                 res.json(result);
-                                ini_logdata_add(d_No);
+                                ini_logdata_add(device.d_No);
                             }
                             else {
                                 result.validation = false;
