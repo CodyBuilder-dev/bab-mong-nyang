@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  makeStyles,
-  TextField,
-  Button,
-  Box,
-  Typography
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { makeStyles, TextField, Button, Box } from "@material-ui/core";
 import {
   useFetchData,
   useStore
 } from "../components/custom-hooks/custom-hooks";
-import { useEffect } from "react";
+import CheckPw from "../components/info/CheckPw";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -35,79 +28,68 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const Info = props => {
-  console.log(props);
   const classes = useStyles();
   const { input, isLoading, dataFetch } = useFetchData("/user/", "user");
   const { store } = useStore();
-  useEffect(() => {
-    dataFetch(store.url + "/user/" + store.u_No, "user");
+  React.useMemo(() => {
+    if (input === undefined) {
+      dataFetch(store.url + "/user/" + store.u_No, "user");
+    }
   }, [store]);
-  //console.log(input);
   return (
     <div className={classes.page}>
       <h2>내 정보</h2>
-      {isLoading ? (
-        <div>Loading....</div>
-      ) : (
-        <div className={classes.inputText}>
-          {/* <Typography>{input.u_Id}</Typography>
-          <Typography>{input.u_Name}</Typography>
-          <Typography>{input.u_Email}</Typography> */}
-          <TextField
-            id="outlined-read-only-input"
-            label="아이디"
-            value={input.u_Id ? input.u_Id : ""}
-            InputProps={{
-              readOnly: true
-            }}
-            margin="normal"
+      <div className={classes.inputText}>
+        <TextField
+          id="outlined-read-only-input"
+          label="아이디"
+          value={isLoading ? "" : input.u_Id ? input.u_Id : ""}
+          InputProps={{
+            readOnly: true
+          }}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-read-only-input"
+          label="이름"
+          value={isLoading ? "" : input.u_Name ? input.u_Name : ""}
+          InputProps={{
+            readOnly: true
+          }}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-read-only-input"
+          label="이메일"
+          value={isLoading ? "" : input.u_Email ? input.u_Email : ""}
+          InputProps={{
+            readOnly: true
+          }}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        />
+        <Box display="flex" justifyContent="space-between">
+          <Button
             fullWidth
-            variant="outlined"
-          />
-          <TextField
-            id="outlined-read-only-input"
-            label="이름"
-            value={input.u_Name ? input.u_Name : ""}
-            InputProps={{
-              readOnly: true
-            }}
-            margin="normal"
-            fullWidth
-            variant="outlined"
-          />
-          <TextField
-            id="outlined-read-only-input"
-            label="이메일"
-            value={input.u_Email ? input.u_Email : ""}
-            InputProps={{
-              readOnly: true
-            }}
-            margin="normal"
-            fullWidth
-            variant="outlined"
-          />
-          <Box display="flex" justifyContent="space-between">
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={e => props.history.push("/infomodify")}
-            >
-              회원정보수정
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={e => props.history.push("/pwmodify")}
-            >
-              비밀번호수정
-            </Button>
-          </Box>
-        </div>
-      )}
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={e => props.history.push("/infomodify")}
+          >
+            회원정보수정
+          </Button>
+          <CheckPw
+            classes={classes}
+            history={props.history}
+            u_Id={input.u_Id}
+          ></CheckPw>
+        </Box>
+      </div>
     </div>
   );
 };

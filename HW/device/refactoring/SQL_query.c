@@ -32,7 +32,6 @@ MYSQL_ROW get_field(MYSQL *conn){
 	sprintf(tbuf, "%d:%d:00", localtime(&restime)->tm_hour, localtime(&restime)->tm_min);
 	mysql_query(conn, "select * from local_timetable");
 	MYSQL_RES *result = mysql_store_result(conn);
-	if (result == NULL) error(conn);
 	MYSQL_ROW row;
 	while((row = mysql_fetch_row(result))){
 		if(strcmp(row[0],tbuf)==0) return row;
@@ -40,12 +39,24 @@ MYSQL_ROW get_field(MYSQL *conn){
 	return row;
 }
 
-void insert_query(MYSQL *conn, int emptyflag, int amount, int remain){
+int get_last_eaten(MYSQL *conn){
+	mysql_query(conn, "select amount, remain from local_feeding_log order by _datetime desc limit 1");
+	int preveaten=0;
+	MYSQL_RES *result = mysql_store_result(conn);
+	MYSQL_ROW row;
+	if(row = mysql_fetch_row(result)){
+		preveaten = atoi(row[0])+atoi(row[1]);
+		return preveaten;
+	}
+	return 0;
+}
+
+void insert_query(MYSQL *conn, int emptyflag, int amount, int remain, int eaten){
 	char buf[1024];
-	sprintf(buf, "insert into local_feeding_log (empty, amount, remain) values ('%d', '%d', '%d')",emptyflag, amount, remain);
+	sprintf(buf, "insert into local_feeding_log (empty, amount, remain, eaten) values ('%d', '%d', '%d', '%d')", emptyflag, amount, remain, eaten);
 	int res = mysql_query(conn, buf);
 	if (!res)
-		printf("Insert <%d> <%d> <%d> successful!\n", emptyflag, amount, remain);
+		printf("Insert <%d> <%d> <%d> <%d> successful!\n", emptyflag, amount, remain, eaten);
 	else
 		error(conn);
 }

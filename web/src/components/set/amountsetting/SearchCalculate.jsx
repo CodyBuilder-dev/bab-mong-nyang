@@ -3,8 +3,8 @@ import { makeStyles, TextField, Box } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
-import { useHistory } from "react-router";
-import { useStore } from "../custom-hooks/custom-hooks";
+import { useStore , useFetchData} from "../../custom-hooks/custom-hooks";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   searchBarRoot: {
@@ -20,11 +20,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SearchBar = props => {
+const SearchCalculate = props => {
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
+  const {input} = useFetchData("/feed", "feed_all");
   const classes = useStyles();
-  const history = useHistory();
   const { store, onChangeStore } = useStore();
   const handleChange = e => {
     setInputValue(e.target.value);
@@ -50,7 +50,7 @@ const SearchBar = props => {
     }
     let inputList = inputValue.split(" ");
     setOptions(
-      props.data.filter(data => {
+      input.filter(data => {
         let nameSearch = true;
         let compSearch = true;
         let isNull = false;
@@ -91,15 +91,22 @@ const SearchBar = props => {
         includeInputInList
         freeSolo
         disableOpenOnFocus
-        onChange={(e, v) => {
+        onChange={async (e, v) => {
           if (typeof v === "object" && v !== null) {
-            history.push(`/feedinfo/${v.f_No}`);
+            await axios({method : "POST" , url: store.url+"/feed/cal/num",headers : store.headers, data : {d_No : store.u_Last, f_No : v.f_No}})
+            .then(res => {
+              if(res.data.validation){
+                onChangeStore({...res.data.data});
+              }else{
+                alert(res.data.message);
+              }
+            })
           }
         }}
         renderInput={params => (
           <TextField
             {...params}
-            label="사료 검색"
+            label="사료 이름 검색"
             variant="outlined"
             fullWidth
             size="small"
@@ -116,7 +123,6 @@ const SearchBar = props => {
             option.f_Name + " / " + option.f_Manufacturer,
             matches
           );
-
           return (
             // 자동완성
             <div key={option.f_No}>
@@ -138,4 +144,4 @@ const SearchBar = props => {
     </Box>
   );
 };
-export default SearchBar;
+export default SearchCalculate;

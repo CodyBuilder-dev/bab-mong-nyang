@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Typography,
-  AppBar,
   Toolbar,
   IconButton,
   SwipeableDrawer,
@@ -34,12 +33,14 @@ const useStyles = makeStyles(theme => ({
 const pathNameMatch = {
   '/set': '설정',
   '/info': '내 정보',
+  '/infomodify': '정보 수정',
   '/device': '밥그릇 목록',
   '/record': '급식 기록',
   '/feedinfo': '사료 정보',
   '/feedsearch': '사료 검색', 
   '/regist': '기기 등록',
-  '/devicemodify': '기기 수정'
+  '/devicemodify': '기기 수정',
+  '/pwmodify': '비밀번호 수정'
 }
 // ========================================================================
 let noteItems = [

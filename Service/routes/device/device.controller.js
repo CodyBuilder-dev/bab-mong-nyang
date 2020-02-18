@@ -8,9 +8,10 @@ const secretKey = require("../../config/jwt");
 // . : 현재 폴더 경로, .. : 상위 폴더
 const mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper(['./mapper/device.xml']);
+mybatisMapper.createMapper(['./mapper/logdata.xml']);
 let format = {language: 'sql', indent: ' '};
 
-var device = {
+var ini_device = {
     d_No: 0,
     u_No: 0,    
     d_Name: 'd_Name',
@@ -31,6 +32,7 @@ var result = {
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        device = ini_device;
         device.u_No = req.params.no;
         let query = mybatisMapper.getStatement('device', 'selectAll', device, format);
         connection.query(query, function(err, rows) {
@@ -54,6 +56,7 @@ const selectAll = function (req, res) {
 
 const selectOne = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        device = ini_device;
         device.d_No = req.params.no;
         let query = mybatisMapper.getStatement('device', 'selectOne', device, format);
         connection.query(query, function(err, rows) {
@@ -77,6 +80,7 @@ const selectOne = function (req, res) {
 
 const checkSerial = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        device = ini_device;
         device.SerialNo = req.params.no;
         let query = mybatisMapper.getStatement('device', 'checkSerial', device, format);
         connection.query(query, function(err, rows) {
@@ -89,7 +93,6 @@ const checkSerial = function (req, res) {
                 return;
             }
             if(rows[0]){
-                //device.UUID = rows[0].UUID;
                 console.log('device checkSerial ok: ' + device.SerialNo);
                 result.validation = true;
                 result.message = '해당 시리얼 번호와 일치하는 UUID 확인 완료'
@@ -99,7 +102,7 @@ const checkSerial = function (req, res) {
             else{
                 console.log('device checkSerial fail: ' + device.SerialNo);
                 result.validation = false;
-                result.message = '해당 시리얼 번호와 일치하는 UUID 미확인'
+                result.message = '해당 시리얼 번호와 일치하는 UUID가 존재하지 않습니다'
                 result.data = [];
                 res.json(result);                
             }
@@ -110,6 +113,7 @@ const checkSerial = function (req, res) {
 
 const add = function (req, res) {
     if(checkToken(req.headers.authorization)) { 
+        device = ini_device;
         device = {...device , ...req.body}; //u_No, d_Name, d_Age, (d_Bday) d_Species, d_Weight, SerialNo
         if(device.d_Bday == '') device.d_Bday = null;
         let check_query = mybatisMapper.getStatement('device', 'deviceCheck', device, format);
@@ -167,6 +171,7 @@ const add = function (req, res) {
                                 result.message = '기기 등록 후 유저의 최신 기기 번호 갱신 성공'
                                 result.data = {d_No: device.d_No};
                                 res.json(result);
+                                ini_logdata_add(device.d_No);
                             }
                             else {
                                 result.validation = false;
@@ -185,6 +190,7 @@ const add = function (req, res) {
 
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        device = ini_device;
         device = {...device , ...req.body}; //d_No, d_Name, d_Age, #{d_Bday}, d_Species, d_Weight
         if(device.d_Bday == '') device.d_Bday = null;
         let query = mybatisMapper.getStatement('device', 'updateDevice', device, format);
@@ -207,9 +213,13 @@ const update = function (req, res) {
     else res.json(result);
 };
 
+var del_temp = {no: 0};
+
 const del = function (req, res) {
     if(checkToken_del(req.headers.authorization)) {
+        device = ini_device;
         device.d_No = req.params.no;
+        device.u_No = del_temp.no;
         let query = mybatisMapper.getStatement('device', 'deleteDevice', device, format);
         connection.query(query, function(err, rows) {
             if(err) {
@@ -246,6 +256,7 @@ const del = function (req, res) {
                         result.message = '유저의 최신 기기 번호 갱신 성공';
                         result.data = get_rows[0];
                         res.json(result);
+                        del_temp.no = 0;
                     });
                 }
                 else{ //삭제하기 전 기기의 개수가 1개라서 삭제 후 u_Last가 갱신되지 않은 경우
@@ -263,6 +274,7 @@ const del = function (req, res) {
                         result.message = '유저의 최신 기기 번호를 0으로 갱신 성공';
                         result.data = {u_Last: 0};
                         res.json(result);
+                        del_temp.no = 0;
                     });
                 }
             });
@@ -270,6 +282,18 @@ const del = function (req, res) {
     }
     else res.json(result);
 };
+
+function ini_logdata_add(no){
+    log_temp = {d_No: no};
+    let query = mybatisMapper.getStatement('logdata', 'deviceAdd', log_temp, format);
+    connection.query(query, function(err, rows) {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        console.log('logdata deviceAdd ok: ' + no);
+    });
+}
 
 function checkToken(token){
     var tempToken = false;
@@ -283,7 +307,6 @@ function checkToken(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
             tempToken = true;
         }
     });
@@ -302,8 +325,7 @@ function checkToken_del(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
-            device.u_No = decoded.u_No;
+            del_temp.no = decoded.u_No;
             tempToken = true;
         }
     });

@@ -32,7 +32,7 @@ const ngrok_info = async function() {
     console.log(ngrok_url);
 
     var uuid_string = uuid.toString();
-    request.put("http://70.12.246.68:3000/hw/ip", //send to server
+    request.put("http://52.78.235.226:3000/hw/ip", //send to server
     {
         form:{
             ngrok_url:ngrok_url,

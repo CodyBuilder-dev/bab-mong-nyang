@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { hour, minute } from "./Time";
-import axios from "axios";
 import { useEffect } from "react";
 import { s_AmountCheck } from "../../modules/regCheck";
 
@@ -27,16 +26,16 @@ const AddSetting = props => {
       d_No: store.u_Last,
       s_Time: "00:00",
       hour: "00",
-      minute: "00"
+      minute: "00",
+      s_Amount:""
     });
-  }, []);
+  }, [open]);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = async event => {
     if (event.currentTarget.name !== "add") {
-      setInput({});
       setOpen(false);
     } else {
       if (s_AmountCheck(input.s_Amount)) {
@@ -44,15 +43,14 @@ const AddSetting = props => {
           .then(res => {
             if (res.validation) {
               alert(res.message);
-              setInput({});
-              setOpen(false);
               onChangeStore({ render: true });
+              setOpen(false);
             } else {
               alert(res.message);
             }
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
       } else {
         alert("1~999사이의 값을 입력해주세요");
@@ -103,8 +101,8 @@ const AddSetting = props => {
                 }
               }}
             >
-              {hour.map(data => (
-                <option value={data}>{data}</option>
+              {hour.map((data,index) => (
+                <option value={data} key = {index} >{data}</option>
               ))}
             </TextField>
 
@@ -131,8 +129,8 @@ const AddSetting = props => {
                 }
               }}
             >
-              {minute.map(data => (
-                <option value={data}>{data}</option>
+              {minute.map((data,index) => (
+                <option value={data} key = {index}>{data}</option>
               ))}
             </TextField>
             <Typography variant="body1">분</Typography>

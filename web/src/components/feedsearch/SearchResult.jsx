@@ -1,19 +1,17 @@
 import React from "react";
 import {
   makeStyles,
-  Typography,
   Box,
-  Grid,
   CardMedia,
   List,
   ListItem,
   ListItemText,
-  ListItemAvatar
+  ListItemAvatar,
+  Typography,
 } from "@material-ui/core";
-import { useHistory, useRouteMatch } from "react-router";
+import StarRateIcon from "@material-ui/icons/StarRate";
+import { useHistory } from "react-router";
 import { useStore } from "../custom-hooks/custom-hooks";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -29,7 +27,8 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     width: "50px",
-    height: "70px"
+    height: "70px",
+    borderRadius: "10px"
   }
 }));
 
@@ -43,26 +42,38 @@ const SearchResult = props => {
   return (
     <Box className={classes.tab}>
       <List className={classes.root}>
-        {console.log(store.options)}
-        {false ? <></> : props.data.map(data => (
-          <ListItem
-            key={`feedImage${data.f_No}`}
-            button
-            onClick={() => goFeedInfo(data.f_No)}
-          >
-            <ListItemAvatar>
-              <CardMedia
-                className={classes.media}
-                image={null}
-                title="Feed Image"
+        {false ? (
+          <></>
+        ) : (
+          props.data.map(data => (
+            <ListItem
+              key={`feedImage${data.f_No}`}
+              button
+              onClick={() => goFeedInfo(data.f_No)}
+            >
+              <ListItemAvatar>
+                <CardMedia
+                  className={classes.media}
+                  image={`/images/${data.f_No}.jpg`}
+                  title="Feed Image"
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={data.f_Name}
+                secondary={data.f_Manufacturer}
               />
-            </ListItemAvatar>
-            <ListItemText
-              primary={data.f_Name}
-              secondary={data.f_Manufacturer}
-            />
-          </ListItem>
-        ))}
+              <Box display="flex" alignItems="flex-end">
+                <Box display="flex" alignItems="center">
+                  <Box display="flex" color="warning.main" alignItems="center">
+                    <StarRateIcon fontSize="small" />
+                  </Box>
+                  <Typography>{Number.parseFloat(data.f_Rank).toFixed(1)}</Typography>
+                </Box>
+                <Typography variant="subtitle2">({data.f_Count})</Typography>
+              </Box>
+            </ListItem>
+          ))
+        )}
       </List>
     </Box>
   );

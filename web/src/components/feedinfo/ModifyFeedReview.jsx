@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -9,24 +9,27 @@ import {
   Button,
   Box,
   Typography,
-  InputAdornment
+  
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import EditIcon from "@material-ui/icons/Edit";
 import { useStore } from "../custom-hooks/custom-hooks";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
 const ModifyFeedReview = props => {
   const [input, setInput] = useState(props.init);
   const [open, setOpen] = useState(false);
   const { store, onChangeStore } = useStore();
-
+  
   const handleClickOpen = () => {
     setInput(props.init)
     setOpen(true);
   };
-
+  useEffect(()=>{
+    if(store.render === undefined || store.render){
+      onChangeStore({render : false});
+    }
+  },[])
   const handleClose = async event => {
     if (event.currentTarget.name !== "add") {
       setInput({});
@@ -53,7 +56,7 @@ const ModifyFeedReview = props => {
               }
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           alert("최저 평점은 0.5점, 최고 평점은 5.0점 입니다.");

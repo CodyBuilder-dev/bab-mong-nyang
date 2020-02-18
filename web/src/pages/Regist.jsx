@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   makeStyles,
   TextField,
@@ -83,7 +83,6 @@ const DogRadio = props => {
   );
 };
 const CheckRadio = props => {
-  const classes = useStyles();
   return (
     <Radio
       checkedIcon={<CheckBoxIcon />}
@@ -104,15 +103,14 @@ const Regist = props => {
     setInput({ u_No: store.u_No, d_Bday: "" });
   }, [store]);
   const onClickEvent = async event => {
-    console.log(input);
     if (checked) {
       let result = await onSubmit(store.url + "/device");
-      if (result !== false) {
-        onChangeStore({ ...store, u_Last: result });
+      if (result.validation) {
+        onChangeStore({ ...store, u_Last: result.data.d_No });
         alert("기기등록에 성공했습니다.");
         props.history.goBack();
       } else {
-        alert("기기등록에 실패했습니다.");
+        alert(result.message);
       }
     } else {
       alert("일련번호 확인이 필요합니다.");
@@ -125,11 +123,11 @@ const Regist = props => {
       const result = await onValidate(
         store.url + "/device/check/" + input.SerialNo
       );
-      if (result) {
-        alert("올바른 일련번호입니다.");
+      if (result.validation) {
+        alert(result.message);
         checked = true;
       } else {
-        alert("등록되지 않은 일련번호입니다.");
+        alert(result.message);
       }
     }
   };

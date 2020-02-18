@@ -10,23 +10,21 @@ import { useStore } from "../../custom-hooks/custom-hooks";
 import axios from "axios";
 
 const initialState = {
-  d_No : "",
-  f_Fat : "",
-  f_Protein : "",
-  f_Calucium : "",
-  f_Phosphorus : "",
-  f_Ash : "",
-  f_Moisture:"",
-  f_Fiber : "",
-}
+  d_No: "",
+  f_Fat: "",
+  f_Protein: "",
+  f_Calucium: "",
+  f_Phosphorus: "",
+  f_Ash: "",
+  f_Moisture: "",
+  f_Fiber: ""
+};
 const Ingredient = props => {
   const fullScreen = props.fullScreen;
-  const [input,setInput] = useState({d_No:props.d_No});
+  const [input, setInput] = useState({ d_No: props.d_No });
   const { store, onChangeStore } = useStore();
   const changeEvent = event => {
-    console.log(input)
     const {name, value} = event.target
-    console.log(name +" " + value)
     setInput({...input,[name] : value})
   }
   const resetEvent = event =>{
@@ -36,7 +34,6 @@ const Ingredient = props => {
   const computeEvent = async() => {
     await axios({method : "POST" , url : store.url+"/feed/cal/direct" ,headers : store.headers, data : input})
     .then(res => {
-      console.log(res);
       if(res.data.validation){
         onChangeStore({...res.data.data});
         //alert(res.data.message);
@@ -44,9 +41,10 @@ const Ingredient = props => {
         alert(res.data.message)
       }
     }).catch(error => {
+      console.log(error);
       alert("심각한 통신 장애")
     })
-  }
+  };
   return (
     <Box minHeight="250px" display="block" justifyContent="center">
       <Typography variant="caption">
@@ -150,7 +148,7 @@ const Ingredient = props => {
               width: "90%"
             }}
             name="f_Calucium"
-            value={input.f_Calucium }
+            value={input.f_Calucium}
             onChange={changeEvent}
             InputProps={{
               endAdornment: (
@@ -373,7 +371,7 @@ const Ingredient = props => {
             width: fullScreen ? "85%" : "100%",
             fontSize: fullScreen ? "13px" : "16px"
           }}
-          onClick = {computeEvent}
+          onClick={computeEvent}
         >
           계산
         </Button>
