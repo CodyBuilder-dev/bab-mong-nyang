@@ -99,7 +99,7 @@ const SearchBar = props => {
         renderInput={params => (
           <TextField
             {...params}
-            label="사료 이름 검색"
+            label="사료 검색"
             variant="outlined"
             fullWidth
             size="small"

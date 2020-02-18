@@ -5,7 +5,7 @@ const Device = props => {
   return (
     <>
       {/* <SettingTable /> */}
-      <DeviceListTable props = {props}  />
+      <DeviceListTable />
     </>
   );
 };

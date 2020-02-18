@@ -15,8 +15,9 @@ import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
 import { useEffect } from "react";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -37,24 +38,6 @@ const useStyles = makeStyles(theme => ({
     padding: "10px 24px 0"
   }
 }));
-const theme = createMuiTheme({
-  overrides: {
-    // Style sheet name ⚛️
-    MuiButton: {
-      // Name of the rule
-      text: {
-        // Some CSS
-        background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-        borderRadius: 3,
-        border: 0,
-        color: "white",
-        height: 48,
-        padding: "0 30px",
-        boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
-      }
-    }
-  }
-});
 function DeviceDialog(props) {
   const history = useHistory();
   const classes = useStyles();
@@ -71,7 +54,7 @@ function DeviceDialog(props) {
   return (
     <Dialog onClose={handleClose} aria-labelledby="device-dialog" open={open}>
       <DialogTitle id="device-dialog" className={classes.dialogTitle}>
-        <Typography>기기를 선택하세요</Typography>
+        <Typography>기기를 선택해주세요</Typography>
       </DialogTitle>
       <List>
         {devices.map(device => (
@@ -112,7 +95,7 @@ const DeviceSelect = props => {
   );
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
-  React.useMemo(()=>{
+  React.useMemo(() => {
     if (input.u_Last !== undefined && input.u_Last !== 0) {
       setSelectedValue(
         input.device.filter(device => device.d_No === store.u_Last)[0]
@@ -120,13 +103,13 @@ const DeviceSelect = props => {
     } else {
       setSelectedValue({});
     }
-  },[input])
-  React.useMemo( ()=>{
-    if((store.u_No !== undefined && store.u_No !== "" ) && input == 0){
-      setSelectedValue(store.u_Last)
+  }, [input]);
+  React.useMemo(() => {
+    if (store.u_No !== undefined && store.u_No !== "" && input == 0) {
+      setSelectedValue(store.u_Last);
       dataFetch(store.url + "/Join/main/" + store.u_No, "devicelist");
     }
-  },[store.u_No])
+  }, [store.u_No]);
   //input.device === undefined ? {} : input.device.filter(device=>device.d_No === state.u_Last)[0]
   const handleClickOpen = () => {
     setOpen(true);
@@ -144,7 +127,12 @@ const DeviceSelect = props => {
   return (
     <div className={classes.deviceSelectForm}>
       {isLoading ? (
-        <div>Loading....</div>
+        <div className={classes.deviceInfoBox}>
+          <Skeleton animation="pulse" variant="text" height="28px" width="110px" />
+          <IconButton onClick={handleClickOpen}>
+            <ArrowDropDown />
+          </IconButton>
+        </div>
       ) : (
         <>
           {input.u_Last === 0 || input.u_Last === undefined ? (
@@ -168,7 +156,7 @@ const DeviceSelect = props => {
           )}
 
           <DeviceDialog
-            selectedValue={typeof(selectedValue) === String ? selectedValue : ""}
+            selectedValue={typeof selectedValue === String ? selectedValue : ""}
             open={open}
             onClose={handleClose}
             devices={input.device === undefined ? [] : input.device}

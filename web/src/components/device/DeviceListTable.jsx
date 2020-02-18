@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: "100px",
-    alignItems: "center"
   }
 }));
 
