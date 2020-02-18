@@ -13,9 +13,9 @@ export const restoreStore = data => ({
 //70.12.246.68:3000
 //localhost:3000
 const initialState = {
-  url: "http://70.12.246.68:3000",
-  //url: "http://localhost:3000",
-  // url:"http://52.78.235.226:3000",
+  // url: "http://70.12.246.68:3000",
+  // url: "http://localhost:3000",
+  url:"http://52.78.235.226:3000",
   currentDeviceNo : "",
   u_No : "",
   u_Last : "" ,

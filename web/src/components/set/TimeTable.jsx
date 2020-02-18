@@ -32,32 +32,42 @@ const TimeTable = props => {
   const classes = useStyles();
   const { store, onChangeStore } = useStore();
   const [editable, setEditable] = useState({});
+  const [click, setClick] = useState([false,-1]);
+
   const modifyClickEvent = async event => {
-    const index = event.currentTarget.value;
-    if (editable === {} || !editable[index]) {
-      setEditable({ ...editable, [index]: true });
-    } else {
-      if (s_AmountCheck(input.data[index].s_Amount)) {
-        await axios({
-          method: "PUT",
-          url: store.url + "/setting",
-          headers: store.headers,
-          data: input.data[index]
-        })
-          .then(res => {
-            if (res.data.validation) {
-              alert(res.data.message);
-              setEditable({ ...editable, [index]: false });
-              dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-            } else {
-              alert(res.data.message);
-            }
-          })
-          .catch(error => {
-            console.error(error);
-          });
+    console.log(click)
+    console.log(event.currentTarget.value)
+    if (click[0] && click[1] !==event.currentTarget.value) {
+      alert("수정을 완료한 후 시도해주세요");
+    } else{
+      setClick([true,event.currentTarget.value])
+      const index = event.currentTarget.value;
+      if (editable === {} || !editable[index]) {
+        setEditable({ ...editable, [index]: true });
       } else {
-        alert("1~999사이의 값을 입력해주세요");
+        if (s_AmountCheck(input.data[index].s_Amount)) {
+          await axios({
+            method: "PUT",
+            url: store.url + "/setting",
+            headers: store.headers,
+            data: input.data[index]
+          })
+            .then(res => {
+              if (res.data.validation) {
+                //alert(res.data.message);
+                setEditable({ ...editable, [index]: false });
+                dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
+                setClick([false,-1])
+              } else {
+                // alert(res.data.message);
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        } else {
+          alert("1~999사이의 값을 입력해주세요");
+        }
       }
     }
   };
@@ -72,10 +82,10 @@ const TimeTable = props => {
       })
         .then(res => {
           if (res.data.validation) {
-            alert(res.data.message);
+            // alert(res.data.message);
             dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
           } else {
-            alert(res.data.message);
+            // alert(res.data.message);
           }
         })
         .catch(error => {
@@ -98,12 +108,12 @@ const TimeTable = props => {
   //     onChangeStore({ render: false });
   //   }
   // }, [store]);
-  React.useMemo(()=>{
+  React.useMemo(() => {
     if (store.render) {
       dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
       onChangeStore({ render: false });
     }
-  },[store])
+  }, [store]);
   // useEffect(() => {
   //   dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
   // }, [store.headers]);
@@ -134,7 +144,7 @@ const TimeTable = props => {
               border={2}
               borderRadius={16}
               padding={2}
-              borderColor="primary.main"
+              borderColor={editable[index] ? "warning.main" : "primary.main"}
               width="100%"
               marginTop={2}
               justifyContent="space-between"
@@ -168,8 +178,10 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {hour.map((data,key) => (
-                  <option value={data} key ={key}>{data}</option>
+                {hour.map((data, key) => (
+                  <option value={data} key={key}>
+                    {data}
+                  </option>
                 ))}
               </TextField>
               <Typography variant="body1">시</Typography>
@@ -201,8 +213,10 @@ const TimeTable = props => {
                   }
                 }}
               >
-                {minute.map((data,key) => (
-                  <option value={data} key = {key}>{data}</option>
+                {minute.map((data, key) => (
+                  <option value={data} key={key}>
+                    {data}
+                  </option>
                 ))}
               </TextField>
               <Typography variant="body1">분</Typography>
@@ -252,6 +266,7 @@ const TimeTable = props => {
                   style={{
                     padding: "1px 1px 1px 1px"
                   }}
+                  key={index}
                 >
                   수정
                 </Button>
