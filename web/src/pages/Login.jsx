@@ -49,16 +49,16 @@ const Login = props => {
     localStorage.getItem("item") ? true : false
   );
   const { store, onChangeStore } = useStore();
-  const [cookies, setCookie, removeCookie]= useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   useEffect(() => {
-    setInput({})
+    setInput({});
     if (localStorage.getItem("u_id")) {
       setInput({ u_Id: localStorage.getItem("u_id") });
     }
   }, [setInput]);
   const onLoginClick = async event => {
     let result = await onSubmit(store.url + "/user/login");
-    setInput({...input,u_Pw:""})
+    setInput({ ...input, u_Pw: "" });
     if (result.validation) {
       onChangeStore(
         { ...result.data, headers: { authorization: result.data.Token } },
@@ -109,6 +109,11 @@ const Login = props => {
           autoComplete="current-password"
           value={input.u_Pw ? input.u_Pw : ""}
           onChange={updateField}
+          onKeyDown={e => {
+            if (e.keyCode === 13) {
+              onLoginClick();
+            }
+          }}
           // InputLabelProps={{
           //   classes: {
           //     //focused: classes.border,
@@ -126,8 +131,7 @@ const Login = props => {
               name="remember"
               color="primary"
               onChange={(e, c) => setRemember(c)}
-              checked={remember? remember : false}
-              
+              checked={remember ? remember : false}
             />
           }
           label="아이디 저장"
