@@ -32,7 +32,8 @@ const Info = props => {
   const { input, isLoading, dataFetch } = useFetchData("/user/", "user");
   const { store } = useStore();
   React.useMemo(() => {
-    if (input === undefined) {
+    // console.log(input);
+    if (input === undefined || input == 0) {
       dataFetch(store.url + "/user/" + store.u_No, "user");
     }
   }, [store]);

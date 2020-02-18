@@ -37,7 +37,7 @@ const InfoModify = props => {
   );
   const { store } = useStore();
   useEffect(() => {
-    if (input === undefined) {
+    if (input === undefined || input == 0) {
       dataFetch(store.url + "/user/" + store.u_No, "user");
     }
   }, [store]);
