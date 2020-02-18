@@ -114,6 +114,11 @@ const PwModify = props => {
               ? ""
               : "일치하지 않습니다"
           }
+          onKeyDown={e=>{
+            if(e.keyCode===13){
+              onClickEvent(e)
+            }
+          }}
         />
         <Button
           fullWidth

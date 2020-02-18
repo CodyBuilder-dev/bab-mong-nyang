@@ -2,18 +2,19 @@ import React from "react"
 import { Button, Dialog, DialogActions, Input, DialogTitle, DialogContent, DialogContentText, TextField } from "@material-ui/core";
 import axios from "axios";
 import { useStore, useFetchData } from "../custom-hooks/custom-hooks";
+import { useMemo } from "react";
 
 const CheckPw = props => {
-  const {input, updateField} = useFetchData("","");
+  const {input, setInput, updateField} = useFetchData("","");
   const [open, setOpen] = React.useState(false);
   const {store} = useStore();
   
-  
+  useMemo(() => setInput({u_Pw: ""}), [open])
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = async (event) => {
-    if(event.currentTarget.name ==="confirm"){
+    if(event.currentTarget.name ==="confirm" || event.keyCode===13){
     await axios
       .post(
         store.url + "/user/login",
@@ -68,6 +69,11 @@ const CheckPw = props => {
           fullWidth
           margin="normal"
           type="password"
+          onKeyDown={e=>{
+            if(e.keyCode===13){
+              handleClose(e)
+            }
+          }}
         />
       </DialogContent>
       <DialogActions>

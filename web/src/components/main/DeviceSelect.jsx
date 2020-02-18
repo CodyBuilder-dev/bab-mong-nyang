@@ -44,12 +44,10 @@ function DeviceDialog(props) {
   const { onClose, open, devices, selectedValue } = props;
 
   const handleClose = () => {
-    console.log(selectedValue)
     onClose(selectedValue);
   };
 
   const handleListItemClick = value => {
-    console.log(value);
     onClose(value);
   };
 

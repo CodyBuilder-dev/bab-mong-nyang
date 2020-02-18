@@ -32,15 +32,15 @@ const TimeTable = props => {
   const classes = useStyles();
   const { store, onChangeStore } = useStore();
   const [editable, setEditable] = useState({});
-  const [click, setClick] = useState([false,-1]);
+  const [click, setClick] = useState([false, -1]);
 
   const modifyClickEvent = async event => {
-    console.log(click)
-    console.log(event.currentTarget.value)
-    if (click[0] && click[1] !==event.currentTarget.value) {
+    console.log(click);
+    console.log(event.currentTarget.value);
+    if (click[0] && click[1] !== event.currentTarget.value) {
       alert("수정을 완료한 후 시도해주세요");
-    } else{
-      setClick([true,event.currentTarget.value])
+    } else {
+      setClick([true, event.currentTarget.value]);
       const index = event.currentTarget.value;
       if (editable === {} || !editable[index]) {
         setEditable({ ...editable, [index]: true });
@@ -57,7 +57,7 @@ const TimeTable = props => {
                 //alert(res.data.message);
                 setEditable({ ...editable, [index]: false });
                 dataFetch(store.url + "/setting/" + store.u_Last, "timetable");
-                setClick([false,-1])
+                setClick([false, -1]);
               } else {
                 // alert(res.data.message);
               }
@@ -120,24 +120,24 @@ const TimeTable = props => {
 
   return (
     <div className={classes.page}>
-      {isLoading ? (
-        <div> Loading.....</div>
-      ) : input.data === undefined ? (
-        <div>데이터가 없습니다.</div>
-      ) : (
-        <Box width="100%" maxWidth="500px">
-          <Box
-            width="100%"
-            maxWidth="500px"
-            display="flex"
-            justifyContent="space-between"
-          >
-            <AmountSetting></AmountSetting>
+      <Box width="100%" maxWidth="500px">
+        <Box
+          width="100%"
+          maxWidth="500px"
+          display="flex"
+          justifyContent="space-between"
+        >
+          <AmountSetting></AmountSetting>
 
-            <AddSetting></AddSetting>
-          </Box>
-          {/* 반복내용 시작 */}
-          {input.data.map((inputData, index) => (
+          <AddSetting></AddSetting>
+        </Box>
+        {/* 반복내용 시작 */}
+        {isLoading ? (
+          <></>
+        ) : input.data === undefined ? (
+          <></>
+        ) : (
+          input.data.map((inputData, index) => (
             <Box
               display="flex"
               alignItems="center"
@@ -291,9 +291,9 @@ const TimeTable = props => {
                 </Button>
               </ButtonGroup>
             </Box>
-          ))}
-        </Box>
-      )}
+          ))
+        )}
+      </Box>
     </div>
   );
 };

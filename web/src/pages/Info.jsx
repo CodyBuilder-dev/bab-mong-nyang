@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  makeStyles,
-  TextField,
-  Button,
-  Box,
-} from "@material-ui/core";
+import { makeStyles, TextField, Button, Box } from "@material-ui/core";
 import {
   useFetchData,
   useStore
@@ -36,65 +31,65 @@ const Info = props => {
   const classes = useStyles();
   const { input, isLoading, dataFetch } = useFetchData("/user/", "user");
   const { store } = useStore();
-  React.useMemo(()=>{
-    if(input===undefined){
+  React.useMemo(() => {
+    if (input === undefined) {
       dataFetch(store.url + "/user/" + store.u_No, "user");
     }
-  },[store])
+  }, [store]);
   return (
     <div className={classes.page}>
       <h2>내 정보</h2>
-      {isLoading ? (
-        <div>Loading....</div>
-      ) : (
-        <div className={classes.inputText}>
-          <TextField
-            id="outlined-read-only-input"
-            label="아이디"
-            value={input.u_Id ? input.u_Id : ""}
-            InputProps={{
-              readOnly: true
-            }}
-            margin="normal"
+      <div className={classes.inputText}>
+        <TextField
+          id="outlined-read-only-input"
+          label="아이디"
+          value={isLoading ? "" : input.u_Id ? input.u_Id : ""}
+          InputProps={{
+            readOnly: true
+          }}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-read-only-input"
+          label="이름"
+          value={isLoading ? "" : input.u_Name ? input.u_Name : ""}
+          InputProps={{
+            readOnly: true
+          }}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-read-only-input"
+          label="이메일"
+          value={isLoading ? "" : input.u_Email ? input.u_Email : ""}
+          InputProps={{
+            readOnly: true
+          }}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        />
+        <Box display="flex" justifyContent="space-between">
+          <Button
             fullWidth
-            variant="outlined"
-          />
-          <TextField
-            id="outlined-read-only-input"
-            label="이름"
-            value={input.u_Name ? input.u_Name : ""}
-            InputProps={{
-              readOnly: true
-            }}
-            margin="normal"
-            fullWidth
-            variant="outlined"
-          />
-          <TextField
-            id="outlined-read-only-input"
-            label="이메일"
-            value={input.u_Email ? input.u_Email : ""}
-            InputProps={{
-              readOnly: true
-            }}
-            margin="normal"
-            fullWidth
-            variant="outlined"
-          />
-          <Box display="flex" justifyContent="space-between">
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={e => props.history.push("/infomodify")}
-            >
-              회원정보수정
-            </Button>
-            <CheckPw classes = {classes} history = {props.history} u_Id = {input.u_Id}></CheckPw>
-          </Box>
-        </div>
-      )}
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={e => props.history.push("/infomodify")}
+          >
+            회원정보수정
+          </Button>
+          <CheckPw
+            classes={classes}
+            history={props.history}
+            u_Id={input.u_Id}
+          ></CheckPw>
+        </Box>
+      </div>
     </div>
   );
 };
