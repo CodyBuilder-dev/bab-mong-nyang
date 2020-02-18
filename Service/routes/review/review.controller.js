@@ -10,7 +10,7 @@ const mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper(['./mapper/review.xml']);
 let format = {language: 'sql', indent: ' '};
 
-var review = { //type 모두 String으로 변환하고 Test
+var ini_review = { //type 모두 String으로 변환하고 Test
     r_No: 0,
     u_No: 0,
     f_No: 0,    
@@ -28,19 +28,14 @@ var result = {
 
 const selectAll = function (req, res) {
     if(checkToken(req.headers.authorization)) {
-        var inputData = {
-            u_No: req.params.uno,
-            f_No: req.params.no
-        }
-        var myData = {
-            validation: false,
-            message: '',
-            data: {
-                rank: 1.1,
-                list: []
-            }
-        }
-        let get_query = mybatisMapper.getStatement('review', 'getRank', inputData, format);
+        review = ini_review;
+        review.u_No = req.params.uno;
+        review.f_No = req.params.no;
+        var getData = {
+            rank: 1.1,
+            list: []
+        };
+        let get_query = mybatisMapper.getStatement('review', 'getRank', review, format);
         connection.query(get_query, function(get_err, get_rows){
             if(get_err){
                 result.validation = false;
@@ -49,8 +44,8 @@ const selectAll = function (req, res) {
                 res.json(result);
                 return;
             }
-            myData.data.rank = get_rows[0];
-            let query = mybatisMapper.getStatement('review', 'selectAll', inputData, format);
+            getData.rank = get_rows[0];
+            let query = mybatisMapper.getStatement('review', 'selectAll', review, format);
             connection.query(query, function(err, rows) {
                 if(err){
                     result.validation = false;
@@ -60,10 +55,11 @@ const selectAll = function (req, res) {
                     return;
                 }
                 console.log('review selectAll ok: ' + review.f_No);
-                myData.validation = true;
-                myData.message = '해당 사료의 모든 리뷰 호출 성공';
-                myData.data.list = rows;
-                res.json(myData);
+                result.validation = true;
+                result.message = '해당 사료의 모든 리뷰 호출 성공';
+                getData.list = rows;
+                result.data = getData;
+                res.json(result);
             });
         });        
     }
@@ -72,6 +68,7 @@ const selectAll = function (req, res) {
 
 const selectOne = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        review = ini_review;
         review.r_No = req.params.no;
         let query = mybatisMapper.getStatement('review', 'selectOne', review, format);
         connection.query(query, function(err, rows) {
@@ -95,6 +92,7 @@ const selectOne = function (req, res) {
 
 const add = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        review = ini_review;
         review = {...review , ...req.body}; //u_No, f_No, r_Rank, r_Positive, r_Negative 
         let query = mybatisMapper.getStatement('review', 'addReview', review, format);
         connection.query(query, function(err, rows){
@@ -158,7 +156,7 @@ const updateGood = function (req, res) {
                     if(add_err){
                         console.log(add_err);
                         result.validation = false;
-                        result.message = '해당 리뷰의 추천 정보를 삭제하는데 오류가 발생하였습니다';
+                        result.message = '해당 리뷰의 추천 정보를 추가하는데 오류가 발생하였습니다';
                         result.data = [];
                         res.json(result);
                         return;
@@ -177,8 +175,8 @@ const updateGood = function (req, res) {
 
 const update = function (req, res) {
     if(checkToken(req.headers.authorization)) {
-        review = req.body; //r_Rank, r_Positive, r_Negative, r_No
-        console.log(req.body);
+        review = ini_review;
+        review = {...review, ...req.body}; //r_Rank, r_Positive, r_Negative, r_No
         let query = mybatisMapper.getStatement('review', 'updateReview', review, format);
         connection.query(query, function(err, rows) {
             if(err){
@@ -189,7 +187,7 @@ const update = function (req, res) {
                 res.json(result);
                 return;
             }
-            console.log('review update ok: ' + review.d_No);
+            console.log('review update ok: ' + review.r_No);
             result.validation = true;
             result.message = '해당 리뷰 수정 성공';
             result.data = [];
@@ -201,6 +199,7 @@ const update = function (req, res) {
 
 const del = function (req, res) {
     if(checkToken(req.headers.authorization)) {
+        review = ini_review;
         review.r_No = req.params.no;
         let query = mybatisMapper.getStatement('review', 'deleteReview', review, format);
         connection.query(query, function(err, rows) {
@@ -234,7 +233,6 @@ function checkToken(token){
             tempToken = false;
         }
         else {
-            console.log('유효한 토큰입니다!');
             tempToken = true;
         }
     });

@@ -6,8 +6,10 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemAvatar
+  ListItemAvatar,
+  Typography,
 } from "@material-ui/core";
+import StarRateIcon from "@material-ui/icons/StarRate";
 import { useHistory } from "react-router";
 import { useStore } from "../custom-hooks/custom-hooks";
 
@@ -25,7 +27,8 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     width: "50px",
-    height: "70px"
+    height: "70px",
+    borderRadius: "10px"
   }
 }));
 
@@ -59,6 +62,15 @@ const SearchResult = props => {
                 primary={data.f_Name}
                 secondary={data.f_Manufacturer}
               />
+              <Box display="flex" alignItems="flex-end">
+                <Box display="flex" alignItems="center">
+                  <Box display="flex" color="warning.main" alignItems="center">
+                    <StarRateIcon fontSize="small" />
+                  </Box>
+                  <Typography>{Number.parseFloat(data.f_Rank).toFixed(1)}</Typography>
+                </Box>
+                <Typography variant="subtitle2">({data.f_Count})</Typography>
+              </Box>
             </ListItem>
           ))
         )}

@@ -31,9 +31,6 @@ const CurrentTimeTable = ({ props }) => {
   },[store.u_Last])
   return (
     <div className={classes.page}>
-      {isLoading ? (
-        <div></div>
-      ) : (
         <Box width="100%" maxWidth="500px" marginTop = "20px">
           <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px">
                   <Box  display="flex" width = "50%" justifyContent = "center">
@@ -43,7 +40,7 @@ const CurrentTimeTable = ({ props }) => {
                     <Typography variant="h5" >상태</Typography>
                   </Box>
                 </Box>
-          {input.data === undefined
+          {isLoading? (<></>): input.data === undefined
             ? ""
             : input.data.map((data,index) => (
                 <Box width="100%" display="flex" justifyContent="space-between" marginBottom = "15px" key = {index}>
@@ -58,7 +55,6 @@ const CurrentTimeTable = ({ props }) => {
                 </Box>
               ))}
         </Box>
-      )}
     </div>
   );
 };
