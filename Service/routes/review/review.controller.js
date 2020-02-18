@@ -26,7 +26,7 @@ var result = {
     data: []    
 };
 
-const selectAll = function (req, res) {
+const selectBasic = function (req, res) {
     if(checkToken(req.headers.authorization)) {
         review = ini_review;
         review.u_No = req.params.uno;
@@ -45,7 +45,7 @@ const selectAll = function (req, res) {
                 return;
             }
             getData.rank = get_rows[0];
-            let query = mybatisMapper.getStatement('review', 'selectAll', review, format);
+            let query = mybatisMapper.getStatement('review', 'selectBasic', review, format);
             connection.query(query, function(err, rows) {
                 if(err){
                     result.validation = false;
@@ -54,7 +54,87 @@ const selectAll = function (req, res) {
                     res.json(result);
                     return;
                 }
-                console.log('review selectAll ok: ' + review.f_No);
+                console.log('review selectBasic ok: ' + review.f_No);
+                result.validation = true;
+                result.message = '해당 사료의 모든 리뷰 호출 성공';
+                getData.list = rows;
+                result.data = getData;
+                res.json(result);
+            });
+        });        
+    }
+    else res.json(result);
+};
+
+const selectBest = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
+        review = ini_review;
+        review.u_No = req.params.uno;
+        review.f_No = req.params.no;
+        var getData = {
+            rank: 1.1,
+            list: []
+        };
+        let get_query = mybatisMapper.getStatement('review', 'getRank', review, format);
+        connection.query(get_query, function(get_err, get_rows){
+            if(get_err){
+                result.validation = false;
+                result.message = '해당 사료의 평균 별점을 호출하는데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
+            getData.rank = get_rows[0];
+            let query = mybatisMapper.getStatement('review', 'selectBest', review, format);
+            connection.query(query, function(err, rows) {
+                if(err){
+                    result.validation = false;
+                    result.message = '해당 사료의 모든 리뷰를 호출하는데 오류가 발생하였습니다';
+                    result.data = [];
+                    res.json(result);
+                    return;
+                }
+                console.log('review selectBest ok: ' + review.f_No);
+                result.validation = true;
+                result.message = '해당 사료의 모든 리뷰 호출 성공';
+                getData.list = rows;
+                result.data = getData;
+                res.json(result);
+            });
+        });        
+    }
+    else res.json(result);
+};
+
+const selectNew = function (req, res) {
+    if(checkToken(req.headers.authorization)) {
+        review = ini_review;
+        review.u_No = req.params.uno;
+        review.f_No = req.params.no;
+        var getData = {
+            rank: 1.1,
+            list: []
+        };
+        let get_query = mybatisMapper.getStatement('review', 'getRank', review, format);
+        connection.query(get_query, function(get_err, get_rows){
+            if(get_err){
+                result.validation = false;
+                result.message = '해당 사료의 평균 별점을 호출하는데 오류가 발생하였습니다';
+                result.data = [];
+                res.json(result);
+                return;
+            }
+            getData.rank = get_rows[0];
+            let query = mybatisMapper.getStatement('review', 'selectNew', review, format);
+            connection.query(query, function(err, rows) {
+                if(err){
+                    result.validation = false;
+                    result.message = '해당 사료의 모든 리뷰를 호출하는데 오류가 발생하였습니다';
+                    result.data = [];
+                    res.json(result);
+                    return;
+                }
+                console.log('review selectNew ok: ' + review.f_No);
                 result.validation = true;
                 result.message = '해당 사료의 모든 리뷰 호출 성공';
                 getData.list = rows;
@@ -240,7 +320,9 @@ function checkToken(token){
 }
 
 module.exports = {
-    selectAll: selectAll,
+    selectBasic: selectBasic,
+    selectBest: selectBest,
+    selectNew: selectNew,
     selectOne: selectOne,
     add: add,
     updateGood: updateGood,
