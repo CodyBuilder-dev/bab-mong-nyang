@@ -132,6 +132,8 @@ int scale[4] = { 1568, 1245, 1568, 1245 } ;
     }
 }
 
+
+
 // #include "rpi_gpio.h"
 
 // #include <wiringPi.h>

@@ -107,8 +107,10 @@ const DeviceModify = props => {
     "device"
   );
   useEffect(() => {
-    dataFetch(store.url + "/device/get/" + cookies.d_CurNo , "device");
-  }, [store]);
+    if(store.url !== ""){
+      dataFetch(store.url + "/device/get/" + cookies.d_CurNo , "device");
+    }
+  }, [store.url]);
   const [open, setOpen] = React.useState(false);
   const onSubmit = async e => {
     await axios

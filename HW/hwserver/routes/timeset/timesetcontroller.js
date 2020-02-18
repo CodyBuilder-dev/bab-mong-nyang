@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const localmapper = require('mybatis-mapper');
-
+const exec = require("child_process").exec;
 const localconn = require('../../config/local_db.js');
 const localcon = mysql.createConnection(localconn);
 
@@ -31,6 +31,10 @@ const updateTable = function(req,res){
         }
         res.json("DEVICE 1 TIME TABlE :: " + req.body.length+" DATA UPDATED");
     }
+    var executecommand = '/home/pi/s02p13a103/HW/device/refactoring/pingpong';
+    exec(executecommand, function (err,stdout,stderr){
+        if(err) throw err;
+    });
 }
 
 module.exports = {

@@ -37,12 +37,14 @@ int main(int argc, char *argv[])
 	conn = connectsql(host,user,pass,dbname);
 	if(loopcnt){
 		int putamount = 0;
+		int flag=0;
 		while(intdata<loopcnt && putamount<loopcnt){
 			putamount+=5;
 			for(int i=0;i<128;++i)
 				goFront(); //512 for 1loop
 			data = serial_signal(fd);
 			intdata=atoi(data);
+			if(intdata>remainfood) flag=1;
 			printf("signal :: %s\n",data);
 		}
 		end();
@@ -50,7 +52,7 @@ int main(int argc, char *argv[])
 		insert_query(conn,1,intdata-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
 		}
 		else insert_query(conn,0,intdata-remainfood,remainfood,(getprev==0?getprev:getprev-remainfood));
-		melody();
+		if(flag) melody();
 		exit(1);
 	}
 	printf("deactivate\n");
