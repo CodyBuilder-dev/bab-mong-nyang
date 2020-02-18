@@ -22,7 +22,7 @@ const ngrok_info = async function() {
             console.log("uuid parshing complete :: ");
         }
     }    
-    const url = await ngrok.connect(3030);
+    const url = await ngrok.connect(3000);
     const api = ngrok.getApi();
     const tunnels = await api.get('api/tunnels');
     var ngrok_url = JSON.parse(tunnels).tunnels[0].public_url;
