@@ -58,10 +58,14 @@ const Chart = props => {
     "chart"
   );
   useEffect(() => {
-    setcenterBarIndex(input.length - 1);
+    if(input != 0){
+      setcenterBarIndex(input.length - 1);
+    }
   }, [input]);
   useEffect(() => {
-    dataFetch(store.url + "/logdata/chart/" + store.u_Last, "chart");
+    if(store.u_Last !== ""){
+      dataFetch(store.url + "/logdata/chart/" + store.u_Last, "chart");
+    }
   }, [store.u_Last])
   
 

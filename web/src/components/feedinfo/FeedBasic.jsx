@@ -63,8 +63,10 @@ const FeedBasic = props => {
   );
   const { store } = useStore();
   useEffect(() => {
-    dataFetch(store.url + "/feed/basic/" + props.f_No, "feedinfo");
-  }, [store]);
+    if(store.url !== ""){
+      dataFetch(store.url + "/feed/basic/" + props.f_No, "feedinfo");
+    }
+  }, [store.url]);
 
   return (
     <div className={classes.page}>
