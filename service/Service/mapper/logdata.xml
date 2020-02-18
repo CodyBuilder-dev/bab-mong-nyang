@@ -10,7 +10,7 @@
   </select>
 
   <insert id = "deviceAdd">
-    insert into LogData values (0, #{d_No}, now(), 0, 0, 0);
+    insert into LogData values (0, #{d_No}, now(), 0, 0, 0, 0);
   </insert>
 
 </mapper>
