@@ -6,7 +6,9 @@ import {
   Grid,
   SvgIcon,
   Tooltip,
-  IconButton
+  IconButton,
+  useMediaQuery,
+  useTheme
 } from "@material-ui/core";
 import SyncIcon from "@material-ui/icons/Sync";
 import { useFetchData, useStore } from "../custom-hooks/custom-hooks";
@@ -67,6 +69,8 @@ const FeedRemain = ({ props }) => {
     "maintable"
   );
   const { store } = useStore();
+  const theme = useTheme();
+  const underSm = useMediaQuery(theme.breakpoints.down("xs"));
   const calcTime = recentSync => {
     let date = new Date();
     let year = date.getFullYear();
@@ -74,10 +78,12 @@ const FeedRemain = ({ props }) => {
     let day = date.getDate();
     let hour = date.getHours();
     let minute = date.getMinutes();
+    let second = date.getSeconds();
     if (month < 10) month = "0" + month;
     if (day < 10) day = "0" + day;
-    if (hour < 10) hour = "0" + month;
-    if (minute < 10) minute = "0" + day;
+    if (hour < 10) hour = "0" + hour;
+    if (minute < 10) minute = "0" + minute;
+    if (second < 10) second = "0" + second;
     let monthDay = month + day;
     let hourmin = hour + minute;
     recentSync = recentSync
@@ -111,7 +117,8 @@ const FeedRemain = ({ props }) => {
             if (mindiff !== 0) {
               return mindiff + "분 전";
             } else if (mindiff === 1) {
-              return "몇초 전";
+              let secdiff = second - recentSync.substr(12, 2)
+              return secdiff > 0 ? "1분 전" : "몇초 전";
             } else {
               return "몇초 전";
             }
@@ -123,21 +130,26 @@ const FeedRemain = ({ props }) => {
     }
     return recent + "년 전";
   };
-  const onClickEvent = async event => {
-    setIsLoading(true);
-    await axios({
-      method: "GET",
-      headers: store.headers,
-      url: store.url + "/logdata/new/" + store.u_Last
-    }).then(async res => {
-      console.log(res);
-      if (res.data.validation) {
-        await dataFetch(store.url + "/logdata/" + store.u_Last, "maintable");
-      } else {
-        alert(res.data.message);
-      }
-    });
-    setIsLoading(false);
+  const onClickEvent = async (event, val) => {
+    let isVal = calcTime(val);
+    if (isVal === "몇초 전" || isVal === "1분 전") {
+      alert("최근에 갱신되었어요! 잠시 후 다시 시도해주세요.");
+    } else {
+      setIsLoading(true);
+      await axios({
+        method: "GET",
+        headers: store.headers,
+        url: store.url + "/logdata/new/" + store.u_Last
+      }).then(async res => {
+        console.log(res);
+        if (res.data.validation) {
+          await dataFetch(store.url + "/logdata/" + store.u_Last, "maintable");
+        } else {
+          alert(res.data.message);
+        }
+      });
+      setIsLoading(false);
+    }
   };
   React.useMemo(() => {
     if (
@@ -151,17 +163,17 @@ const FeedRemain = ({ props }) => {
   return (
     <div className={classes.page}>
       <Grid container alignItems="center">
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}></Grid>
+        <Grid item xs={2}>
           <div className={classes.page}>
             <Typography>사료통</Typography>
           </div>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           {isLoading ? (
             <>
-              <Box height="48px">
-                <div style={{ padding: "15px" }}>
+              <Box height="34px">
+                <div style={{ padding: "5px" }}>
                   <PacmanLoader
                     color="gray"
                     size="15px"
@@ -174,11 +186,33 @@ const FeedRemain = ({ props }) => {
             </>
           ) : (
             <>
-              <IconButton onClick={onClickEvent}>
-                <SyncIcon />
-              </IconButton>
-
-              <div style={{ position: "absolute" }}>
+              <Box display="flex" alignItems="center">
+                <IconButton
+                  onClick={e =>
+                    onClickEvent(e, input.data ? input.data.l_Time2 : 0)
+                  }
+                  style={{ padding: "5px" }}
+                >
+                  <SyncIcon />
+                </IconButton>
+                <div style={{ display: underSm ? "" : "none" }}>
+                  <Tooltip
+                    title={
+                      <Typography>
+                        {input.data ? input.data.l_Time2 : ""}
+                      </Typography>
+                    }
+                    interactive
+                  >
+                    <Typography style={{ fontSize: "12px" }} component="span">
+                      {input.data ? calcTime(input.data.l_Time2) : ""} 갱신
+                    </Typography>
+                  </Tooltip>
+                </div>
+              </Box>
+              <div
+                style={{ position: "absolute", display: underSm ? "none" : "" }}
+              >
                 <Tooltip
                   title={
                     <Typography>
