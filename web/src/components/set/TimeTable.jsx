@@ -132,6 +132,7 @@ const TimeTable = props => {
 
   return (
     <div className={classes.page}>
+      {console.log("세팅")}
       <Box width="100%" maxWidth="500px">
         <Box
           width="100%"
