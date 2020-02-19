@@ -99,20 +99,20 @@ const FeedRemain = ({ props }) => {
         let hourdiff = hour - syncdayhm.substr(0, 2);
         if (daydiff !== 0) {
           return daydiff + "일 전";
-        } else if(daydiff === 1) {
-          return hourdiff > 0 ? "1일 전" : 24 + hourdiff + "시간 전"
-        }else {
+        } else if (daydiff === 1) {
+          return hourdiff > 0 ? "1일 전" : 24 + hourdiff + "시간 전";
+        } else {
           let mindiff = minute - syncdayhm.substr(2, 2);
           if (hourdiff !== 0) {
             return hourdiff + "시간 전";
-          } else if(hourdiff === 1) {
-            return mindiff > 0 ? "1시간 전" : 60 + mindiff + "분 전"
-          }else {
+          } else if (hourdiff === 1) {
+            return mindiff > 0 ? "1시간 전" : 60 + mindiff + "분 전";
+          } else {
             if (mindiff !== 0) {
               return mindiff + "분 전";
             } else if (mindiff === 1) {
-              return "몇초 전"
-            }else {
+              return "몇초 전";
+            } else {
               return "몇초 전";
             }
           }
@@ -174,18 +174,10 @@ const FeedRemain = ({ props }) => {
             </>
           ) : (
             <>
-              <Tooltip
-                title={
-                  <Typography>
-                    최근 업데이트 : {input.data ? input.data.l_Time2 : ""}
-                  </Typography>
-                }
-                interactive
-              >
-                <IconButton onClick={onClickEvent}>
-                  <SyncIcon />
-                </IconButton>
-              </Tooltip>
+              <IconButton onClick={onClickEvent}>
+                <SyncIcon />
+              </IconButton>
+
               <div style={{ position: "absolute" }}>
                 <Tooltip
                   title={
