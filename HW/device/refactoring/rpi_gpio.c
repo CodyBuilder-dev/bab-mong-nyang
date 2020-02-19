@@ -14,7 +14,7 @@
 //sonic wave set
 #define trig 26
 #define echo 27
-#define maxd 15
+#define maxd 16
 
 // speaker pin set
 #define SPEAKER 6
