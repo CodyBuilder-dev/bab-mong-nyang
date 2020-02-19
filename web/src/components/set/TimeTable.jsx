@@ -184,7 +184,7 @@ const TimeTable = props => {
                   }
                 }}
                 InputProps={{
-                  readOnly: editable === {} ? false : editable[index],
+                  readOnly: editable === {} ? false : !editable[index],
                   style: {
                     width: "58px",
                     textAlignLast: "center"
@@ -219,7 +219,7 @@ const TimeTable = props => {
                   }
                 }}
                 InputProps={{
-                  readOnly: editable === {} ? false : editable[index],
+                  readOnly: editable === {} ? false : !editable[index],
                   style: {
                     width: "58px"
                     //textAlignLast : "center"
