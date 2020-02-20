@@ -170,7 +170,6 @@ export const useFetchData = (requestURL, dataType) => {
             break;
         }
       }else{
-        alert(result.data.message)
         if(result.data.message == "다시 로그인 해주세요!"){
           history.replace("/login");
         }
