@@ -72,6 +72,7 @@ const FeedRemain = ({ props }) => {
   const theme = useTheme();
   const underSm = useMediaQuery(theme.breakpoints.down("xs"));
   const calcTime = recentSync => {
+    if (recentSync == 0) return ""
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
