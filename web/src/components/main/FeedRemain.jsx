@@ -98,27 +98,27 @@ const FeedRemain = ({ props }) => {
     let recent = monthDay < syncdaymd ? year - syncdayy - 1 : year - syncdayy;
     let monthAge = monthDay.substr(0, 2) - syncdaymd.substr(0, 2);
     if (recent < 1) {
-      if (monthAge !== 0) {
+      if (monthAge >= 1) {
         return monthAge + "개월 전";
       } else {
         let daydiff = day - syncdaymd.substr(2, 2);
         let hourdiff = hour - syncdayhm.substr(0, 2);
-        if (daydiff !== 0) {
+        if (daydiff > 1) {
           return daydiff + "일 전";
         } else if (daydiff === 1) {
-          return hourdiff > 0 ? "1일 전" : 24 + hourdiff + "시간 전";
+          return hourdiff >= 0 ? "1일 전" : 24 + hourdiff + "시간 전";
         } else {
           let mindiff = minute - syncdayhm.substr(2, 2);
-          if (hourdiff !== 0) {
+          if (hourdiff > 1) {
             return hourdiff + "시간 전";
           } else if (hourdiff === 1) {
-            return mindiff > 0 ? "1시간 전" : 60 + mindiff + "분 전";
+            return mindiff >= 0 ? "1시간 전" : 60 + mindiff + "분 전";
           } else {
-            if (mindiff !== 0) {
+            if (mindiff > 1) {
               return mindiff + "분 전";
             } else if (mindiff === 1) {
               let secdiff = second - recentSync.substr(12, 2)
-              return secdiff > 0 ? "1분 전" : "몇초 전";
+              return secdiff >= 0 ? "1분 전" : "몇초 전";
             } else {
               return "몇초 전";
             }
