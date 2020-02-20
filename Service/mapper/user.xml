@@ -18,7 +18,7 @@
   </select>
 
   <insert id = "addUser">
-    insert into User values(0, #{u_Id},0, #{u_Name}, #{u_Email}, 0, password(#{u_Pw}));
+    insert into User values(0, #{u_Id}, #{u_Name}, #{u_Email}, 0, password(#{u_Pw}));
   </insert>
  
   <select id = "loginUser">
