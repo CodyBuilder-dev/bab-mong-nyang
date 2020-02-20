@@ -124,6 +124,7 @@ int EMPTYCHECK(){
   sum = (1-(sum/maxd))*100;
   int ret = round(sum);
   ret = ret<-5?100:ret;
+  ret = ret<5?0:ret;
   printf("Bucket filled :: %d percent\n",ret);
   return ret;
 }
