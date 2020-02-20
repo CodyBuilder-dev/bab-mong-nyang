@@ -141,7 +141,6 @@ const FeedRemain = ({ props }) => {
         headers: store.headers,
         url: store.url + "/logdata/new/" + store.u_Last
       }).then(async res => {
-        console.log(res);
         if (res.data.validation) {
           await dataFetch(store.url + "/logdata/" + store.u_Last, "maintable");
         } else {
