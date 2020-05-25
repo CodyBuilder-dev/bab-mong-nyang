@@ -1,33 +1,21 @@
-# Common PJT team3
+# 프로젝트 밥멍냥
+Common PJT team3
+PPT : [발표자료]("IoT 펫푸드 케어 - 밥멍냥(최종제출용).pdf")
+## 프로젝트 개요
+IoT 펫푸드 케어 서비스
 
-## 3주차 할 일
+## 핵심 기능
+1. 사료 정보 검색  
+  - 원하는 사료 정보 검색
+2. 자동 사료 지급  
+  - 지정된 시간에 맞게 사료 지급
+3. 식사량 모니터링  
+  - 센서를 통해 얼마나 먹었는지 모니터링
+  - 그래프를 통한 시각화
+## 서비스 아키텍처
+![](architecture.png)  
 
-* Web
-  - 차트만들기
-  - 기기 등록 및 시간표 페이지 BackEnd 연결
-* Back
-  - AWS 연동
-  - Front의 요구사항에 맞게 DB, Node.JS 수정
-* Device
-  - AWS 라즈베리 파이 연동
-
-
-
-## 4주차 할 일
-
-* Web
-  * 컴포넌트 구조 정리
-  * LogData table 만들기
-  * 오류 잡기
-  * history push 정리
-  * 인증 관련 router 설정
-* Back
-  * JWT 적용
-  * ERD 재작성
-  * 백엔드 서버 AWS에 올리기
-  * 사료 데이터 채워놓기
-* HW
-  * 기구 설계도 도면 그리는 법 찾기
-  * 도면 그리고 구현하기
-  * 추가 모듈 필요하면 미리미리 사오고 동작 테스트
-  * (사출방식) 스크류 컨베이어 아이디어 고려
+## 사용된 기술 스택
+Front : REACT.js  
+Back : Node.js(Express), MySQL(MariaDB)  
+HW : Node.js(Express), Linux/C(Raspberry Pi)
